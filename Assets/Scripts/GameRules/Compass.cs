@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Compass : MonoBehaviour {
@@ -8,6 +10,28 @@ public class Compass : MonoBehaviour {
     public enum ORIENTATION {
         RIGHT, UP, LEFT, DOWN, count
     }
+
+    // The combinations of all the orientations
+    public enum DIRECTION {
+        EMPTY,
+        RIGHT,
+        UP, UP_RIGHT,
+        LEFT, LEFT_RIGHT, LEFT_UP, LEFT_UP_RIGHT,
+        DOWN, DOWN_RIGHT, DOWN_UP, DOWN_UP_RIGHT, DOWN_LEFT, DOWN_LEFT_RIGHT, DOWN_LEFT_UP,
+        DOWN_LEFT_UP_RIGHT,
+        CENTER,
+        count
+    };
+
+    // The isomorphic exit structure
+    public enum EXIT {
+        SINGLE,
+        DOUBLE_UNALIGNED,
+        DOUBLE_ALIGNED,
+        TRIPLE,
+        QUADRUPLE,
+        count
+    };
 
     /* --- Dictionaries --- */
     public static Dictionary<ORIENTATION, Vector2> OrientationVectors = new Dictionary<ORIENTATION, Vector2>() {
@@ -31,27 +55,13 @@ public class Compass : MonoBehaviour {
         { -Vector2.right,ORIENTATION.LEFT }
     };
 
-    /* --- Enums --- */
-    // The ordered layout of the tiles.
-    public enum DIRECTION {
-        EMPTY,
-        CENTER,
-        RIGHT,
-        UP, UP_RIGHT,
-        LEFT, LEFT_RIGHT, LEFT_UP, LEFT_UP_RIGHT,
-        DOWN, DOWN_RIGHT, DOWN_UP, DOWN_UP_RIGHT, DOWN_LEFT, DOWN_LEFT_RIGHT, DOWN_LEFT_UP,
-        DOWN_LEFT_UP_RIGHT,
-        count
-    };
-
-    // The isomorphic exit structure
-    public enum EXIT {
-        SINGLE,
-        DOUBLE_UNALIGNED,
-        DOUBLE_ALIGNED,
-        TRIPLE,
-        QUADRUPLE,
-        count
+    public static Dictionary<EXIT, DIRECTION> ExitTiles = new Dictionary<EXIT, DIRECTION>() {
+        {EXIT.SINGLE, DIRECTION.RIGHT }, // 1
+        {EXIT.DOUBLE_UNALIGNED, DIRECTION.UP_RIGHT }, // 3
+        {EXIT.DOUBLE_ALIGNED, DIRECTION.LEFT_RIGHT }, // 5
+        {EXIT.TRIPLE, DIRECTION.LEFT_UP_RIGHT }, // 7
+        {EXIT.QUADRUPLE, DIRECTION.DOWN_LEFT_UP_RIGHT } // 15
+        // No discernible pattern :/
     };
 
     /* --- Exit Parsing --- */
@@ -99,21 +109,57 @@ public class Compass : MonoBehaviour {
     }
 
     /* --- Transformations --- */
-    public static EXIT DirectionToExitAndRotations(DIRECTION direction) {
-        return EXIT.count;
-    }
-
-
-    public static int[][] RotateClockwise(int[][] grid) {
-        int[][] rotatedGrid = new int[grid[0].Length][];
-        for (int i = 0; i < grid.Length; i++) {
-            rotatedGrid[i] = new int[grid.Length];
-            for (int j = 0; j < grid[0].Length; j++) {
-                rotatedGrid[i][j] = grid[j][grid.Length - i - 1];
+    public static (EXIT, int) DirectionToExitAndRotations(DIRECTION direction) {
+        List<ORIENTATION> orientations = DirectionToOrientations(direction);
+        ORIENTATION minimumOrientation = ORIENTATION.count;
+        for (int i = 0; i < orientations.Count; i++) {
+            if ((int)orientations[i] < (int)minimumOrientation) {
+                minimumOrientation = orientations[i];
             }
         }
-        return rotatedGrid;
+        int rotations = (int)minimumOrientation - (int)ORIENTATION.RIGHT;
+        EXIT exits;
+        switch (orientations.Count) {
+            case (1):
+                exits = EXIT.SINGLE;
+                break;
+            case (2):
+                int val0 = (int)orientations[0] % (int)ORIENTATION.count;
+                int val1 = (int)orientations[1] % (int)ORIENTATION.count;
+                if (val0 - val1 == 1) {
+                    exits = EXIT.DOUBLE_UNALIGNED;
+                }
+                else {
+                    exits = EXIT.DOUBLE_ALIGNED;
+                }
+                break;
+            case (3):
+                exits = EXIT.TRIPLE;
+                break;
+            case (4):
+                exits = EXIT.QUADRUPLE;
+                break;
+            default:
+                exits = EXIT.SINGLE;
+                break;
+        }
+        return (exits, rotations);
     }
 
+    public static List<ORIENTATION> ExitToOrientations(EXIT exits) {
+        DIRECTION direction = ExitTiles[exits];
+        return DirectionToOrientations(direction);
+    }
+
+    public static List<ORIENTATION> DirectionToOrientations(DIRECTION direction) {
+        List<ORIENTATION> orientations = new List<ORIENTATION>();
+        for (int i = 0; i < (int)ORIENTATION.count; i++) {
+            int check = ((int)direction) % (int)Mathf.Pow(2, i + 1);
+            if (check >= (int)Mathf.Pow(2, i)) {
+                orientations.Add((ORIENTATION)i);
+            }
+        }
+        return orientations;
+    }
 
 }

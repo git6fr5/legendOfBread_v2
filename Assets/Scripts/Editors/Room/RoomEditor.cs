@@ -15,7 +15,7 @@ public class RoomEditor : MonoBehaviour {
     public Room room;
     public Tilemap mobMap;
     public Tilemap trapMap;
-    public ChannelSelector challengeSelector;
+    public ChallengeSelector challengeSelector;
     public ValueSelector nullValue;
 
     /* --- Variables --- */

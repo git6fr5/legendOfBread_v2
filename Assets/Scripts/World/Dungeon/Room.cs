@@ -38,8 +38,8 @@ public class Room : MonoBehaviour {
 
     /* --- Variables --- */
     // Dimensions.
-    int size = 11;
-    int border = 1;
+    public int size = 11;
+    public int border = 1;
     // File Management.
     public static string path = "DataFiles/Rooms/";
     public static string identifierFilename = "identifierFiles";
@@ -75,13 +75,13 @@ public class Room : MonoBehaviour {
     // Constructs the room setting.
     public void Construct() {
         borderGrid = Geometry.Grid(shape, size, size, border, border);
-        borderGrid = Janitor.CleanBorder(borderGrid, size, size, border, border);
         borderGrid = Janitor.AddExits(borderGrid, exits, border);
         PrintRoom();
     }
 
     // Prints the grids to the tilemaps.
-    void PrintRoom() {
+    public void PrintRoom() {
+        borderGrid = Janitor.CleanBorder(borderGrid, size, size, border, border);
         Geometry.PrintGridToMap(floorGrid, floorMap, environment.floor);
         Geometry.PrintGridToMap(borderGrid, borderMap, environment.border);
     }

@@ -12,6 +12,8 @@ public class Environment : MonoBehaviour {
     // Controllers
     public Mob[] mobs;
     public Trap[] traps;
+    // Exit
+    public Exit exit;
 
     /* --- Unity --- */
     // Runs once on compilation.
@@ -43,6 +45,24 @@ public class Environment : MonoBehaviour {
             }
         }
         return tiles;
+    }
+
+    // Converts an array of controllers to be used as tiles.
+    // Has to be sprite tiles to be able to access the sprite later on.
+    public Controller[] OrderedControllers(Controller[] controllers) {
+        // Get the max ID in the array of controllers.
+        int maxID = 0;
+        for (int i = 0; i < controllers.Length; i++) {
+            if (controllers[i].id > maxID) {
+                maxID = controllers[i].id;
+            }
+        }
+        // Create the array of tiles.
+        Controller[] orderedControllers = new Controller[maxID + 1];
+        for (int i = 0; i < controllers.Length; i++) {
+            orderedControllers[controllers[i].id] = controllers[i];
+        }
+        return orderedControllers;
     }
 
 }

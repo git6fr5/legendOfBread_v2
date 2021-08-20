@@ -184,7 +184,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  channel: 0
+  challenge: 0
 --- !u!61 &115169295
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -803,7 +803,7 @@ MonoBehaviour:
   room: {fileID: 596568458}
   mobMap: {fileID: 1027142253}
   trapMap: {fileID: 1818143755}
-  channelSelector: {fileID: 115169294}
+  challengeSelector: {fileID: 115169294}
   nullValue: {fileID: 140932473}
 --- !u!4 &630928381
 Transform:

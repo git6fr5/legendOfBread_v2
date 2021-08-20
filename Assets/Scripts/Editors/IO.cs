@@ -72,7 +72,6 @@ public class IO : MonoBehaviour {
                 int[] _identifiers = new int[cols.Length - 1];
                 for (int j = 1; j < cols.Length; j++) {
                     if (cols[j] != "") {
-                        print(cols[j]);
                         _identifiers[j - 1] = int.Parse(cols[j]);
                     }
                 }

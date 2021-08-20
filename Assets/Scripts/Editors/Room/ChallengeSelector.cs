@@ -7,7 +7,7 @@ using CHALLENGE = Room.CHALLENGE;
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(SpriteRenderer))]
-public class ChannelSelector : MonoBehaviour {
+public class ChallengeSelector : MonoBehaviour {
     
     /* --- Events --- */
     [System.Serializable] public class ChannelEvent : UnityEvent<CHALLENGE> { }

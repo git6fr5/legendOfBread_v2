@@ -15,6 +15,8 @@ public class GameRules : MonoBehaviour {
     public static float gameTime;
 
     /* --- Tags --- */
+    public static string dungeonTag = "Dungeon";
+    public static string mapTag = "Map";
     public static string roomTag = "Room";
     public static string playerTag = "Player";
     public static string mobTag = "Mob";
