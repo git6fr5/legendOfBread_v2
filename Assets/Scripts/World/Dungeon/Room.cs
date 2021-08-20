@@ -4,11 +4,20 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 using ORIENTATION = Compass.ORIENTATION;
+using EXIT = Compass.EXIT;
 using SHAPE = Geometry.SHAPE;
-using TILE = Janitor.TILE;
+using DIRECTION = Compass.DIRECTION;
 
 [RequireComponent(typeof(Grid))]
 public class Room : MonoBehaviour {
+
+    /* --- Enums --- */
+    public enum CHALLENGE {
+        MOBS,
+        TRAPS,
+        count
+    }
+
 
     /* --- Components --- */
     // Maps
@@ -21,13 +30,19 @@ public class Room : MonoBehaviour {
     public Environment environment;
 
     // Constructors
-    public TILE exits;
     public SHAPE shape;
+    public EXIT exits;
+    public CHALLENGE challenge;
     public int[][] mobGrid;
+    public int[][] trapGrid;
 
     /* --- Variables --- */
+    // Dimensions.
     int size = 11;
     int border = 1;
+    // File Management.
+    public static string path = "DataFiles/Rooms/";
+    public static string identifierFilename = "identifierFiles";
 
     /* --- Unity --- */
     // Runs once on compilation
@@ -36,11 +51,25 @@ public class Room : MonoBehaviour {
         Construct();
     }
 
+    /* --- Files --- */
+    // Reads and constructs a room from a file.
+    public void Open(string filename) {
+        List<int[][]> channels = IO.OpenCSV(path, filename);
+        int[] identifiers = IO.FindInListFile(filename);
+        shape = (SHAPE)identifiers[0];
+        exits = (EXIT)identifiers[1];
+        challenge = (CHALLENGE)identifiers[2]; 
+        mobGrid = channels[0];
+        trapGrid = channels[1];
+        Construct();
+    }
+
     /* --- Methods --- */
     // Resets the room state
     public void Reset() {
         floorGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
         mobGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
+        trapGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
     }
 
     // Constructs the room setting.
@@ -48,7 +77,6 @@ public class Room : MonoBehaviour {
         borderGrid = Geometry.Grid(shape, size, size, border, border);
         borderGrid = Janitor.CleanBorder(borderGrid, size, size, border, border);
         borderGrid = Janitor.AddExits(borderGrid, exits, border);
-        // roomObjectDictionary[id] = ObjectLoader.LoadObjects(mobs);
         PrintRoom();
     }
 

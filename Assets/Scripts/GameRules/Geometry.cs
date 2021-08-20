@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-using TILE = Janitor.TILE;
+using DIRECTION = Compass.DIRECTION;
 
 public class Geometry : MonoBehaviour {
 
@@ -13,7 +13,6 @@ public class Geometry : MonoBehaviour {
         EMPTY,
         SQUARE,
         ELLIPSE,
-        CROSS,
         count
     }
 
@@ -21,8 +20,8 @@ public class Geometry : MonoBehaviour {
     // Constructs the given shape through a border.
     public static int[][] Grid(
         SHAPE shape, int vertical, int horizontal, int vertBorder = 0,
-        int horBorder = 0, int backgroundTile = (int)TILE.EMPTY,
-        int fillTile = (int)TILE.CENTER) {
+        int horBorder = 0, int backgroundTile = (int)DIRECTION.EMPTY,
+        int fillTile = (int)DIRECTION.CENTER) {
 
         switch (shape) {
             case SHAPE.EMPTY:
@@ -32,7 +31,7 @@ public class Geometry : MonoBehaviour {
             case SHAPE.ELLIPSE:
                 return Ellipse(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
             default:
-                return new int[0][];
+                return Empty(backgroundTile, fillTile, vertical, horizontal);
         }
     }
 
@@ -99,6 +98,25 @@ public class Geometry : MonoBehaviour {
         return ellipse;
     }
 
+    /* --- Points --- */
+    public static int[][] EditPoint(Transform gridTransform, int[][] grid, int value) {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        int[] coord = Geometry.PointToGrid(mousePos, gridTransform);
+        if (Geometry.IsValid(coord, grid)) {
+            grid[coord[0]][coord[1]] = value;
+        }
+        return grid;
+    }
+
+    public static int[][] EditInteriorPoint(Transform gridTransform, int[][] grid, int[][] borderGrid, int value) {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        int[] coord = Geometry.PointToGrid(mousePos, gridTransform);
+        if (Geometry.IsValid(coord, grid) && borderGrid[coord[0]][coord[1]] == (int)DIRECTION.EMPTY) {
+            grid[coord[0]][coord[1]] = value;
+        }
+        return grid;
+    }
+
     /* --- Tilemap Construction --- */
     // Set the tiles in a tilemap according to the grid.
     public static void PrintGridToMap(int[][] grid, Tilemap tilemap, TileBase[] tiles) {
@@ -148,7 +166,7 @@ public class Geometry : MonoBehaviour {
             for (int j = -1; j <= 1; j++) {
                 int[] newCoordinate = new int[] { coordinate[0] + i, coordinate[1] + j };
                 if (IsValid(newCoordinate, grid) && (i != 0 || j != 0)) {
-                    if (grid[newCoordinate[0]][newCoordinate[1]] == (int)TILE.EMPTY) {
+                    if (grid[newCoordinate[0]][newCoordinate[1]] == (int)DIRECTION.EMPTY) {
                         adjacentEmptyTiles.Add(newCoordinate);
                     }
                 }
@@ -160,18 +178,5 @@ public class Geometry : MonoBehaviour {
     public static bool IsValid(int[] coordinate, int[][] grid) {
         return (coordinate[0] < grid.Length && coordinate[0] >= 0 && coordinate[1] < grid[0].Length && coordinate[1] >= 0);
     }
-
-    /* --- Transformations --- */
-    public static int[][] RotateClockwise(int[][] grid) {
-        int[][] rotatedGrid = new int[grid[0].Length][];
-        for (int i = 0; i < grid.Length; i++) {
-            rotatedGrid[i] = new int[grid.Length];
-            for (int j = 0; j < grid[0].Length; j++) {
-                rotatedGrid[i][j] = grid[j][grid.Length - i - 1];
-            }
-        }
-        return rotatedGrid;
-    }
-
 
 }

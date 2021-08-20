@@ -11,6 +11,7 @@ public class Environment : MonoBehaviour {
     public TileBase[] border;
     // Controllers
     public Mob[] mobs;
+    public Trap[] traps;
 
     /* --- Unity --- */
     // Runs once on compilation.

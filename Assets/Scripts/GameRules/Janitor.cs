@@ -4,34 +4,34 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 using ORIENTATION = Compass.ORIENTATION;
+using DIRECTION = Compass.DIRECTION;
+using EXIT = Compass.EXIT;
 
 public class Janitor : MonoBehaviour {
 
-    /* --- Enums --- */
-    // The ordered layout of the tiles.
-    public enum TILE {
-        EMPTY,
-        CENTER,
-        RIGHT,
-        UP, UP_RIGHT,
-        LEFT, LEFT_RIGHT, LEFT_UP, LEFT_UP_RIGHT,
-        DOWN, DOWN_RIGHT, DOWN_UP, DOWN_UP_RIGHT, DOWN_LEFT, DOWN_LEFT_RIGHT, DOWN_LEFT_UP,
-        DOWN_LEFT_UP_RIGHT,
-        count
+
+    public static Dictionary<EXIT, DIRECTION> ExitTiles = new Dictionary<EXIT, DIRECTION>() {
+        {EXIT.SINGLE, DIRECTION.RIGHT }, // 1
+        {EXIT.DOUBLE_UNALIGNED, DIRECTION.UP_RIGHT }, // 3
+        {EXIT.DOUBLE_ALIGNED, DIRECTION.LEFT_RIGHT }, // 5
+        {EXIT.TRIPLE, DIRECTION.LEFT_UP_RIGHT }, // 7
+        {EXIT.QUADRUPLE, DIRECTION.DOWN_LEFT_UP_RIGHT } // 15
+        // No discernible pattern :/
+
     };
 
     /* --- Border Cleaning --- */
     // The organization format.
-    static TILE[] inputOrder = new TILE[] {
-        TILE.LEFT_UP, TILE.UP, TILE.UP_RIGHT,
-        TILE.LEFT, TILE.CENTER, TILE.RIGHT,
-        TILE.DOWN_LEFT, TILE.DOWN, TILE.DOWN_RIGHT,
+    static DIRECTION[] inputOrder = new DIRECTION[] {
+        DIRECTION.LEFT_UP, DIRECTION.UP, DIRECTION.UP_RIGHT,
+        DIRECTION.LEFT, DIRECTION.CENTER, DIRECTION.RIGHT,
+        DIRECTION.DOWN_LEFT, DIRECTION.DOWN, DIRECTION.DOWN_RIGHT,
     };
 
     /* --- Methods --- */
     // Reorder the border tiles with respect to the input order.
     public static TileBase[] BorderOrder(TileBase[] tiles) {
-        TileBase[] tempTiles = new TileBase[(int)TILE.count + 1];
+        TileBase[] tempTiles = new TileBase[(int)DIRECTION.count + 1];
         tempTiles[0] = null;
         for (int i = 0; i < inputOrder.Length; i++) {
             // Put the tile currently at "i", at the correct index
@@ -45,7 +45,7 @@ public class Janitor : MonoBehaviour {
     public static int[][] CleanBorder(int[][] grid, int sizeVertical, int sizeHorizontal, int borderVertical, int borderHorizontal) {
         for (int i = borderVertical - 1; i < sizeVertical - (borderVertical - 1); i++) {
             for (int j = borderHorizontal - 1; j < sizeHorizontal - (borderHorizontal - 1); j++) {
-                if (grid[i][j] != (int)TILE.CENTER) {
+                if (grid[i][j] != (int)DIRECTION.CENTER) {
                     grid[i][j] = CleanBorderCell(grid, sizeVertical, sizeHorizontal, i, j);
                 }
             }
@@ -67,16 +67,16 @@ public class Janitor : MonoBehaviour {
 
     // Checks if a cell is filled with a center tile.
     static bool CellIsFilled(int[][] grid, int i, int j) {
-        if (Geometry.IsValid(new int[] { i, j }, grid) && grid[i][j] == (int)TILE.CENTER) {
+        if (Geometry.IsValid(new int[] { i, j }, grid) && grid[i][j] == (int)DIRECTION.CENTER) {
             return true;
         }
         return false;
     }
 
     /* --- Exit Cleaning --- */
-    public static int[][] AddExits(int[][] grid, TILE exits, int border) {
+    public static int[][] AddExits(int[][] grid, EXIT exits, int border) {
 
-        List<ORIENTATION> orientations = TileToOrientations(exits);
+        List<ORIENTATION> orientations = ExitToOrientations(exits);
         for (int k = 0; k < orientations.Count; k++) {
             Vector2 direction = Compass.OrientationVectors[orientations[k]];
             int i; int j;
@@ -91,13 +91,15 @@ public class Janitor : MonoBehaviour {
                 j = (int)Mathf.Floor(grid[0].Length / 2);
             }
             int[] coord = new int[] { i, j };
-            grid[i][j] = (int)TILE.EMPTY;
+            grid[i][j] = (int)DIRECTION.EMPTY;
         }
         return grid;
 
     }
 
-    public static List<ORIENTATION> TileToOrientations(TILE tile) {
+    public static List<ORIENTATION> ExitToOrientations(EXIT exits) {
+        DIRECTION tile = ExitTiles[exits];
+
         List<ORIENTATION> orientations = new List<ORIENTATION>();
         for (int i = 0; i < (int)ORIENTATION.count; i++) {
             int check = ((int)tile-1) % (int)Mathf.Pow(2, i+1);
@@ -107,5 +109,7 @@ public class Janitor : MonoBehaviour {
         }
         return orientations;
     }
+
+
 
 }

@@ -1,0 +1,2 @@
+sqauresinglecombat,1,0,0
+squaresingletrap,1,0,1

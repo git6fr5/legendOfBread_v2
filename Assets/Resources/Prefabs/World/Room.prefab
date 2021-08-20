@@ -73,6 +73,7 @@ MonoBehaviour:
   mobs:
   - {fileID: 3060322277553909562, guid: e999b6d704adc6a4dba09f7f181392dc, type: 3}
   - {fileID: 6909791593945908993, guid: f17ebb8d0003b3846893160f96e4877d, type: 3}
+  traps: []
 --- !u!1 &1998861111543876962
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,7 +85,7 @@ GameObject:
   - component: {fileID: 1998861111543876963}
   - component: {fileID: 1998861111543876961}
   - component: {fileID: 1998861111543876960}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Floor Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -253,8 +254,9 @@ MonoBehaviour:
   floorMap: {fileID: 1998861111543876961}
   borderMap: {fileID: 1998861112605667583}
   environment: {fileID: 1998861110950444911}
-  exits: 6
   shape: 1
+  exits: 0
+  rotations: 0
 --- !u!1 &1998861112605667579
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +269,7 @@ GameObject:
   - component: {fileID: 1998861112605667583}
   - component: {fileID: 1998861112605667582}
   - component: {fileID: 1998861112605667577}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Border Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}

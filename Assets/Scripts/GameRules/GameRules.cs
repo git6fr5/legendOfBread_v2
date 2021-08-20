@@ -7,6 +7,9 @@ using UnityEngine.Tilemaps;
 
 public class GameRules : MonoBehaviour {
 
+    /* --- Path --- */
+    public static string Path = "Assets/Resources/";
+
     /* --- Time Keeping --- */
     public static int gameTicks;
     public static float gameTime;
