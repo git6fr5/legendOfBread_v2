@@ -157,7 +157,7 @@ public class RoomEditor : MonoBehaviour {
             Vector3.zero, Quaternion.identity, challengeSelector.transform).GetComponent<ValueSelector>();
         // Set the selection parameters.
         valueSelector.gameObject.SetActive(true);
-        valueSelector.transform.localPosition = new Vector3(j % 3 + 11, -Mathf.Floor(j / 3) + 3, 0); // There's a better way to do this.
+        valueSelector.transform.localPosition = nullValue.transform.localPosition + new Vector3(j % 3, -Mathf.Floor(j / 3), 0);
         valueSelector.spriteRenderer.sprite = challengeTile.newSprite;
         valueSelector.index = i;
         return valueSelector;

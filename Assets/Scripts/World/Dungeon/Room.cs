@@ -13,6 +13,7 @@ public class Room : MonoBehaviour {
 
     /* --- Enums --- */
     public enum CHALLENGE {
+        EMPTY,
         MOBS,
         TRAPS,
         count
@@ -80,10 +81,12 @@ public class Room : MonoBehaviour {
     }
 
     // Prints the grids to the tilemaps.
-    public void PrintRoom() {
-        borderGrid = Janitor.CleanBorder(borderGrid, size, size, border, border);
-        Geometry.PrintGridToMap(floorGrid, floorMap, environment.floor);
-        Geometry.PrintGridToMap(borderGrid, borderMap, environment.border);
+    public void PrintRoom(bool cleanBorder = true) {
+        if (cleanBorder) {
+            borderGrid = Janitor.CleanBorder(borderGrid, size, size, border, border);
+        }
+        Geometry.PrintGridToMap(floorGrid, floorMap, environment.floor, border);
+        Geometry.PrintGridToMap(borderGrid, borderMap, environment.border, border);
     }
 
 }

@@ -99,6 +99,15 @@ public class Geometry : MonoBehaviour {
     }
 
     /* --- Points --- */
+    public static int[][] IncrementPoint(Transform gridTransform, int[][] grid, int maxValue) {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        int[] coord = Geometry.PointToGrid(mousePos, gridTransform);
+        if (Geometry.IsValid(coord, grid)) {
+            grid[coord[0]][coord[1]] = (grid[coord[0]][coord[1]] + 1) % maxValue;
+        }
+        return grid;
+    }
+
     public static int[][] EditPoint(Transform gridTransform, int[][] grid, int value) {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         int[] coord = Geometry.PointToGrid(mousePos, gridTransform);
@@ -119,9 +128,9 @@ public class Geometry : MonoBehaviour {
 
     /* --- Tilemap Construction --- */
     // Set the tiles in a tilemap according to the grid.
-    public static void PrintGridToMap(int[][] grid, Tilemap tilemap, TileBase[] tiles) {
-        for (int i = 0; i < grid.Length; i++) {
-            for (int j = 0; j < grid[0].Length; j++) {
+    public static void PrintGridToMap(int[][] grid, Tilemap tilemap, TileBase[] tiles, int border = 0) {
+        for (int i = border; i < grid.Length - border; i++) {
+            for (int j = border; j < grid[0].Length - border; j++) {
                 PrintTileToMap(grid, tilemap, tiles, i, j);
             }
         }

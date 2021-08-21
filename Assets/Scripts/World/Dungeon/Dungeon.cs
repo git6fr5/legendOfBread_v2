@@ -12,20 +12,20 @@ public class Dungeon : MonoBehaviour {
     /* --- COMPONENTS --- */
     public Map map;
     public Room room;
-
-    Exit[] loadedExits = new Exit[0];
-
-    public Dictionary<string, int[]> roomIdentifiers;
-
-    public int[] id = new int[2] { 0, 0 };
-
-    Dictionary<string, Controller[]> loadedControllers = new Dictionary<string, Controller[]>();
-
     public string mapfile;
+
+
+    /* --- Variables --- */
+    [HideInInspector] public int[] id = new int[2] { 0, 0 };
+    // Loaded objects
+    public Dictionary<string, int[]> mapRooms;
+    public Dictionary<string, GameObject[]> loadedObjects = new Dictionary<string, GameObject[]>();
+    public Exit[] loadedExits = new Exit[0];
+
 
     void Start() {
         map.Open(mapfile);
-        roomIdentifiers = IO.ReadListFile();
+        mapRooms = IO.ReadListFile();
         LoadRoom(id);
     }
 
@@ -35,49 +35,27 @@ public class Dungeon : MonoBehaviour {
         DeloadRoom();
 
         (int[], int) roomData = GetRequiredIdentifiersFromMap(newID);
-        int[] requiredIdentifiers = roomData.Item1;
-        int rotations = roomData.Item2;
-        List<string> roomNames = FindMatchingRoom(requiredIdentifiers);
-        if (roomNames.Count > 0) {
-            print(roomNames[0]);
-            room.Open(roomNames[0]);
-        }
-        else {
-            print("Found no matching rooms");
-            CreateDefaultRoom(requiredIdentifiers);
-        }
-
-        for (int i = 0; i < rotations; i++) {
-            room.borderGrid = Geometry.RotateClockwise(room.borderGrid);
-        }
-
-        loadedExits = Janitor.AddExitObjects(room.environment.exit, room.transform, room.borderGrid);
-
-        string idString = newID[0].ToString() + ", " + newID[1].ToString();
-        if (loadedControllers.ContainsKey(idString)) {
-            foreach (Controller controller in loadedControllers[idString]) {
-                controller.gameObject.SetActive(true);
-            }
-        }
-        else {
-            Controller[] roomControllers = Janitor.LoadControllers(room.transform, room.mobGrid, room.environment.OrderedControllers(room.environment.mobs));
-            loadedControllers.Add(idString, roomControllers);
-        }
+        OpenMatchingRoom(roomData.Item1);
+        RotateRoom(roomData.Item2);
+        LoadRoomObjects(newID);      
 
         id = newID;
         room.PrintRoom();
     }
 
     public void DeloadRoom() {
-        string idString = id[0].ToString() + ", " + id[1].ToString();
-        if (loadedControllers.ContainsKey(idString)) {
-            foreach (Controller controller in loadedControllers[idString]) {
-                controller.gameObject.SetActive(false);
+        string str_id = GetIDString(id);
+        if (loadedObjects.ContainsKey(str_id)) {
+            for (int i = 0; i < loadedObjects[str_id].Length; i++) {
+                if (loadedObjects[str_id][i] != null) {
+                    loadedObjects[str_id][i].gameObject.SetActive(false);
+                }
             }
         }
         foreach (Exit exit in loadedExits) {
             Destroy(exit.gameObject);
         }
+        room.Reset();
 
     }
 
@@ -91,8 +69,6 @@ public class Dungeon : MonoBehaviour {
         int rotations = exitAndRotation.Item2;
 
         requiredIdentifiers[2] = map.challengeGrid[id[0]][id[1]];
-        print(string.Format("{0}, {1}, {2}", requiredIdentifiers[0], requiredIdentifiers[1], requiredIdentifiers[1] ));
-        print("------------------------------------------");
 
         return (requiredIdentifiers, rotations);
     }
@@ -104,10 +80,19 @@ public class Dungeon : MonoBehaviour {
         room.Construct();
     }
 
+    void OpenMatchingRoom(int[] requiredIdentifiers) {
+        List<string> roomNames = FindMatchingRoom(requiredIdentifiers);
+        if (roomNames.Count > 0) {
+            room.Open(roomNames[0]);
+        }
+        else {
+            CreateDefaultRoom(requiredIdentifiers);
+        }
+    }
+
     List<string> FindMatchingRoom(int[] requiredIdentifiers) {
         List<string> matchingRooms = new List<string>();
-        foreach (KeyValuePair<string, int[]> identifier in roomIdentifiers) {
-            print(string.Format("{0}, {1}, {2}", identifier.Value[0], identifier.Value[1], identifier.Value[1]));
+        foreach (KeyValuePair<string, int[]> identifier in mapRooms) {
             bool match = true;
             for (int i = 0; i < requiredIdentifiers.Length; i++) {
                 if (identifier.Value[i] != requiredIdentifiers[i]) {
@@ -120,6 +105,35 @@ public class Dungeon : MonoBehaviour {
             }
         }
         return matchingRooms;
+    }
+
+    void RotateRoom(int rotations) {
+        for (int i = 0; i < rotations; i++) {
+            room.borderGrid = Geometry.RotateClockwise(room.borderGrid);
+            room.borderGrid = Janitor.RotateExitID(room.borderGrid);
+            room.mobGrid = Geometry.RotateClockwise(room.mobGrid);
+        }
+    }
+
+    void LoadRoomObjects(int[] newID) {
+        loadedExits = Janitor.AddExitObjects(room.environment.exit, room.transform, room.borderGrid);
+
+        string idString = newID[0].ToString() + ", " + newID[1].ToString();
+        if (loadedObjects.ContainsKey(idString)) {
+            for (int i = 0; i < loadedObjects[idString].Length; i++) {
+                if (loadedObjects[idString][i] != null && !loadedObjects[idString][i].state.isDead) {
+                    loadedObjects[idString][i].gameObject.SetActive(true);
+                }
+            }
+        }
+        else {
+            Controller[] roomControllers = Janitor.LoadControllers(room.transform, room.mobGrid, room.environment.OrderedControllers(room.environment.mobs));
+            loadedObjects.Add(idString, roomControllers);
+        }
+    }
+
+    public static string GetIDString(int[] id) {
+        return id[0].ToString() + ", " + id[1].ToString();
     }
 
 }

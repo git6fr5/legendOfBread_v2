@@ -28,6 +28,7 @@ public class Scorpion : Mob {
         if (room != null) {
             // Sync the scorpions movement
             if (GameRules.gameTicks % syncTicks == 0 || targetPoint == Vector3.zero) {
+                print("syncing");
                 int[] coordinate = Geometry.PointToGrid(transform.position, room.transform);
                 List<int[]> adjacentCoordinates = Geometry.AdjacentEmptyTiles(coordinate, room.borderGrid, true);
                 int[] targetCoordinate = adjacentCoordinates[Random.Range(0, adjacentCoordinates.Count)];

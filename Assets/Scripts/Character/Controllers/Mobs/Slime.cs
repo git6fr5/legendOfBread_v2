@@ -15,6 +15,9 @@ public class Slime : Mob {
     [Range(0F, 5F)] public double damage;
 
     /* --- Variables --- */
+    public bool isChild;
+    float aliveInterval = 0f;
+    float growTime = 3f;
     Vector3 targetPoint;
     float idleDistance = 0.75f;
     float idleTicks = 0f;
@@ -42,6 +45,12 @@ public class Slime : Mob {
         else {
             orientationVector = new Vector2(Mathf.Sign(movementVector.x), 0);
         }
+        if (isChild) {
+            aliveInterval += Time.deltaTime;
+            if (aliveInterval >= growTime) {
+                Grow();
+            }
+        }
     }
     
     /* --- Event Actions --- */
@@ -50,6 +59,23 @@ public class Slime : Mob {
     }
 
     protected override void OnDeath() {
-        // Load a child slime
+        if (!isChild) {
+            Split();
+        }
     }
+
+    /* --- Methods --- */
+    // Splits into two child slimes
+    void Split() {
+        for (int i = 0; i < 2; i++) {
+            Janitor.LoadNewController(childSlime, transform.position);
+        }
+        Destroy(gameObject);
+    }
+
+    void Grow() {
+        Janitor.LoadNewController(parentSlime, transform.position);
+        Destroy(gameObject);
+    }
+
 }

@@ -20,7 +20,9 @@ public class Compass : MonoBehaviour {
         DOWN, DOWN_RIGHT, DOWN_UP, DOWN_UP_RIGHT, DOWN_LEFT, DOWN_LEFT_RIGHT, DOWN_LEFT_UP,
         DOWN_LEFT_UP_RIGHT,
         CENTER,
-        count
+        count,
+        EXIT_RIGHT, EXIT_UP, EXIT_LEFT, EXIT_DOWN,
+        fullCount
     };
 
     // The isomorphic exit structure
@@ -126,11 +128,12 @@ public class Compass : MonoBehaviour {
             case (2):
                 int val0 = (int)orientations[0] % (int)ORIENTATION.count;
                 int val1 = (int)orientations[1] % (int)ORIENTATION.count;
-                if (val0 - val1 == 1) {
-                    exits = EXIT.DOUBLE_UNALIGNED;
+                if (Mathf.Abs(val0 - val1) == 2f) {
+                    exits = EXIT.DOUBLE_ALIGNED;
                 }
                 else {
-                    exits = EXIT.DOUBLE_ALIGNED;
+                    exits = EXIT.DOUBLE_UNALIGNED;
+                    if (orientations.Contains(ORIENTATION.DOWN)) { rotations = 3; }
                 }
                 break;
             case (3):

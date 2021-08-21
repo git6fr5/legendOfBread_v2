@@ -14,7 +14,10 @@ public class Exit : MonoBehaviour {
     /* --- Unity --- */
     // Runs once on instantiation
     void Awake() {
-        dungeon = GameObject.FindWithTag(GameRules.dungeonTag).GetComponent<Dungeon>();
+        GameObject dungeonObject = GameObject.FindWithTag(GameRules.dungeonTag);
+        if (dungeonObject != null) {
+            dungeon = dungeonObject.GetComponent<Dungeon>();
+        }
         GetComponent<CircleCollider2D>().isTrigger = true;
     }
 
@@ -42,7 +45,7 @@ public class Exit : MonoBehaviour {
 
         // slightly different values along the x and y axis because of the rectangular shape
         // of the players hitbox
-        float dist = 6;
+        float dist = 9f;
         Vector3 deltaPosition = new Vector3(-id[1] * dist, id[0] * dist, 0);
         hurtbox.controller.transform.position = currPosition + deltaPosition;
 

@@ -8,7 +8,7 @@ using ORIENTATION = Compass.ORIENTATION;
 public class Controller : MonoBehaviour {
     
     /* --- Components --- */
-    protected State state;
+    [HideInInspector] public State state;
     protected Rigidbody2D body;
 
     /* --- Variables --- */

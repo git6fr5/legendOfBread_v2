@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f84cbf13ea5d77c40aca922502ad1222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: {fileID: 0}
   id: 1
   movementVector: {x: 0, y: 0}
   orientationVector: {x: 0, y: 0}
@@ -182,9 +183,10 @@ MonoBehaviour:
   vision: {fileID: 3060322278178288418}
   idleFactor: 1
   aggressiveFactor: 1.25
-  childSlime: {fileID: 0}
-  parentSlime: {fileID: 0}
+  childSlime: {fileID: 8383983335340645592, guid: a494676119b618c4cb2f961adea6a887, type: 3}
+  parentSlime: {fileID: 3060322277553909562}
   damage: 0.5
+  isChild: 0
 --- !u!50 &3060322277553909561
 Rigidbody2D:
   serializedVersion: 4

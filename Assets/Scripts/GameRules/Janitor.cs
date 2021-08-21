@@ -20,7 +20,7 @@ public class Janitor : MonoBehaviour {
     /* --- Methods --- */
     // Reorder the border tiles with respect to the input order.
     public static TileBase[] BorderOrder(TileBase[] tiles) {
-        TileBase[] tempTiles = new TileBase[(int)DIRECTION.count + 1];
+        TileBase[] tempTiles = new TileBase[(int)DIRECTION.fullCount + 1];
         tempTiles[0] = null;
         for (int i = 0; i < inputOrder.Length; i++) {
             // Put the tile currently at "i", at the correct index
@@ -34,7 +34,7 @@ public class Janitor : MonoBehaviour {
     public static int[][] CleanBorder(int[][] grid, int sizeVertical, int sizeHorizontal, int borderVertical, int borderHorizontal) {
         for (int i = borderVertical - 1; i < sizeVertical - (borderVertical - 1); i++) {
             for (int j = borderHorizontal - 1; j < sizeHorizontal - (borderHorizontal - 1); j++) {
-                if (grid[i][j] != (int)DIRECTION.CENTER && grid[i][j] != (int)DIRECTION.DOWN_LEFT_UP_RIGHT) {
+                if (grid[i][j] != (int)DIRECTION.CENTER && grid[i][j] < (int)DIRECTION.count) {
                     grid[i][j] = CleanBorderCell(grid, sizeVertical, sizeHorizontal, i, j);
                 }
             }
@@ -64,9 +64,26 @@ public class Janitor : MonoBehaviour {
 
     /* --- Exit Cleaning --- */
     public static int[][] AddExits(int[][] grid, EXIT exits, int border) {
-        int[][] exitCoords = ExitCoordinates(grid, exits, border);
+        print(exits);
+        List<ORIENTATION> orientations = Compass.ExitToOrientations(exits);
+        int[][] exitCoords = ExitCoordinates(grid, orientations, border);
         for (int i = 0; i < exitCoords.Length; i++) {
-            grid[exitCoords[i][0]][exitCoords[i][1]] = (int)DIRECTION.DOWN_LEFT_UP_RIGHT;
+            // Exit Orientiation = Value - (Direction.Count - 1)
+            grid[exitCoords[i][0]][exitCoords[i][1]] = (int)DIRECTION.count + (int)orientations[i] + 1;
+        }
+        return grid;
+    }
+
+    public static int[][] RotateExitID(int[][] grid) {
+        for (int i = 0; i < grid.Length; i++) {
+            for (int j = 0; j < grid[0].Length; j++) {
+                if (grid[i][j] > (int)DIRECTION.count) {
+                    // Exit Orientiation = Value - (Direction.Count - 1)
+                    int orientation = grid[i][j] - (int)DIRECTION.count - 1;
+                    orientation = (orientation + 1) % (int)ORIENTATION.count;
+                    grid[i][j] = orientation + (int)DIRECTION.count + 1;
+                }
+            }
         }
         return grid;
     }
@@ -74,10 +91,13 @@ public class Janitor : MonoBehaviour {
     public static Exit[] AddExitObjects(Exit nullExit, Transform gridTransform, int[][] grid) {
 
         List<int[]> exitCoords = new List<int[]>();
+        List<int> orientations = new List<int>();
         for (int i = 0; i < grid.Length; i++) {
             for (int j = 0; j < grid[0].Length; j++) {
-                if (grid[i][j] == (int)DIRECTION.DOWN_LEFT_UP_RIGHT) {
+                if (grid[i][j] > (int)DIRECTION.count) {
                     exitCoords.Add(new int[] { i, j });
+                    // Exit Orientiation = Value - (Direction.Count - 1)
+                    orientations.Add(grid[i][j] - (int)DIRECTION.count - 1);
                 }
             }
         }
@@ -86,29 +106,18 @@ public class Janitor : MonoBehaviour {
         for (int i = 0; i < exitCoords.Count; i++) {
             Vector3 position = Geometry.GridToPosition(exitCoords[i], gridTransform);
             Exit exit = Instantiate(nullExit.gameObject, position, Quaternion.identity).GetComponent<Exit>();
+            exit.gameObject.SetActive(true);
+            Vector3 idVec = Compass.OrientationVectors[(ORIENTATION)orientations[i]];
+            exit.id = new int[] { -(int)idVec.y, (int)idVec.x };
 
-            int x = 0; int y = 0;
-            if (exitCoords[i][0] < Mathf.Floor(grid.Length / 3)) {
-                y = -1;
-            }
-            else if (exitCoords[i][0] >= Mathf.Floor(2 * grid.Length / 3)) {
-                y = 1;
-            }
-            if (exitCoords[i][1] < Mathf.Floor(grid[0].Length / 3)) {
-                x = -1;
-            }
-            else if (exitCoords[i][1] > Mathf.Ceil(2 * grid[0].Length / 3)) {
-                x = 1;
-            }
+            exit.transform.localRotation = Compass.OrientationAngles[(ORIENTATION)orientations[i]];
 
-            exit.id = new int[] { y, x };
             roomExits[i] = exit;
         }
         return roomExits;
     }
 
-    static int[][] ExitCoordinates(int[][] grid, EXIT exits, int border) {
-        List<ORIENTATION> orientations = Compass.ExitToOrientations(exits);
+    static int[][] ExitCoordinates(int[][] grid, List<ORIENTATION> orientations, int border) {
         int[][] exitCoords = new int[orientations.Count][];
         for (int k = 0; k < orientations.Count; k++) {
             Vector2 direction = Compass.OrientationVectors[orientations[k]];
@@ -149,5 +158,24 @@ public class Janitor : MonoBehaviour {
         return loadedControllers.ToArray();
     }
 
+    // Load a set of controllers based on the grid.
+    public static void LoadNewController(Controller controllerPrefab, Vector3 position) {
+
+        Transform roomTransform = GameObject.FindWithTag(GameRules.roomTag).transform;
+        Controller controller = Instantiate(controllerPrefab.gameObject, position, Quaternion.identity, roomTransform).GetComponent<Controller>();
+        controller.gameObject.SetActive(true);
+
+        Dungeon dungeon = GameObject.FindWithTag(GameRules.dungeonTag)?.GetComponent<Dungeon>();
+        if (dungeon != null) {
+            string idString = dungeon.id[0].ToString() + ", " + dungeon.id[1].ToString();
+            Controller[] loadedControllers = dungeon.loadedControllers[idString];
+            Controller[] newLoadedControllers = new Controller[loadedControllers.Length + 1];
+            for (int i = 0; i < loadedControllers.Length; i++) {
+                newLoadedControllers[i] = loadedControllers[i];
+            }
+            newLoadedControllers[loadedControllers.Length] = controller;
+            dungeon.loadedControllers[idString] = newLoadedControllers;
+        }
+    }
 
 }

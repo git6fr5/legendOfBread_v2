@@ -36,7 +36,7 @@ public class Alphabet : MonoBehaviour {
         characterRenderers = new SpriteRenderer[text.Length];
         for (int i = 0; i < text.Length; i++) {
             SpriteRenderer characterRenderer = Instantiate(defaultCharacterRenderer.gameObject, Vector3.zero, Quaternion.identity, transform).GetComponent<SpriteRenderer>();
-            characterRenderer.transform.localPosition = new Vector3(0.5f * i, 0f, 0f);
+            characterRenderer.transform.localPosition = new Vector3(0.4f * i, 0f, 0f);
             characterRenderer.sprite = letters[text[i]];
             characterRenderer.material = textMaterial;
             characterRenderers[i] = characterRenderer;

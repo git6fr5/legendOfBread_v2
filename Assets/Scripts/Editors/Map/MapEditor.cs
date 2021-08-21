@@ -29,6 +29,11 @@ public class MapEditor : MonoBehaviour {
 
     public int[] prevCoord;
 
+    // Runs once on compilation.
+    void Awake() {
+        transform.position = map.transform.position;
+    }
+
     void Start() {
         PrintEdit();
     }
@@ -78,12 +83,11 @@ public class MapEditor : MonoBehaviour {
     // Edit the shape of the rooms in the map.
     void EditShapes() {
         if (Input.GetMouseButtonDown(0)) {
-            int value = 1;
-            map.shapeGrid = Geometry.EditPoint(map.transform, map.shapeGrid, value);
+            map.shapeGrid = Geometry.IncrementPoint(map.transform, map.shapeGrid, (int)SHAPE.count);
             PrintEdit();
         }
         if (Input.GetMouseButtonDown(1)) {
-            map.shapeGrid = Geometry.EditPoint(map.transform, map.shapeGrid, (int)DIRECTION.EMPTY);
+            map.shapeGrid = Geometry.EditPoint(map.transform, map.shapeGrid, (int)SHAPE.EMPTY);
             PrintEdit();
         }
     }
@@ -108,12 +112,11 @@ public class MapEditor : MonoBehaviour {
     // Edit the different types of challenges in the map.
     void EditChallenges() {
         if (Input.GetMouseButtonDown(0)) {
-            int value = 1;
-            map.shapeGrid = Geometry.EditPoint(map.transform, map.challengeGrid, value);
+            map.challengeGrid = Geometry.IncrementPoint(map.transform, map.challengeGrid, (int)CHALLENGE.count);
             PrintEdit();
         }
         if (Input.GetMouseButtonDown(1)) {
-            map.shapeGrid = Geometry.EditPoint(map.transform, map.challengeGrid, (int)DIRECTION.EMPTY);
+            map.challengeGrid = Geometry.EditPoint(map.transform, map.challengeGrid, (int)CHALLENGE.EMPTY);
             PrintEdit();
         }
     }
@@ -124,7 +127,6 @@ public class MapEditor : MonoBehaviour {
         print("selecting channel");
         channel = (CHANNEL)(((int)channel + 1) % (int)CHANNEL.count);
         // channel = selectedChannel; // Until we set the buttons up.
-        PrintEdit();
     }
 
 }
