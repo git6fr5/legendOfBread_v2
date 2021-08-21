@@ -13,7 +13,7 @@ public class Environment : MonoBehaviour {
     public Mob[] mobs;
     public Trap[] traps;
     // Exit
-    public Exit exit;
+    public Exitbox exit;
 
     /* --- Unity --- */
     // Runs once on compilation.

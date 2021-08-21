@@ -7,8 +7,8 @@ public class State : MonoBehaviour {
 
     /* --- Variables --- */
     // Health
-    [Range(0F, 7F)] public double maxHealth;
-    public double health;
+    [Range(0, 10)] public int maxHealth;
+    public int health;
 
     // Stats
     [Range(0f, 5f)] public float baseSpeed;

@@ -133,7 +133,7 @@ public class Compass : MonoBehaviour {
                 }
                 else {
                     exits = EXIT.DOUBLE_UNALIGNED;
-                    if (orientations.Contains(ORIENTATION.DOWN)) { rotations = 3; }
+                    if (orientations.Contains(ORIENTATION.DOWN) && orientations.Contains(ORIENTATION.RIGHT)) { rotations = 3; }
                 }
                 break;
             case (3):

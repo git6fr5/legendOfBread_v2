@@ -10,7 +10,7 @@ public class Scorpion : Mob {
     }
 
     /* --- Components --- */
-    [Range(0F, 5F)] public double damage;
+    [Range(0, 5)] public int damage;
 
     /* --- Variables --- */
     Room room;
@@ -20,6 +20,7 @@ public class Scorpion : Mob {
     /* --- Unity --- */
     void Start() {
         room = GameObject.FindWithTag(GameRules.roomTag).GetComponent<Room>();
+        orientationVector = Vector2.right;
     }
 
     /* --- Action Flow --- */

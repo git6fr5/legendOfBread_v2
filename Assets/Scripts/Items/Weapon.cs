@@ -12,7 +12,7 @@ public class Weapon : Item {
     public Hitbox hitbox;
 
     /* --- Variables --- */
-    [Range(0F, 5F)] public double damage;
+    [Range(0, 5)] public int damage;
 
     /* --- Unity --- */
     void Awake() {

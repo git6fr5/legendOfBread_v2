@@ -17,7 +17,6 @@ public class Janitor : MonoBehaviour {
         DIRECTION.DOWN_LEFT, DIRECTION.DOWN, DIRECTION.DOWN_RIGHT,
     };
 
-    /* --- Methods --- */
     // Reorder the border tiles with respect to the input order.
     public static TileBase[] BorderOrder(TileBase[] tiles) {
         TileBase[] tempTiles = new TileBase[(int)DIRECTION.fullCount + 1];
@@ -88,7 +87,7 @@ public class Janitor : MonoBehaviour {
         return grid;
     }
 
-    public static Exit[] AddExitObjects(Exit nullExit, Transform gridTransform, int[][] grid) {
+    public static Exitbox[] AddExitboxes(Exitbox nullExit, Transform gridTransform, int[][] grid) {
 
         List<int[]> exitCoords = new List<int[]>();
         List<int> orientations = new List<int>();
@@ -102,10 +101,10 @@ public class Janitor : MonoBehaviour {
             }
         }
 
-        Exit[] roomExits = new Exit[exitCoords.Count];
+        Exitbox[] roomExits = new Exitbox[exitCoords.Count];
         for (int i = 0; i < exitCoords.Count; i++) {
             Vector3 position = Geometry.GridToPosition(exitCoords[i], gridTransform);
-            Exit exit = Instantiate(nullExit.gameObject, position, Quaternion.identity).GetComponent<Exit>();
+            Exitbox exit = Instantiate(nullExit.gameObject, position, Quaternion.identity).GetComponent<Exitbox>();
             exit.gameObject.SetActive(true);
             Vector3 idVec = Compass.OrientationVectors[(ORIENTATION)orientations[i]];
             exit.id = new int[] { -(int)idVec.y, (int)idVec.x };
@@ -138,44 +137,56 @@ public class Janitor : MonoBehaviour {
     }
 
     /* --- Object Loading --- */
-    // Load a set of controllers based on the grid.
-    public static Controller[] LoadControllers(Transform gridTransform, int[][] grid, Controller[] controllers) {
+    // Load already instantiated objects
+    public static void LoadControllers(Controller[] controllers, bool activate) {
+        for (int i = 0; i < controllers.Length; i++) {
+            if (controllers[i] != null && !controllers[i].state.isDead) {
+                controllers[i].gameObject.SetActive(activate);
+            }
+        }
+    }
+
+    // Load a set of new objects on the grid.
+    public static Controller[] LoadNewControllers(Transform gridTransform, int[][] grid, Controller[] orderedControllers) {
         // Find out where challenges are and place them.
-        List<Controller> loadedControllers = new List<Controller>();
+        List<Controller> controllers = new List<Controller>();
         for (int i = 0; i < grid.Length; i++) {
             for (int j = 0; j < grid[0].Length; j++) {
                 // Instantiate the appropriate controller by its index.
                 int index = grid[i][j];
                 // Check that its a valid index.
-                if (index < controllers.Length && controllers[index] != null) {
-                    Vector3 position = (Vector3)Geometry.GridToPosition(new int[] { i, j }, gridTransform);
-                    Controller controller = Instantiate(controllers[index].gameObject, position, Quaternion.identity, gridTransform).GetComponent<Controller>();
-                    controller.gameObject.SetActive(true);
-                    loadedControllers.Add(controller);
+                if (index < orderedControllers.Length && orderedControllers[index] != null) {
+                    controllers.Add(InstantiateController(new int[] { i, j }, gridTransform, orderedControllers[index]));
                 }
             }
         }
-        return loadedControllers.ToArray();
+        return controllers.ToArray();
     }
 
-    // Load a set of controllers based on the grid.
+    // Load a new object.
     public static void LoadNewController(Controller controllerPrefab, Vector3 position) {
+        // Instantiate the new controller.
+        Controller controller = Instantiate(controllerPrefab, position, Quaternion.identity, GameObject.FindWithTag(GameRules.roomTag).transform).GetComponent<Controller>();
 
-        Transform roomTransform = GameObject.FindWithTag(GameRules.roomTag).transform;
-        Controller controller = Instantiate(controllerPrefab.gameObject, position, Quaternion.identity, roomTransform).GetComponent<Controller>();
-        controller.gameObject.SetActive(true);
-
+        // Update the dungeon information.
         Dungeon dungeon = GameObject.FindWithTag(GameRules.dungeonTag)?.GetComponent<Dungeon>();
         if (dungeon != null) {
-            string idString = dungeon.id[0].ToString() + ", " + dungeon.id[1].ToString();
-            Controller[] loadedControllers = dungeon.loadedControllers[idString];
-            Controller[] newLoadedControllers = new Controller[loadedControllers.Length + 1];
-            for (int i = 0; i < loadedControllers.Length; i++) {
-                newLoadedControllers[i] = loadedControllers[i];
+            string str_id = Dungeon.GetIDString(dungeon.id);
+            Controller[] currControllers = dungeon.controllerDirectory[str_id];
+            Controller[] newControllers = new Controller[currControllers.Length + 1];
+            for (int i = 0; i < currControllers.Length; i++) {
+                newControllers[i] = currControllers[i];
             }
-            newLoadedControllers[loadedControllers.Length] = controller;
-            dungeon.loadedControllers[idString] = newLoadedControllers;
+            newControllers[currControllers.Length] = controller;
+            dungeon.controllerDirectory[str_id] = newControllers;
         }
+    }
+
+    static Controller InstantiateController(int[] coord, Transform gridTransform, Controller controllerPrefab) {
+        Vector3 position = (Vector3)Geometry.GridToPosition(coord, gridTransform);
+        Controller controller = Instantiate(controllerPrefab, position, Quaternion.identity, gridTransform).GetComponent<Controller>();
+        controller.gameObject.SetActive(true);
+        return controller;
     }
 
 }

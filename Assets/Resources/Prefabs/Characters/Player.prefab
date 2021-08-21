@@ -393,7 +393,7 @@ MonoBehaviour:
   state: {fileID: 7993923673991456148}
   blade: {fileID: 7993923673053926841}
   hitbox: {fileID: 7993923674290545123}
-  damage: 0.5
+  damage: 1
 --- !u!1 &7993923673921461958
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,6 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6873e83d0d14e89418014b0d2db06aa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: {fileID: 0}
   id: 0
   movementVector: {x: 0, y: 0}
   orientationVector: {x: 0, y: 0}

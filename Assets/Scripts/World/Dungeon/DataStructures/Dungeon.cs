@@ -19,8 +19,8 @@ public class Dungeon : MonoBehaviour {
     [HideInInspector] public int[] id = new int[2] { 0, 0 };
     // Loaded objects
     public Dictionary<string, int[]> mapRooms;
-    public Dictionary<string, GameObject[]> loadedObjects = new Dictionary<string, GameObject[]>();
-    public Exit[] loadedExits = new Exit[0];
+    public Dictionary<string, Controller[]> controllerDirectory = new Dictionary<string, Controller[]>();
+    public Exitbox[] exitDirectory = new Exitbox[0];
 
 
     void Start() {
@@ -31,32 +31,51 @@ public class Dungeon : MonoBehaviour {
 
     /* --- FILES --- */
     public void LoadRoom(int[] newID) {
-
+        // Deload the previous room.
         DeloadRoom();
-
-        (int[], int) roomData = GetRequiredIdentifiersFromMap(newID);
-        OpenMatchingRoom(roomData.Item1);
-        RotateRoom(roomData.Item2);
-        LoadRoomObjects(newID);      
-
+        // Load the new room.
         id = newID;
+        (int[], int) roomData = GetRequiredIdentifiersFromMap(id);
+        // Opens a room that matches the criteria from the room data.
+        OpenMatchingRoom(roomData.Item1);
+        // Rotates the room to the correct orientation.
+        RotateRoom(roomData.Item2);
+        // Prints the tiles.
         room.PrintRoom();
+        // Loads the objects.
+        LoadRoomObjects();      
     }
 
     public void DeloadRoom() {
         string str_id = GetIDString(id);
-        if (loadedObjects.ContainsKey(str_id)) {
-            for (int i = 0; i < loadedObjects[str_id].Length; i++) {
-                if (loadedObjects[str_id][i] != null) {
-                    loadedObjects[str_id][i].gameObject.SetActive(false);
-                }
-            }
-        }
-        foreach (Exit exit in loadedExits) {
+        // Delete the exits
+        foreach (Exitbox exit in exitDirectory) {
             Destroy(exit.gameObject);
         }
+        // Deactive the controllers
+        if (controllerDirectory.ContainsKey(str_id)) {
+            Janitor.LoadControllers(controllerDirectory[str_id], false);
+        }
         room.Reset();
+    }
 
+    void LoadRoomObjects() {
+        string str_id = GetIDString(id);
+        // Load the exits.
+        exitDirectory = Janitor.AddExitboxes(room.environment.exit, room.transform, room.borderGrid);
+        // Check if the controllers have already been loaded
+        if (controllerDirectory.ContainsKey(str_id)) {
+            Janitor.LoadControllers(controllerDirectory[str_id], true);
+        }
+        // Otherwise load new controllers.
+        else {
+            Controller[] mobs = Janitor.LoadNewControllers(room.transform, room.mobGrid, room.environment.OrderedControllers(room.environment.mobs));
+            Controller[] traps = Janitor.LoadNewControllers(room.transform, room.trapGrid, room.environment.OrderedControllers(room.environment.traps));
+            Controller[] controllers = new Controller[mobs.Length + traps.Length];
+            mobs.CopyTo(controllers, 0);
+            traps.CopyTo(controllers, mobs.Length);
+            controllerDirectory.Add(str_id, controllers);
+        }
     }
 
     public (int[], int) GetRequiredIdentifiersFromMap(int[] id) {
@@ -112,23 +131,7 @@ public class Dungeon : MonoBehaviour {
             room.borderGrid = Geometry.RotateClockwise(room.borderGrid);
             room.borderGrid = Janitor.RotateExitID(room.borderGrid);
             room.mobGrid = Geometry.RotateClockwise(room.mobGrid);
-        }
-    }
-
-    void LoadRoomObjects(int[] newID) {
-        loadedExits = Janitor.AddExitObjects(room.environment.exit, room.transform, room.borderGrid);
-
-        string idString = newID[0].ToString() + ", " + newID[1].ToString();
-        if (loadedObjects.ContainsKey(idString)) {
-            for (int i = 0; i < loadedObjects[idString].Length; i++) {
-                if (loadedObjects[idString][i] != null && !loadedObjects[idString][i].state.isDead) {
-                    loadedObjects[idString][i].gameObject.SetActive(true);
-                }
-            }
-        }
-        else {
-            Controller[] roomControllers = Janitor.LoadControllers(room.transform, room.mobGrid, room.environment.OrderedControllers(room.environment.mobs));
-            loadedObjects.Add(idString, roomControllers);
+            room.trapGrid = Geometry.RotateClockwise(room.trapGrid);
         }
     }
 

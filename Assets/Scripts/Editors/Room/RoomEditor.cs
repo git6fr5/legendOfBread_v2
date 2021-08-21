@@ -20,7 +20,7 @@ public class RoomEditor : MonoBehaviour {
 
     /* --- Variables --- */
     // Has to be sprite tiles to be able to access the sprite later on.
-    SpriteTile[] challengeTiles;
+    public SpriteTile[] challengeTiles;
     List<ValueSelector> valueSelections;
     int value;
 
@@ -109,7 +109,14 @@ public class RoomEditor : MonoBehaviour {
 
     // Edit the trap grid.
     void EditTraps() {
-        //
+        if (Input.GetMouseButtonDown(0)) {
+            room.trapGrid = Geometry.EditInteriorPoint(room.transform, room.trapGrid, room.borderGrid, value);
+            PrintEdit(room.trapGrid, trapMap);
+        }
+        else if (Input.GetMouseButtonDown(1)) {
+            room.trapGrid = Geometry.EditInteriorPoint(room.transform, room.trapGrid, room.borderGrid, (int)DIRECTION.EMPTY);
+            PrintEdit(room.trapGrid, trapMap);
+        }
     }
 
     // Print the edits to this map.
@@ -124,9 +131,11 @@ public class RoomEditor : MonoBehaviour {
                 challengeTiles = room.environment.ControllersToTileBase(room.environment.mobs);
                 break;
             case (CHALLENGE.TRAPS):
+                print("hello");
                 challengeTiles = room.environment.ControllersToTileBase(room.environment.traps);
                 break;
             default:
+                challengeTiles = new SpriteTile[0];
                 break;
         }
     }

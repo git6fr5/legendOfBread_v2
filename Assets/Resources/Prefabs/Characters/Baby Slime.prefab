@@ -307,7 +307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1
-  health: 1
+  health: 2
   baseSpeed: 1
   orientation: 0
   isMoving: 0
@@ -341,7 +341,7 @@ MonoBehaviour:
   aggressiveFactor: 1.25
   childSlime: {fileID: 8383983335340645592}
   parentSlime: {fileID: 3060322277553909562, guid: e999b6d704adc6a4dba09f7f181392dc, type: 3}
-  damage: 0.5
+  damage: 0
   isChild: 1
 --- !u!50 &8383983335340645595
 Rigidbody2D:

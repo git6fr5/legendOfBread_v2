@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CircleCollider2D))]
-public class Exit : MonoBehaviour {
+public class Exitbox : MonoBehaviour {
 
     /* --- Components --- */
     Dungeon dungeon;

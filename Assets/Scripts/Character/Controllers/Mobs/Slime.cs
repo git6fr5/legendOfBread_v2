@@ -12,7 +12,7 @@ public class Slime : Mob {
     /* --- Components --- */
     public Slime childSlime;
     public Slime parentSlime;
-    [Range(0F, 5F)] public double damage;
+    [Range(0, 5)] public int damage;
 
     /* --- Variables --- */
     public bool isChild;

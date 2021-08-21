@@ -13,6 +13,7 @@ public class Controller : MonoBehaviour {
 
     /* --- Variables --- */
     [SerializeField] public int id;
+    [SerializeField] protected Vector2 origin;
 
     // Action Controls
     [SerializeField] protected Vector2 movementVector;
@@ -21,9 +22,11 @@ public class Controller : MonoBehaviour {
     [SerializeField] protected bool activateAttack;
 
 
+
     /* --- Unity --- */
     // Runs once on compilation.
     void Awake() {
+        origin = transform.position;
         state = GetComponent<State>();
         body = GetComponent<Rigidbody2D>();
         body.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -87,7 +90,7 @@ public class Controller : MonoBehaviour {
     }
 
     // Damages the state by the given damage.
-    public void Hurt(double damage) {
+    public void Hurt(int damage) {
         OnHurt();
         state.health -= damage;
         state.isHurt = true;

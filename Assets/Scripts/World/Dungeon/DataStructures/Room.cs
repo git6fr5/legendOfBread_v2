@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 using ORIENTATION = Compass.ORIENTATION;
+using DIRECTION = Compass.DIRECTION;
 using EXIT = Compass.EXIT;
 using SHAPE = Geometry.SHAPE;
-using DIRECTION = Compass.DIRECTION;
 
 [RequireComponent(typeof(Grid))]
 public class Room : MonoBehaviour {
