@@ -794,6 +794,7 @@ MonoBehaviour:
   trapMap: {fileID: 1818143755}
   challengeSelector: {fileID: 115169294}
   nullValue: {fileID: 140932473}
+  challengeTiles: []
 --- !u!4 &630928381
 Transform:
   m_ObjectHideFlags: 0
@@ -1900,6 +1901,7 @@ MonoBehaviour:
   - {fileID: 6909791593945908993, guid: f17ebb8d0003b3846893160f96e4877d, type: 3}
   traps:
   - {fileID: 6938610357521397598, guid: 4ab1f4a8c9aa0dd4a9aea66bd8b15914, type: 3}
+  - {fileID: 1916190443933977279, guid: 933fcdf5ecae6364cb9a5301c3670938, type: 3}
   exit: {fileID: 3984115869912451937}
 --- !u!483693784 &1998861112570764656
 TilemapRenderer:
