@@ -13,13 +13,32 @@ public class MapChannelSelector : MonoBehaviour {
     [System.Serializable] public class MapChannelEvent : UnityEvent<CHANNEL> { }
     public MapChannelEvent OnSelect;
 
+    /* --- Components --- */
+    public Sprite[] sprites;
+    public MapEditor mapEditor;
+
     /* --- Variables --- */
     public CHANNEL channel;
+    SpriteRenderer spriteRenderer;
 
     /* --- Unity --- */
+    void Awake() {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+
     // Runs whenever the attached collider is clicked on.
     void OnMouseDown() {
         OnSelect.Invoke(channel);
+    }
+
+    void Update() {
+        if ((int)mapEditor.channel < sprites.Length) {
+            spriteRenderer.sprite = sprites[(int)mapEditor.channel];
+        }
+        else {
+            spriteRenderer.sprite = sprites[0];
+        }
     }
 
 }

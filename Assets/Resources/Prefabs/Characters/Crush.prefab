@@ -415,9 +415,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hull: {fileID: 5616281844054680348}
   depth: 0
-  state: {fileID: 6938610357521397597}
-  off: []
-  on: []
+  trap: {fileID: 6938610357521397598}
+  off:
+  - {fileID: -417064688979900798, guid: 2276360a1bedbcc4289f4454b9a42979, type: 3}
+  on:
+  - {fileID: -417064688979900798, guid: 2276360a1bedbcc4289f4454b9a42979, type: 3}
 --- !u!1 &7685818007285483197
 GameObject:
   m_ObjectHideFlags: 0

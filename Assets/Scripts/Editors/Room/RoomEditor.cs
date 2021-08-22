@@ -131,7 +131,6 @@ public class RoomEditor : MonoBehaviour {
                 challengeTiles = room.environment.ControllersToTileBase(room.environment.mobs);
                 break;
             case (CHALLENGE.TRAPS):
-                print("hello");
                 challengeTiles = room.environment.ControllersToTileBase(room.environment.traps);
                 break;
             default:

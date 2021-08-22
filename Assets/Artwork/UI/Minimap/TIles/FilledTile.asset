@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: FilledTile
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: 5050163983f13814fa9d4458f9b12126, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dd1881cc3a7c61c4cbf9be213ab4576c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

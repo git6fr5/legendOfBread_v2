@@ -130,13 +130,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 384398806586792696, guid: eced1d3ce4c09ed43a70ecd91ab50a48, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 06ccbeef9bb136c40a6a0765e02c0238, type: 3}
     - target: {fileID: 1924849575094008921, guid: eced1d3ce4c09ed43a70ecd91ab50a48, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 1924849575094008921, guid: eced1d3ce4c09ed43a70ecd91ab50a48, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 1924849575094008921, guid: eced1d3ce4c09ed43a70ecd91ab50a48, type: 3}
       propertyPath: m_LocalPosition.z
@@ -178,6 +182,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Map
       objectReference: {fileID: 0}
+    - target: {fileID: 2998670475627825731, guid: eced1d3ce4c09ed43a70ecd91ab50a48, type: 3}
+      propertyPath: minimapTile
+      value: 
+      objectReference: {fileID: 11400000, guid: a65fe962187172048b81b7c1024f565d, type: 2}
+    - target: {fileID: 2998670475627825731, guid: eced1d3ce4c09ed43a70ecd91ab50a48, type: 3}
+      propertyPath: playerTile
+      value: 
+      objectReference: {fileID: 11400000, guid: ec55f612b3127684982b5b1871e8edf6, type: 2}
+    - target: {fileID: 2998670475627825731, guid: eced1d3ce4c09ed43a70ecd91ab50a48, type: 3}
+      propertyPath: dungeon
+      value: 
+      objectReference: {fileID: 2038702491}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eced1d3ce4c09ed43a70ecd91ab50a48, type: 3}
 --- !u!1001 &288155210
@@ -425,7 +441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map: {fileID: 2127804727}
   room: {fileID: 1822530875}
-  mapfile: maptestB
+  mapfile: maptestC
   id: 0300000003000000
   exitDirectory: []
 --- !u!4 &2038702492
@@ -676,7 +692,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &3413540672385754937
 GameObject:
   m_ObjectHideFlags: 0

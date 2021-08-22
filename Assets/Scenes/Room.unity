@@ -184,6 +184,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  sprites:
+  - {fileID: 21300000, guid: ee51240273a0ff849be8910b9b9092eb, type: 3}
+  - {fileID: -1863859237976802683, guid: ae1babc0318c37a4b87c7ccdb2e88339, type: 3}
+  - {fileID: 3052315535316524931, guid: ae1babc0318c37a4b87c7ccdb2e88339, type: 3}
   challenge: 0
 --- !u!61 &115169295
 BoxCollider2D:
@@ -915,7 +919,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  shape: 2
+  sprites:
+  - {fileID: 21300000, guid: ee51240273a0ff849be8910b9b9092eb, type: 3}
+  - {fileID: -941769597684628784, guid: 2aebedb93f8980c458d243e9f46e0a61, type: 3}
+  - {fileID: -2151989937092700874, guid: 2aebedb93f8980c458d243e9f46e0a61, type: 3}
+  shape: 1
 --- !u!61 &932679447
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1612,6 +1620,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  sprites:
+  - {fileID: -5908327983602914153, guid: cc311fb3b16cd354b8614e02f9137152, type: 3}
+  - {fileID: 8850629881700986773, guid: cc311fb3b16cd354b8614e02f9137152, type: 3}
+  - {fileID: 3769495060631318584, guid: cc311fb3b16cd354b8614e02f9137152, type: 3}
+  - {fileID: 7550500568185113417, guid: cc311fb3b16cd354b8614e02f9137152, type: 3}
+  - {fileID: -4799540573422841136, guid: cc311fb3b16cd354b8614e02f9137152, type: 3}
   exits: 0
 --- !u!61 &2098926330
 BoxCollider2D:
@@ -1902,6 +1916,7 @@ MonoBehaviour:
   traps:
   - {fileID: 6938610357521397598, guid: 4ab1f4a8c9aa0dd4a9aea66bd8b15914, type: 3}
   - {fileID: 1916190443933977279, guid: 933fcdf5ecae6364cb9a5301c3670938, type: 3}
+  - {fileID: 1100849837317249334, guid: 6beaa956e82fbb747838d07edb0f4267, type: 3}
   exit: {fileID: 3984115869912451937}
 --- !u!483693784 &1998861112570764656
 TilemapRenderer:

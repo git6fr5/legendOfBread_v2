@@ -48,7 +48,7 @@ public class Crush : Trap {
         }
         if (isCharging) {
             moveSpeed = state.baseSpeed * onSpeed;
-            if (Vector2.Distance(transform.position, origin) >= travelDistance) {
+            if (Vector2.Distance(transform.position, targetPoint) < GameRules.movementPrecision) {
                 targetPoint = origin;
                 isCharging = false;
             }

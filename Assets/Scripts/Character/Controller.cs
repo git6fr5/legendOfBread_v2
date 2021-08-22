@@ -91,11 +91,13 @@ public class Controller : MonoBehaviour {
 
     // Damages the state by the given damage.
     public void Hurt(int damage) {
-        OnHurt();
-        state.health -= damage;
-        state.isHurt = true;
-        if (state.health <= 0) {
-            Death();
+        if (!state.isHurt) {
+            OnHurt();
+            state.health -= damage;
+            state.isHurt = true;
+            if (state.health <= 0) {
+                Death();
+            }
         }
     }
 

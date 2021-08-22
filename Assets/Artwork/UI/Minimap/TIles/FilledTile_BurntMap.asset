@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: FilledTile_BurntMap
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: b73a0d81575f12048bfadeebb31cb02c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c7240f5b0769f304cb82165b9b7d4ecc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

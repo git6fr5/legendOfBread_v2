@@ -42,6 +42,7 @@ public class Human : Mesh {
     // Renders the sprite based on the state.
     void RenderSprite() {
         timeInterval += Time.deltaTime;
+        transform.localPosition = new Vector3(0, 0, 0);
         if (state.isAttacking) {
             if (active != attack) {
                 timeInterval = 0f;
@@ -57,6 +58,9 @@ public class Human : Mesh {
             }
             int index = walkCycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * frameRate) % walkCycle);
             spriteRenderer.sprite = walk[index];
+            if (index % 2 == 0) {
+                transform.localPosition = new Vector3(0, 0.05f, 0);
+            }
         }
         else {
             active = idle;

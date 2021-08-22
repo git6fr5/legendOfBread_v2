@@ -146,7 +146,7 @@ public class Geometry : MonoBehaviour {
     }
 
     // Converts a grid coordinate to tile map position.
-    static Vector3Int GridToTileMap(int i, int j) {
+    public static Vector3Int GridToTileMap(int i, int j) {
         return new Vector3Int(j, -(i + 1), 0);
     }
 

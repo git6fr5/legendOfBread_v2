@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 384398806586792698}
   - component: {fileID: 384398806586792696}
   - component: {fileID: 384398806586792697}
+  - component: {fileID: 2998670475627825731}
   m_Layer: 0
   m_Name: Minimap
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 384398806586792699}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6, y: 1, z: 0}
+  m_LocalPosition: {x: -3, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 384398808087588851}
@@ -70,10 +71,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1253274193
-  m_SortingLayer: 0
+  m_SortingLayerID: 2094388327
+  m_SortingLayer: 4
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: b4037c72c66bd524ba0e5edff2cf5096, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3966b057a9f76114288a09b7049fcae9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -96,6 +97,26 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!114 &2998670475627825731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384398806586792699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69833b230314a3948be8646916beb0d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minimapTile: {fileID: 11400000, guid: 53880f723edfa79419f2115f0966e2d8, type: 2}
+  playerTile: {fileID: 11400000, guid: 5ff9112759a541341982beeaebce9b1a, type: 2}
+  map: {fileID: 1924849575094008920}
+  mapEditor: {fileID: 0}
+  dungeon: {fileID: 0}
+  minimapMap: {fileID: 384398808087588849}
+  horOffset: -1.75
+  vertOffset: 1.75
 --- !u!1 &384398808087588852
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,8 +224,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1253274193
-  m_SortingLayer: 0
+  m_SortingLayerID: 2094388327
+  m_SortingLayer: 4
   m_SortingOrder: 4
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -226,7 +247,7 @@ GameObject:
   - component: {fileID: 1924849575094008920}
   m_Layer: 0
   m_Name: Map
-  m_TagString: Untagged
+  m_TagString: Map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

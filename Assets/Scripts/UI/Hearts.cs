@@ -31,6 +31,7 @@ public class Hearts : MonoBehaviour {
         for (int i = 0; i < heartRenderers.Length; i++) {
             SpriteRenderer heartRenderer = Instantiate(defaultHeartRenderer.gameObject, Vector3.zero, Quaternion.identity, transform).GetComponent<SpriteRenderer>();
             heartRenderer.transform.localPosition = new Vector3(i, 0, 0);
+            heartRenderer.gameObject.SetActive(true);
             heartRenderers[i] = heartRenderer;
         }
     }

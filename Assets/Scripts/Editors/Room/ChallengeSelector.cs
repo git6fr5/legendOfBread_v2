@@ -13,13 +13,33 @@ public class ChallengeSelector : MonoBehaviour {
     [System.Serializable] public class ChannelEvent : UnityEvent<CHALLENGE> { }
     public ChannelEvent OnSelect;
 
+    /* --- Components --- */
+    public Sprite[] sprites;
+
     /* --- Variables --- */
     public CHALLENGE challenge;
+    SpriteRenderer spriteRenderer;
+    Room room;
 
     /* --- Unity --- */
+
+    void Awake() {
+        room = GameObject.FindWithTag(GameRules.roomTag).GetComponent<Room>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     // Runs whenever the attached collider is clicked on.
     void OnMouseDown() {
         OnSelect.Invoke(challenge);
+    }
+
+    void Update() {
+        if ((int)room.challenge < sprites.Length) {
+            spriteRenderer.sprite = sprites[(int)room.challenge];
+        }
+        else {
+            spriteRenderer.sprite = sprites[0];
+        }
     }
 
 }
