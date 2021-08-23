@@ -180,7 +180,7 @@ public class Geometry : MonoBehaviour {
 
     // Transforms a given coordinate to world space
     public static Vector3 GridToPosition(int[] coordinate, Transform gridTransform) {
-        return new Vector3(gridTransform.position.x + coordinate[1] + 0.49f, gridTransform.position.y - (coordinate[0] + 0.49f), 0);
+        return new Vector3(gridTransform.position.x + coordinate[1] + 0.5f, gridTransform.position.y - (coordinate[0] + 0.5f), 0);
     }
 
     /* --- Searching --- */

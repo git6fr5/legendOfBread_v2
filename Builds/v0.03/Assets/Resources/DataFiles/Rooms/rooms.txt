@@ -1,0 +1,4 @@
+slime,1,1
+scorpion,1,1
+crush,1,2
+spinner,1,2
