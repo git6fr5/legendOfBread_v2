@@ -5,7 +5,6 @@ using UnityEngine.Tilemaps;
 
 using ORIENTATION = Compass.ORIENTATION;
 using DIRECTION = Compass.DIRECTION;
-using EXIT = Compass.EXIT;
 using SHAPE = Geometry.SHAPE;
 
 [RequireComponent(typeof(Grid))]
@@ -32,7 +31,6 @@ public class Room : MonoBehaviour {
 
     // Constructors
     public SHAPE shape;
-    public EXIT exits;
     public CHALLENGE challenge;
     public int[][] mobGrid;
     public int[][] trapGrid;
@@ -43,7 +41,7 @@ public class Room : MonoBehaviour {
     public int border = 1;
     // File Management.
     public static string path = "DataFiles/Rooms/";
-    public static string identifierFilename = "identifierFiles";
+    public static string identifierFilename = "rooms";
 
     /* --- Unity --- */
     // Runs once on compilation
@@ -58,8 +56,7 @@ public class Room : MonoBehaviour {
         List<int[][]> channels = IO.OpenCSV(path, filename);
         int[] identifiers = IO.FindInListFile(filename);
         shape = (SHAPE)identifiers[0];
-        exits = (EXIT)identifiers[1];
-        challenge = (CHALLENGE)identifiers[2]; 
+        challenge = (CHALLENGE)identifiers[1]; 
         mobGrid = channels[0];
         trapGrid = channels[1];
         Construct();
@@ -76,7 +73,6 @@ public class Room : MonoBehaviour {
     // Constructs the room setting.
     public void Construct() {
         borderGrid = Geometry.Grid(shape, size, size, border, border);
-        borderGrid = Janitor.AddExits(borderGrid, exits, border);
         PrintRoom();
     }
 

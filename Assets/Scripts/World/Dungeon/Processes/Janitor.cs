@@ -5,7 +5,6 @@ using UnityEngine.Tilemaps;
 
 using ORIENTATION = Compass.ORIENTATION;
 using DIRECTION = Compass.DIRECTION;
-using EXIT = Compass.EXIT;
 
 public class Janitor : MonoBehaviour {
 
@@ -61,79 +60,48 @@ public class Janitor : MonoBehaviour {
         return false;
     }
 
-    /* --- Exit Cleaning --- */
-    public static int[][] AddExits(int[][] grid, EXIT exits, int border) {
-        print(exits);
-        List<ORIENTATION> orientations = Compass.ExitToOrientations(exits);
-        int[][] exitCoords = ExitCoordinates(grid, orientations, border);
-        for (int i = 0; i < exitCoords.Length; i++) {
+    /* --- Exit --- */
+    public static int[][] AddExits(DIRECTION direction, int[][] grid, int border) {
+        List<ORIENTATION> orientations = Compass.DirectionToOrientations(direction);
+        for (int i = 0; i < orientations.Count; i++) {
             // Exit Orientiation = Value - (Direction.Count - 1)
-            grid[exitCoords[i][0]][exitCoords[i][1]] = (int)DIRECTION.count + (int)orientations[i] + 1;
-        }
-        return grid;
-    }
-
-    public static int[][] RotateExitID(int[][] grid) {
-        for (int i = 0; i < grid.Length; i++) {
-            for (int j = 0; j < grid[0].Length; j++) {
-                if (grid[i][j] > (int)DIRECTION.count) {
-                    // Exit Orientiation = Value - (Direction.Count - 1)
-                    int orientation = grid[i][j] - (int)DIRECTION.count - 1;
-                    orientation = (orientation + 1) % (int)ORIENTATION.count;
-                    grid[i][j] = orientation + (int)DIRECTION.count + 1;
-                }
-            }
+            int[] exitCoord = OrientationToCoordinate(orientations[i], grid.Length, border);
+            grid[exitCoord[0]][exitCoord[1]] = (int)DIRECTION.count + (int)orientations[i] + 1;
         }
         return grid;
     }
 
     public static Exitbox[] AddExitboxes(Exitbox nullExit, Transform gridTransform, int[][] grid) {
-
-        List<int[]> exitCoords = new List<int[]>();
-        List<int> orientations = new List<int>();
+        List<Exitbox> exitboxes = new List<Exitbox>();
         for (int i = 0; i < grid.Length; i++) {
             for (int j = 0; j < grid[0].Length; j++) {
                 if (grid[i][j] > (int)DIRECTION.count) {
-                    exitCoords.Add(new int[] { i, j });
-                    // Exit Orientiation = Value - (Direction.Count - 1)
-                    orientations.Add(grid[i][j] - (int)DIRECTION.count - 1);
+                    Exitbox exit = AddExitbox(nullExit, grid, gridTransform, new int[] { i, j });
+                    exitboxes.Add(exit);
                 }
             }
         }
-
-        Exitbox[] roomExits = new Exitbox[exitCoords.Count];
-        for (int i = 0; i < exitCoords.Count; i++) {
-            Vector3 position = Geometry.GridToPosition(exitCoords[i], gridTransform);
-            Exitbox exit = Instantiate(nullExit.gameObject, position, Quaternion.identity).GetComponent<Exitbox>();
-            exit.gameObject.SetActive(true);
-            Vector3 idVec = Compass.OrientationVectors[(ORIENTATION)orientations[i]];
-            exit.id = new int[] { -(int)idVec.y, (int)idVec.x };
-
-            exit.transform.localRotation = Compass.OrientationAngles[(ORIENTATION)orientations[i]];
-
-            roomExits[i] = exit;
-        }
-        return roomExits;
+        return exitboxes.ToArray();
     }
 
-    static int[][] ExitCoordinates(int[][] grid, List<ORIENTATION> orientations, int border) {
-        int[][] exitCoords = new int[orientations.Count][];
-        for (int k = 0; k < orientations.Count; k++) {
-            Vector2 direction = Compass.OrientationVectors[orientations[k]];
-            int i; int j;
-            if (direction.x != 0) {
-                j = (int)(((direction.x + 1) / 2) * (grid[0].Length - (border + 1)));
-                if (j == 0) { j = border; }
-                i = (int)Mathf.Floor(grid.Length / 2);
-            }
-            else {
-                i = (int)(((-direction.y + 1) / 2) * (grid[0].Length - (border + 1)));
-                if (i == 0) { i = border; }
-                j = (int)Mathf.Floor(grid[0].Length / 2);
-            }
-            exitCoords[k] = new int[] { i, j };
-        }
-        return exitCoords;
+    static Exitbox AddExitbox(Exitbox nullExit, int[][] grid, Transform gridTransform, int[] coord) {
+        Vector3 position = Geometry.GridToPosition(coord, gridTransform);
+        Exitbox exit = Instantiate(nullExit.gameObject, position, Quaternion.identity).GetComponent<Exitbox>();
+        exit.gameObject.SetActive(true);
+
+        ORIENTATION exitOrientation = (ORIENTATION) (grid[coord[0]][coord[1]] - (int)DIRECTION.count - 1);
+        Vector3 vec_id = Compass.OrientationVectors[exitOrientation];
+        exit.id = new int[] { -(int)vec_id.y, (int)vec_id.x };
+        exit.transform.localRotation = Compass.OrientationAngles[exitOrientation];
+        return exit;
+    }
+
+    static int[] OrientationToCoordinate(ORIENTATION orientation, int length, int border) {
+        Vector2 vector = Compass.OrientationVectors[orientation];
+        vector.x = (vector.x + 1f) / 2f;
+        vector.y = (-vector.y + 1f) / 2f;
+        vector = vector * (length - 2*border - 1) + new Vector2(border, border);
+        return new int[2] { (int)vector.y, (int)vector.x };
     }
 
     /* --- Object Loading --- */
@@ -142,6 +110,7 @@ public class Janitor : MonoBehaviour {
         for (int i = 0; i < controllers.Length; i++) {
             if (controllers[i] != null && !controllers[i].state.isDead) {
                 controllers[i].gameObject.SetActive(activate);
+                controllers[i].transform.position = controllers[i].origin;
             }
         }
     }

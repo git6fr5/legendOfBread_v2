@@ -4,28 +4,29 @@ using UnityEngine;
 
 using SHAPE = Geometry.SHAPE;
 using CHALLENGE = Room.CHALLENGE;
-using DIRECTION = Compass.DIRECTION;
-using EXIT = Compass.EXIT;
+using NODE = Compass.DIRECTION;
 
 public class Dungeon : MonoBehaviour {
 
     /* --- COMPONENTS --- */
     public Map map;
     public Room room;
-    public string mapfile;
+    public static string mapfile = "mapA";
+    public static int seed = 1;
 
 
     /* --- Variables --- */
     [HideInInspector] public int[] id = new int[2] { 0, 0 };
     // Loaded objects
-    public Dictionary<string, int[]> mapRooms;
+    public Dictionary<string, int[]> roomDirectory;
     public Dictionary<string, Controller[]> controllerDirectory = new Dictionary<string, Controller[]>();
     public Exitbox[] exitDirectory = new Exitbox[0];
 
 
     void Start() {
+        seed = GameRules.PrimeRandomizer(seed);
         map.Open(mapfile);
-        mapRooms = IO.ReadListFile();
+        roomDirectory = IO.ReadListFile();
         LoadRoom(id);
     }
 
@@ -35,15 +36,18 @@ public class Dungeon : MonoBehaviour {
         DeloadRoom();
         // Load the new room.
         id = newID;
-        (int[], int) roomData = GetRequiredIdentifiersFromMap(id);
+        (SHAPE, NODE, CHALLENGE) mapData = ParseMapData(id);
         // Opens a room that matches the criteria from the room data.
-        OpenMatchingRoom(roomData.Item1);
-        // Rotates the room to the correct orientation.
-        RotateRoom(roomData.Item2);
+        OpenMatchingRoom(mapData);
+        // Loads the objects.
+        LoadRoomObjects();
         // Prints the tiles.
         room.PrintRoom();
-        // Loads the objects.
-        LoadRoomObjects();      
+    }
+
+    /* --- LOADING ROOMS --- */
+    public static string GetIDString(int[] id) {
+        return id[0].ToString() + ", " + id[1].ToString();
     }
 
     public void DeloadRoom() {
@@ -78,65 +82,46 @@ public class Dungeon : MonoBehaviour {
         }
     }
 
-    public (int[], int) GetRequiredIdentifiersFromMap(int[] id) {
-        int[] requiredIdentifiers = new int[(int)MapEditor.CHANNEL.count];
-        requiredIdentifiers[0] = map.shapeGrid[id[0]][id[1]];
+    /* --- MATCHING ROOMS --- */
+    public (SHAPE, NODE, CHALLENGE) ParseMapData(int[] id) {
+        
+        SHAPE shape = (SHAPE)map.shapeGrid[id[0]][id[1]];
+        NODE direction = (NODE)map.nodeGrid[id[0]][id[1]];
+        CHALLENGE challenge = (CHALLENGE)map.challengeGrid[id[0]][id[1]];
 
-        DIRECTION direction = (DIRECTION)map.exitAndRotationsGrid[id[0]][id[1]];
-        (EXIT, int) exitAndRotation = Compass.DirectionToExitAndRotations(direction);
-        requiredIdentifiers[1] = (int)exitAndRotation.Item1; // Convert to exit
-        int rotations = exitAndRotation.Item2;
-
-        requiredIdentifiers[2] = map.challengeGrid[id[0]][id[1]];
-
-        return (requiredIdentifiers, rotations);
+        return (shape, direction, challenge);
     }
 
-    public void CreateDefaultRoom(int[] identifiers) {
-        room.shape = (SHAPE)identifiers[0];
-        room.exits = (EXIT)identifiers[1];
-        room.challenge = (CHALLENGE)identifiers[2];
+    void OpenMatchingRoom((SHAPE, NODE, CHALLENGE) mapData) {
+        List<string> roomNames = FindMatchingRoom(mapData);
+        int roomSeed = int.Parse(seed.ToString().Substring(2, 2));
+        if (roomNames.Count > 0) {
+            int index = GameRules.PrimeRandomizerID(roomSeed, id) % roomNames.Count;
+            room.Open(roomNames[index]);
+        }
+        else {
+            DefaultRoom(mapData);
+        }
+        room.floorGrid = Geometry.RandomizeGrid(room.size, room.size, 4, GameRules.PrimeRandomizerID(roomSeed, id));
+        room.borderGrid = Janitor.AddExits(mapData.Item2, room.borderGrid, room.border);
+    }
+
+    void DefaultRoom((SHAPE, NODE, CHALLENGE) mapData) {
+        room.shape = (SHAPE)mapData.Item1;
+        room.challenge = (CHALLENGE)mapData.Item3;
         room.Construct();
     }
 
-    void OpenMatchingRoom(int[] requiredIdentifiers) {
-        List<string> roomNames = FindMatchingRoom(requiredIdentifiers);
-        if (roomNames.Count > 0) {
-            room.Open(roomNames[0]);
-        }
-        else {
-            CreateDefaultRoom(requiredIdentifiers);
-        }
-    }
-
-    List<string> FindMatchingRoom(int[] requiredIdentifiers) {
+    List<string> FindMatchingRoom((SHAPE, NODE, CHALLENGE) mapData) {
         List<string> matchingRooms = new List<string>();
-        foreach (KeyValuePair<string, int[]> identifier in mapRooms) {
-            bool match = true;
-            for (int i = 0; i < requiredIdentifiers.Length; i++) {
-                if (identifier.Value[i] != requiredIdentifiers[i]) {
-                    match = false;
-                    break;
-                }
-            }
-            if (match) {
-                matchingRooms.Add(identifier.Key);
+        foreach (KeyValuePair<string, int[]> roomEntry in roomDirectory) {
+            bool shapeMatch = (int)mapData.Item1 == roomEntry.Value[0];
+            bool challengeMatch = (int)mapData.Item3 == roomEntry.Value[1];
+            if (shapeMatch && challengeMatch) {
+                matchingRooms.Add(roomEntry.Key);
             }
         }
         return matchingRooms;
-    }
-
-    void RotateRoom(int rotations) {
-        for (int i = 0; i < rotations; i++) {
-            room.borderGrid = Geometry.RotateClockwise(room.borderGrid);
-            room.borderGrid = Janitor.RotateExitID(room.borderGrid);
-            room.mobGrid = Geometry.RotateClockwise(room.mobGrid);
-            room.trapGrid = Geometry.RotateClockwise(room.trapGrid);
-        }
-    }
-
-    public static string GetIDString(int[] id) {
-        return id[0].ToString() + ", " + id[1].ToString();
     }
 
 }

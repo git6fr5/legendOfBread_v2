@@ -21,14 +21,14 @@ public class Map : MonoBehaviour {
     };
 
     /* --- COMPONENTS --- */
-    // public Minimap minimap;
+    public Minimap minimap;
 
     /* --- VARIABLES --- */
     // Files.
     public static string path = "DataFiles/Maps/";
     // Dimensions.
     public int[][] shapeGrid;
-    public int[][] exitAndRotationsGrid;
+    public int[][] nodeGrid;
     public int[][] challengeGrid;
     [Range(1, 8)] public int size = 7;
 
@@ -42,7 +42,7 @@ public class Map : MonoBehaviour {
     public void Open(string filename) {
         List<int[][]> channels = IO.OpenCSV(path, filename);
         shapeGrid = channels[0];
-        exitAndRotationsGrid = channels[1];
+        nodeGrid = channels[1];
         challengeGrid = channels[2];
     }
 
@@ -50,7 +50,7 @@ public class Map : MonoBehaviour {
     // Resets the room state
     public void Reset() {
         shapeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
-        exitAndRotationsGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
+        nodeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
         challengeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
     }
 

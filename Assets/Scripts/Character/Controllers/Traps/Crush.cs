@@ -13,7 +13,7 @@ public class Crush : Trap {
     public int damage;
 
     Vector3 targetPoint;
-    float travelDistance = 3f;
+    float travelDistance = 2.5f;
     bool isCharging = false;
     float onSpeed = 5f;
     float onTicks = 0f;

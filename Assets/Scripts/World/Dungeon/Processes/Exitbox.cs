@@ -45,7 +45,7 @@ public class Exitbox : MonoBehaviour {
 
         // slightly different values along the x and y axis because of the rectangular shape
         // of the players hitbox
-        float dist = 9f;
+        float dist = 8.85f;
         Vector3 deltaPosition = new Vector3(-id[1] * dist, id[0] * dist, 0);
         hurtbox.controller.transform.position = currPosition + deltaPosition;
 

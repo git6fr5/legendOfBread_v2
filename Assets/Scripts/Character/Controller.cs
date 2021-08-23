@@ -13,7 +13,7 @@ public class Controller : MonoBehaviour {
 
     /* --- Variables --- */
     [SerializeField] public int id;
-    [SerializeField] protected Vector2 origin;
+    [SerializeField] public Vector2 origin;
 
     // Action Controls
     [SerializeField] protected Vector2 movementVector;

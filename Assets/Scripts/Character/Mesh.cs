@@ -36,6 +36,7 @@ public class Mesh : MonoBehaviour {
 
     // Compare the depth of the meshes.
     public static int Compare(Mesh meshA, Mesh meshB) {
+        print(meshA); print(meshB);
         return meshA.depth.CompareTo(meshB.depth);
     }
 

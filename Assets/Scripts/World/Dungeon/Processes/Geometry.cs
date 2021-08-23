@@ -35,6 +35,24 @@ public class Geometry : MonoBehaviour {
         }
     }
 
+
+    public static int[][] RandomizeGrid(int vertical, int horizontal, int rows, int seed) {
+
+        int floorSeed = int.Parse(seed.ToString().Substring(3, 2));
+        int row = floorSeed % 4;
+
+        int[][] grid = new int[vertical][];
+        for (int i = 0; i < vertical; i++) {
+            grid[i] = new int[horizontal];
+            for (int j = 0; j < horizontal; j++) {
+                int index = GameRules.PrimeRandomizerID(floorSeed, new int[] { i, j }) % rows;
+                index = rows * row + index;
+                grid[i][j] = index;
+            }
+        }
+        return grid;
+    }
+
     // Creates an empty grid.
     public static int[][] Empty(int backgroundTile, int fillTile, int vertical, int horizontal) {
         // Initialize the grid.

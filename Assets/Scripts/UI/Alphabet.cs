@@ -5,7 +5,7 @@ using UnityEngine;
 public class Alphabet : MonoBehaviour {
 
     /* --- Components --- */
-    public static string ascii = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    public string ascii = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     public Sprite[] letterSprites;
     public SpriteRenderer defaultCharacterRenderer;
     public Material textMaterial;
@@ -16,7 +16,7 @@ public class Alphabet : MonoBehaviour {
 
 
     /* --- Unity --- */
-    void Awake() {
+    protected virtual void Awake() {
         // set the dictionary
         letters = new Dictionary<char, Sprite>();
         int length = (int)Mathf.Min(ascii.Length, letterSprites.Length);

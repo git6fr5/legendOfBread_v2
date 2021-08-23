@@ -25,16 +25,6 @@ public class Compass : MonoBehaviour {
         fullCount
     };
 
-    // The isomorphic exit structure
-    public enum EXIT {
-        SINGLE,
-        DOUBLE_UNALIGNED,
-        DOUBLE_ALIGNED,
-        TRIPLE,
-        QUADRUPLE,
-        count
-    };
-
     /* --- Dictionaries --- */
     public static Dictionary<ORIENTATION, Vector2> OrientationVectors = new Dictionary<ORIENTATION, Vector2>() {
         {ORIENTATION.UP, Vector2.up },
@@ -55,15 +45,6 @@ public class Compass : MonoBehaviour {
         { Vector2.right, ORIENTATION.RIGHT },
         { -Vector2.up, ORIENTATION.DOWN },
         { -Vector2.right,ORIENTATION.LEFT }
-    };
-
-    public static Dictionary<EXIT, DIRECTION> ExitTiles = new Dictionary<EXIT, DIRECTION>() {
-        {EXIT.SINGLE, DIRECTION.RIGHT }, // 1
-        {EXIT.DOUBLE_UNALIGNED, DIRECTION.UP_RIGHT }, // 3
-        {EXIT.DOUBLE_ALIGNED, DIRECTION.LEFT_RIGHT }, // 5
-        {EXIT.TRIPLE, DIRECTION.LEFT_UP_RIGHT }, // 7
-        {EXIT.QUADRUPLE, DIRECTION.DOWN_LEFT_UP_RIGHT } // 15
-        // No discernible pattern :/
     };
 
     /* --- Exit Parsing --- */
@@ -111,50 +92,6 @@ public class Compass : MonoBehaviour {
     }
 
     /* --- Transformations --- */
-    public static (EXIT, int) DirectionToExitAndRotations(DIRECTION direction) {
-        List<ORIENTATION> orientations = DirectionToOrientations(direction);
-        ORIENTATION minimumOrientation = ORIENTATION.count;
-        for (int i = 0; i < orientations.Count; i++) {
-            if ((int)orientations[i] < (int)minimumOrientation) {
-                minimumOrientation = orientations[i];
-            }
-        }
-        int rotations = (int)minimumOrientation - (int)ORIENTATION.RIGHT;
-        EXIT exits;
-        switch (orientations.Count) {
-            case (1):
-                exits = EXIT.SINGLE;
-                break;
-            case (2):
-                int val0 = (int)orientations[0] % (int)ORIENTATION.count;
-                int val1 = (int)orientations[1] % (int)ORIENTATION.count;
-                if (Mathf.Abs(val0 - val1) == 2f) {
-                    exits = EXIT.DOUBLE_ALIGNED;
-                }
-                else {
-                    exits = EXIT.DOUBLE_UNALIGNED;
-                    if (orientations.Contains(ORIENTATION.DOWN) && orientations.Contains(ORIENTATION.RIGHT)) { rotations = 3; }
-                }
-                break;
-            case (3):
-                if (orientations.Contains(ORIENTATION.DOWN) && orientations.Contains(ORIENTATION.RIGHT)) { rotations = 3; }
-                exits = EXIT.TRIPLE;
-                break;
-            case (4):
-                exits = EXIT.QUADRUPLE;
-                break;
-            default:
-                exits = EXIT.SINGLE;
-                break;
-        }
-        return (exits, rotations);
-    }
-
-    public static List<ORIENTATION> ExitToOrientations(EXIT exits) {
-        DIRECTION direction = ExitTiles[exits];
-        return DirectionToOrientations(direction);
-    }
-
     public static List<ORIENTATION> DirectionToOrientations(DIRECTION direction) {
         List<ORIENTATION> orientations = new List<ORIENTATION>();
         for (int i = 0; i < (int)ORIENTATION.count; i++) {
