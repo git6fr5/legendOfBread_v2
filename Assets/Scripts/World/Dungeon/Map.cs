@@ -9,16 +9,14 @@ using DIRECTION = Compass.DIRECTION;
 using SHAPE = Geometry.SHAPE;
 
 public class Map : MonoBehaviour {
-   
+
     /* --- Enums --- */
-    // The data that the map needs for each room.
-    public enum Channel {
-        SHAPE,
+    public enum ENTRANCE {
+        EMPTY,
+        ENTRANCE,
         EXIT,
-        CHALLENGE,
-        ROTATION,
-        channelCount
-    };
+        count
+    }
 
     /* --- COMPONENTS --- */
     public Minimap minimap;
@@ -32,6 +30,9 @@ public class Map : MonoBehaviour {
     public int[][] challengeGrid;
     public int[][] entranceGrid;
     [Range(1, 8)] public int size = 7;
+    // Entrances
+    public int[] entrance = new int[] { 0, 0 };
+    public int[] exit = new int[] { 6, 6 };
 
     /* --- Unity --- */
     // Runs once on compilation
@@ -46,6 +47,7 @@ public class Map : MonoBehaviour {
         nodeGrid = channels[1];
         challengeGrid = channels[2];
         entranceGrid = channels[3];
+        FindEntrances();
     }
 
     /* --- Methods --- */
@@ -55,6 +57,19 @@ public class Map : MonoBehaviour {
         nodeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
         challengeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
         entranceGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
+    }
+
+    public void FindEntrances() {
+        for (int i = 0; i < entranceGrid.Length; i++) {
+            for (int j = 0; j < entranceGrid[0].Length; j++) {
+                if (entranceGrid[i][j] == (int)ENTRANCE.ENTRANCE) {
+                    entrance = new int[] { i, j };
+                }
+                else if (entranceGrid[i][j] == (int)ENTRANCE.EXIT) {
+                    exit = new int[] { i, j };
+                }
+            }
+        }
     }
 
 }

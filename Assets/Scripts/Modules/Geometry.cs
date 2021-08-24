@@ -13,6 +13,8 @@ public class Geometry : MonoBehaviour {
         EMPTY,
         SQUARE,
         ELLIPSE,
+        VERTICAL_STRIPS,
+        HORIZONTAL_STRIPS,
         count
     }
 
@@ -30,6 +32,10 @@ public class Geometry : MonoBehaviour {
                 return Square(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
             case SHAPE.ELLIPSE:
                 return Ellipse(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
+            case SHAPE.VERTICAL_STRIPS:
+                return VerticalStrips(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
+            case SHAPE.HORIZONTAL_STRIPS:
+                return HorizontalStrips(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
             default:
                 return Empty(backgroundTile, fillTile, vertical, horizontal);
         }
@@ -114,6 +120,50 @@ public class Geometry : MonoBehaviour {
             }
         }
         return ellipse;
+    }
+
+    public static int[][] VerticalStrips(int backgroundTile, int fillTile, int vertical, int horizontal, int vertBorder, int horBorder) {
+        // Initialize the grid.
+        int[][] strips = Square(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
+
+        // Draw a line through the middle.
+        int width = (horizontal - horBorder * 2);
+        int[] lines;
+        if (width % 2 == 1) {
+            lines = new int[] { horBorder + (int)Mathf.Floor(horizontal / 2) - 1 };
+        }
+        else {
+            lines = new int[] { horBorder + (int)Mathf.Floor(horizontal / 2) - 1, horBorder + (int)Mathf.Floor(horizontal / 2) };
+        }
+        foreach( int line in lines) {
+            for (int i = 0; i < vertical; i++) {
+                strips[i][line] = fillTile;
+            }
+        }
+
+        return strips;
+    }
+
+    public static int[][] HorizontalStrips(int backgroundTile, int fillTile, int vertical, int horizontal, int vertBorder, int horBorder) {
+        // Initialize the grid.
+        int[][] strips = Square(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
+
+        // Draw a line through the middle.
+        int width = (vertical - vertBorder * 2);
+        int[] lines;
+        if (width % 2 == 1) {
+            lines = new int[] { vertBorder + (int)Mathf.Floor(vertical / 2) - 1 };
+        }
+        else {
+            lines = new int[] { vertBorder + (int)Mathf.Floor(vertical / 2) - 1, vertBorder + (int)Mathf.Floor(vertical / 2) };
+        }
+        foreach (int line in lines) {
+            for (int i = 0; i < horizontal; i++) {
+                strips[line][i] = fillTile;
+            }
+        }
+
+        return strips;
     }
 
     /* --- Points --- */

@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb1e3938a18c3854e8808016ca62439d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alphabet: {fileID: 2854143793387502964}
+  ascii: {fileID: 2854143793387502964}
   isActive: 0
   text: 
 --- !u!61 &2854143792144179056

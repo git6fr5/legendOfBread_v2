@@ -5,7 +5,9 @@ using UnityEngine.Tilemaps;
 
 using SHAPE = Geometry.SHAPE;
 using DIRECTION = Compass.DIRECTION;
+using ORIENTATION = Compass.ORIENTATION;
 using CHALLENGE = Room.CHALLENGE;
+using ENTRANCE = Map.ENTRANCE;
 
 public class MapEditor : MonoBehaviour {
 
@@ -21,17 +23,16 @@ public class MapEditor : MonoBehaviour {
 
     public Map map;
     public Tilemap shapeMap;
-    public Tilemap nodeMap;
     public Tilemap challengeMap;
     public Tilemap entranceMap;
 
     public TileBase[] shapeTiles;
-    public TileBase[] nodeTiles;
     public TileBase[] challengeTiles;
+    public TileBase[] entranceTiles;
 
     public int[] prevCoord;
-    public int[] entrance = new int[] { 0, 0 };
-    public int[] exit = new int[] { 6, 6 };
+    public NodeSelector nullNode;
+    public List<NodeSelector> nodes;
 
     // Runs once on compilation.
     void Awake() {
@@ -39,6 +40,7 @@ public class MapEditor : MonoBehaviour {
     }
 
     void Start() {
+        CreateNodes();
         PrintEdit();
     }
 
@@ -99,19 +101,7 @@ public class MapEditor : MonoBehaviour {
 
     // Edit how the rooms connect with each other.
     void EditExits() {
-        if (Input.GetMouseButtonDown(0)) {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            prevCoord = Geometry.PointToGrid(mousePos, map.transform);
-        }
-        if (Input.GetMouseButtonUp(0)) {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            int[] coord = Geometry.PointToGrid(mousePos, transform);
-            if (Geometry.IsValid(coord, map.shapeGrid) && Geometry.IsValid(prevCoord, map.shapeGrid)) {
-                map.nodeGrid[coord[0]][coord[1]] = Compass.GetNewPath(map.nodeGrid[coord[0]][coord[1]], coord, prevCoord);
-                map.nodeGrid[prevCoord[0]][prevCoord[1]] = Compass.GetNewPath(map.nodeGrid[prevCoord[0]][prevCoord[1]], prevCoord, coord);
-                PrintEdit();
-            }
-        }
+        //
     }
 
     // Edit the different types of challenges in the map.
@@ -132,15 +122,22 @@ public class MapEditor : MonoBehaviour {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int[] coord = Geometry.PointToGrid(mousePos, transform);
             if (Geometry.IsValid(coord, map.shapeGrid)) {
-                entrance = coord;
+                print("hello");
+                map.entranceGrid[map.entrance[0]][map.entrance[1]] = (int)ENTRANCE.EMPTY;
+                map.entranceGrid[coord[0]][coord[1]] = (int)ENTRANCE.ENTRANCE;
+                map.entrance = coord;
             }
+            PrintEdit();
         }
         if (Input.GetMouseButtonDown(1)) {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             int[] coord = Geometry.PointToGrid(mousePos, transform);
             if (Geometry.IsValid(coord, map.shapeGrid)) {
-                exit = coord;
+                map.entranceGrid[map.exit[0]][map.exit[1]] = (int)ENTRANCE.EMPTY;
+                map.entranceGrid[coord[0]][coord[1]] = (int)ENTRANCE.EXIT;
+                map.exit = coord;
             }
+            PrintEdit();
         }
     }
 
@@ -149,8 +146,47 @@ public class MapEditor : MonoBehaviour {
         // For now, print only to the mob grid.
         Geometry.PrintGridToMap(map.shapeGrid, shapeMap, shapeTiles);
         Geometry.PrintGridToMap(map.challengeGrid, challengeMap, challengeTiles);
-        Geometry.PrintGridToMap(map.nodeGrid, nodeMap, nodeTiles);
-        Geometry.PrintGridToMap(map.nodeGrid, nodeMap, nodeTiles);
+        Geometry.PrintGridToMap(map.entranceGrid, entranceMap, entranceTiles);
+    }
+
+    /* --- Nodes --- */
+    void CreateNodes() {
+        nodes = new List<NodeSelector>();
+        int nodesPerSide = 3;
+        for (int i = 0; i < map.size; i++) {
+            int sides = 2;
+            if (i == map.size - 1) {
+                sides = 1;
+            }
+            for (int j = 0; j < map.size; j++) {
+                int min_side = 0;
+                if (j == map.size - 1) {
+                    min_side = 1;
+                }
+                float x_mid = j - (int)((float)map.size / 2) + 1;
+                float y_mid = i - (int)((float)map.size / 2);
+                for (int k = min_side; k < sides; k++) {
+                    Vector3 orientation = (Vector3)Compass.OrientationVectors[(ORIENTATION)k];
+                    Vector3 rotation = Vector3.right;
+                    if (k % 2 == 0) {
+                        rotation = Vector3.up;
+                    }
+                    else {
+                        rotation = Vector3.right;
+                    }
+                    for (int l = 0; l < nodesPerSide; l++) {
+                        print(orientation);
+                        Vector3 offset = orientation / 2f + rotation * ((((float)l) / 2f) - 0.5f) / 2f;
+                        print(offset);
+                        NodeSelector node = Instantiate(nullNode.gameObject, new Vector3(x_mid, y_mid, 0) + offset, Quaternion.identity, transform).GetComponent<NodeSelector>();
+                        node.gameObject.SetActive(true);
+                        node.id0 = new int[] { map.size -(i + (int)orientation.y), j };
+                        node.id1 = new int[] { map.size - i, j + (int)orientation.x };
+                        nodes.Add(node);
+                    }
+                }
+            }
+        }
     }
 
 }

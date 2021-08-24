@@ -27,7 +27,7 @@ public class Dungeon : MonoBehaviour {
         seed = GameRules.PrimeRandomizer(seed);
         map.Open(mapfile);
         roomDirectory = IO.ReadListFile();
-        LoadRoom(id);
+        LoadRoom(map.entrance);
     }
 
     /* --- FILES --- */

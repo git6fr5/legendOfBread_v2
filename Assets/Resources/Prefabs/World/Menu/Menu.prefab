@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fde15e469ab40a34695d872441c7791d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ascii: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
   letterSprites:
   - {fileID: 8540466440557752896, guid: 0fb3ef15208cc8148aa2edd4dd31615b, type: 3}
   - {fileID: 6513391781972318734, guid: 0fb3ef15208cc8148aa2edd4dd31615b, type: 3}
@@ -155,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb1e3938a18c3854e8808016ca62439d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alphabet: {fileID: 5629593508590122249}
+  ascii: {fileID: 5629593508590122249}
   isActive: 0
   text: 1
 --- !u!61 &5629593509561849600

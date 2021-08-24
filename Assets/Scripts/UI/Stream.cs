@@ -6,7 +6,7 @@ using UnityEngine;
 public class Stream : MonoBehaviour {
 
     /* --- Components --- */
-    public Alphabet alphabet;
+    public ASCII ascii;
 
     /* --- Variables --- */
     public bool isActive = false;
@@ -14,7 +14,7 @@ public class Stream : MonoBehaviour {
     
     /* --- Unity --- */
     void Start() {
-        alphabet.SetText(text);
+        ascii.SetText(text);
     }
 
     void OnMouseDown() {
@@ -25,7 +25,7 @@ public class Stream : MonoBehaviour {
         // Get the input string if it's active.
         if (isActive) {
             GetInputText();
-            alphabet.SetText(text);
+            ascii.SetText(text);
             GetComponent<SpriteRenderer>().material.SetFloat("_OutlineWidth", 0.05f);
         }
         else {
@@ -39,7 +39,7 @@ public class Stream : MonoBehaviour {
             if (character == '\b' && text.Length != 0) {
                 text = text.Substring(0, text.Length - 1);
             }
-            else if (alphabet.letters.ContainsKey(character)) {
+            else if (ascii.letters.ContainsKey(character)) {
                 text = text + character;
             }
         }
