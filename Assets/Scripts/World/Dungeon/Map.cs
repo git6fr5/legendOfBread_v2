@@ -30,6 +30,7 @@ public class Map : MonoBehaviour {
     public int[][] shapeGrid;
     public int[][] nodeGrid;
     public int[][] challengeGrid;
+    public int[][] entranceGrid;
     [Range(1, 8)] public int size = 7;
 
     /* --- Unity --- */
@@ -44,6 +45,7 @@ public class Map : MonoBehaviour {
         shapeGrid = channels[0];
         nodeGrid = channels[1];
         challengeGrid = channels[2];
+        entranceGrid = channels[3];
     }
 
     /* --- Methods --- */
@@ -52,6 +54,7 @@ public class Map : MonoBehaviour {
         shapeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
         nodeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
         challengeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
+        entranceGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
     }
 
 }

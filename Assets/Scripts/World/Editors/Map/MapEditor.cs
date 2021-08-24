@@ -11,8 +11,9 @@ public class MapEditor : MonoBehaviour {
 
     public enum CHANNEL {
         SHAPE,
-        EXIT,
+        NODE,
         CHALLENGE,
+        ENTRANCE,
         count
     }
 
@@ -20,14 +21,17 @@ public class MapEditor : MonoBehaviour {
 
     public Map map;
     public Tilemap shapeMap;
-    public Tilemap exitMap;
+    public Tilemap nodeMap;
     public Tilemap challengeMap;
+    public Tilemap entranceMap;
 
     public TileBase[] shapeTiles;
-    public TileBase[] exitTiles;
+    public TileBase[] nodeTiles;
     public TileBase[] challengeTiles;
 
     public int[] prevCoord;
+    public int[] entrance = new int[] { 0, 0 };
+    public int[] exit = new int[] { 6, 6 };
 
     // Runs once on compilation.
     void Awake() {
@@ -44,11 +48,14 @@ public class MapEditor : MonoBehaviour {
             case (CHANNEL.SHAPE):
                 EditShapes();
                 break;
-            case (CHANNEL.EXIT):
+            case (CHANNEL.NODE):
                 EditExits();
                 break;
             case (CHANNEL.CHALLENGE):
                 EditChallenges();
+                break;
+            case (CHANNEL.ENTRANCE):
+                EditEntrance();
                 break;
         }
     }
@@ -66,6 +73,7 @@ public class MapEditor : MonoBehaviour {
             map.shapeGrid,
             map.nodeGrid,
             map.challengeGrid,
+            map.entranceGrid
         };
         IO.SaveCSV(channels, Map.path, filename);
     }
@@ -73,8 +81,7 @@ public class MapEditor : MonoBehaviour {
     /* --- Selecting --- */
     // Sets the shape of the room.
     public void SelectChannel(CHANNEL selectedChannel) {
-        channel = (CHANNEL)(((int)channel + 1) % (int)CHANNEL.count);
-        // channel = selectedChannel; // Until we set the buttons up.
+        channel = selectedChannel; // Until we set the buttons up.
     }
 
     /* --- Editing --- */
@@ -119,12 +126,31 @@ public class MapEditor : MonoBehaviour {
         }
     }
 
+    // Adds or removes an entrance from the map
+    void EditEntrance() {
+        if (Input.GetMouseButtonDown(0)) {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            int[] coord = Geometry.PointToGrid(mousePos, transform);
+            if (Geometry.IsValid(coord, map.shapeGrid)) {
+                entrance = coord;
+            }
+        }
+        if (Input.GetMouseButtonDown(1)) {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            int[] coord = Geometry.PointToGrid(mousePos, transform);
+            if (Geometry.IsValid(coord, map.shapeGrid)) {
+                exit = coord;
+            }
+        }
+    }
+
     // Print the edits to this map.
     void PrintEdit(bool printAll = false) {
         // For now, print only to the mob grid.
         Geometry.PrintGridToMap(map.shapeGrid, shapeMap, shapeTiles);
         Geometry.PrintGridToMap(map.challengeGrid, challengeMap, challengeTiles);
-        Geometry.PrintGridToMap(map.nodeGrid, exitMap, exitTiles);
+        Geometry.PrintGridToMap(map.nodeGrid, nodeMap, nodeTiles);
+        Geometry.PrintGridToMap(map.nodeGrid, nodeMap, nodeTiles);
     }
 
 }

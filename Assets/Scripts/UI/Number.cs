@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Number : Alphabet {
+public class Number : ASCII {
     
     /* --- Unity --- */
     protected override void Awake() {

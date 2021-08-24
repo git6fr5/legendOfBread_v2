@@ -342,8 +342,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1}
+  m_Offset: {x: 0, y: -0.24}
+  m_Size: {x: 0.5, y: 0.5}
   m_Direction: 0
 --- !u!1 &7993923673465999853
 GameObject:
@@ -507,6 +507,9 @@ MonoBehaviour:
   attackKey: 106
   attackMoveFactor: 0.25
   runMoveFactor: 2
+  isInteracting: 0
+  interactKey: 32
+  dialogue: {fileID: 0}
 --- !u!50 &7993923673991456170
 Rigidbody2D:
   serializedVersion: 4

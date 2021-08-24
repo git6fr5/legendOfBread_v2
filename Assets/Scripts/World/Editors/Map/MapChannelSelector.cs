@@ -14,7 +14,6 @@ public class MapChannelSelector : MonoBehaviour {
     public MapChannelEvent OnSelect;
 
     /* --- Components --- */
-    public Sprite[] sprites;
     public MapEditor mapEditor;
 
     /* --- Variables --- */
@@ -26,27 +25,18 @@ public class MapChannelSelector : MonoBehaviour {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    void Update() {
+        if (mapEditor.channel == channel) {
+            GetComponent<SpriteRenderer>().material.SetFloat("_OutlineWidth", 0.05f);
+        }
+        else {
+            GetComponent<SpriteRenderer>().material.SetFloat("_OutlineWidth", 0f);
+        }
+    }
 
     // Runs whenever the attached collider is clicked on.
     void OnMouseDown() {
         OnSelect.Invoke(channel);
-    }
-
-    void Update() {
-        if ((int)mapEditor.channel < sprites.Length) {
-            spriteRenderer.sprite = sprites[(int)mapEditor.channel];
-        }
-        else {
-            spriteRenderer.sprite = sprites[0];
-        }
-    }
-
-    void OnMouseOver() {
-        GetComponent<SpriteRenderer>().material.SetFloat("_OutlineWidth", 0.05f);
-    }
-
-    void OnMouseExit() {
-        GetComponent<SpriteRenderer>().material.SetFloat("_OutlineWidth", 0f);
     }
 
 }

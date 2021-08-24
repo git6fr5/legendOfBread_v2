@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Controller
-{
+public class Player : Controller {
+
     /* --- Variables --- */
     // Player-Specific Components
     public Weapon weapon;
@@ -25,11 +25,21 @@ public class Player : Controller
     [Range(0.05f, 1f)] public float attackMoveFactor = 0.25f;
     [Range(0.05f, 2f)] public float runMoveFactor = 1.25f;
 
+    // Interactions
+    public bool isInteracting;
+    public KeyCode interactKey = KeyCode.Space;
+    public Dialogue dialogue;
+
     /* --- Override --- */
     // Sets the action controls.
     protected override void Think() {
-        AttackInput();
-        MoveInput();
+        if (isInteracting) {
+            InteractInput();
+        }
+        else {
+            AttackInput();
+            MoveInput();
+        }
     }
 
     /* --- Thinking Actions --- */
@@ -80,6 +90,16 @@ public class Player : Controller
     // When hitting something through an attack
     protected override void OnHit(Hurtbox hurtbox) {
         weapon.OnHit(hurtbox);
+    }
+
+    /* --- Interactions --- */
+    void InteractInput() {
+        movementVector = Vector2.zero;
+        if (Input.GetKeyUp(interactKey) && !Dialogue.isRunningCommand) {
+            dialogue.Clear();
+            dialogue.gameObject.SetActive(false);
+            isInteracting = false;
+        }
     }
 
 }

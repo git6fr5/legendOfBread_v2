@@ -1,0 +1,6 @@
+talk:Oh my goodness! Are you ok?
+talk:My name is Sally, what's your name?
+talk:...
+talk:[1.5]I'll tell you who you are, you're the hero![1.5]
+talk:I'm Mr Helper, [1.5]and I can tell right away that you are destined for [0.1]GREAT[1.5] things!
+talk:Right now you have nothing but the clothes on your back, but with enough hard work you can achieve anything!

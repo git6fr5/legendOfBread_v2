@@ -21,8 +21,6 @@ public class Controller : MonoBehaviour {
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected bool activateAttack;
 
-
-
     /* --- Unity --- */
     // Runs once on compilation.
     void Awake() {
@@ -31,6 +29,7 @@ public class Controller : MonoBehaviour {
         body = GetComponent<Rigidbody2D>();
         body.constraints = RigidbodyConstraints2D.FreezeRotation;
         body.gravityScale = 0f;
+        body.angularDrag = 0f;
     }
 
     // Runs every frame.

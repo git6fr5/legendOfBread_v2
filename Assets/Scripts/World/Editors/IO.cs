@@ -122,4 +122,13 @@ public class IO : MonoBehaviour {
 
     }
 
+    // Opens a text file to a string.
+    public static string OpenText(string path, string filename) {
+        string text = "";
+        using (StreamReader readFile = new StreamReader(GameRules.Path + path + filename + ".txt")) {
+            text = readFile.ReadToEnd();
+        }
+        return text;
+    }
+
 }
