@@ -15,6 +15,9 @@ public class RoomEditor : MonoBehaviour {
     public Tilemap trapMap;
     public ChallengeSelector challengeSelector;
     public ValueSelector nullValue;
+    public ValueSelector nullShape;
+
+    public Sprite[] shapeSprites;
 
     /* --- Variables --- */
     // Has to be sprite tiles to be able to access the sprite later on.
@@ -72,10 +75,19 @@ public class RoomEditor : MonoBehaviour {
 
     /* --- Selections --- */
     // Sets the shape of the room.
-    public void SelectShape(SHAPE shape) {
-        room.shape = (SHAPE)(((int)room.shape + 1) % (int)SHAPE.count);
-        // room.shape = shape; // Until we set the buttons up.
-        room.Construct();
+    public void CreateShapeSelectors() {
+        // Reset the value selections.
+        if (valueSelections != null) {
+            for (int i = valueSelections.Count - 1; i >= 0; i--) {
+                Destroy(valueSelections[i].gameObject);
+            }
+        }
+        valueSelections = new List<ValueSelector>();
+        // Create the new selections.
+        for (int i = 0; i < shapeSprites.Length; i++) {
+            ValueSelector newValueSelector = NewShape(shapeSprites[i], i);
+            valueSelections.Add(newValueSelector);
+        }
     }
 
     // Select a new challenge.
@@ -88,14 +100,22 @@ public class RoomEditor : MonoBehaviour {
         // Reset the value
         value = 0;
         // Reset the room
-        room.Reset();
-        PrintEdit(room.mobGrid, mobMap);
-        PrintEdit(room.trapGrid, trapMap);
+        // room.Reset();
+        // PrintEdit(room.mobGrid, mobMap);
+        // PrintEdit(room.trapGrid, trapMap);
     }
 
     // Set the the brush value.
     public void SelectValue(int index) {
         value = index;
+    }
+
+    // Sets the shape of the room.
+    public void SelectShape(int index) {
+        room.shape = (SHAPE)(index % (int)SHAPE.count);
+        value = index;
+        // room.shape = shape; // Until we set the buttons up.
+        room.Construct();
     }
 
     /* --- Editing --- */
@@ -184,6 +204,18 @@ public class RoomEditor : MonoBehaviour {
                 valueSelections[i].spriteRenderer.material.SetFloat("_Opacity", 0.5f);
             }
         }
+    }
+
+    // Create a new brush selectable.
+    ValueSelector NewShape(Sprite sprite, int index) {
+        ValueSelector valueSelector = Instantiate(nullShape.gameObject,
+            Vector3.zero, Quaternion.identity, challengeSelector.transform).GetComponent<ValueSelector>();
+        // Set the selection parameters.
+        valueSelector.gameObject.SetActive(true);
+        valueSelector.transform.localPosition = nullShape.transform.localPosition + new Vector3(index % 3, -Mathf.Floor(index / 3), 0);
+        valueSelector.GetComponent<SpriteRenderer>().sprite = sprite;
+        valueSelector.index = index;
+        return valueSelector;
     }
 
 }

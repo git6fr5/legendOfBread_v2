@@ -44,9 +44,9 @@ public class Map : MonoBehaviour {
     public void Open(string filename) {
         List<int[][]> channels = IO.OpenCSV(path, filename);
         shapeGrid = channels[0];
-        nodeGrid = channels[1];
-        challengeGrid = channels[2];
-        entranceGrid = channels[3];
+        challengeGrid = channels[1];
+        entranceGrid = channels[2];
+        nodeGrid = channels[3];
         FindEntrances();
     }
 
@@ -54,7 +54,7 @@ public class Map : MonoBehaviour {
     // Resets the room state
     public void Reset() {
         shapeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
-        nodeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
+        nodeGrid = new int[][] { };
         challengeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
         entranceGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
     }

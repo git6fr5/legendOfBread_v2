@@ -10,15 +10,9 @@ using SHAPE = Geometry.SHAPE;
 public class ShapeSelector : MonoBehaviour {
 
     /* --- Events --- */
-    [System.Serializable] public class ShapeEvent : UnityEvent<SHAPE> { }
-    public ShapeEvent OnSelect;
-
-    /* --- Components --- */
-    public Sprite[] sprites;
+    public UnityEvent OnSelect;
 
     /* --- Variables --- */
-    public SHAPE shape;
-
     SpriteRenderer spriteRenderer;
     Room room;
 
@@ -31,19 +25,8 @@ public class ShapeSelector : MonoBehaviour {
     
     // Runs whenever the attached collider is clicked on.
     void OnMouseDown() {
-        OnSelect.Invoke(shape);
+        OnSelect.Invoke();
     }
-
-
-    void Update() {
-        if ((int)room.shape < sprites.Length) {
-            spriteRenderer.sprite = sprites[(int)room.shape];
-        }
-        else {
-            spriteRenderer.sprite = sprites[0];
-        }
-    }
-
 
     void OnMouseOver() {
         GetComponent<SpriteRenderer>().material.SetFloat("_OutlineWidth", 0.05f);

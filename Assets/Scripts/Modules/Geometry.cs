@@ -15,6 +15,8 @@ public class Geometry : MonoBehaviour {
         ELLIPSE,
         VERTICAL_STRIPS,
         HORIZONTAL_STRIPS,
+        UP_HALL,
+        DOWN_HALL,
         count
     }
 
@@ -36,6 +38,10 @@ public class Geometry : MonoBehaviour {
                 return VerticalStrips(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
             case SHAPE.HORIZONTAL_STRIPS:
                 return HorizontalStrips(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
+            case SHAPE.UP_HALL:
+                return HorizontalStrips(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder, 1);
+            case SHAPE.DOWN_HALL:
+                return HorizontalStrips(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder, -1);
             default:
                 return Empty(backgroundTile, fillTile, vertical, horizontal);
         }
@@ -122,7 +128,7 @@ public class Geometry : MonoBehaviour {
         return ellipse;
     }
 
-    public static int[][] VerticalStrips(int backgroundTile, int fillTile, int vertical, int horizontal, int vertBorder, int horBorder) {
+    public static int[][] VerticalStrips(int backgroundTile, int fillTile, int vertical, int horizontal, int vertBorder, int horBorder, int offset = 0) {
         // Initialize the grid.
         int[][] strips = Square(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
 
@@ -137,14 +143,14 @@ public class Geometry : MonoBehaviour {
         }
         foreach( int line in lines) {
             for (int i = 0; i < vertical; i++) {
-                strips[i][line] = fillTile;
+                strips[i][line - offset] = fillTile;
             }
         }
 
         return strips;
     }
 
-    public static int[][] HorizontalStrips(int backgroundTile, int fillTile, int vertical, int horizontal, int vertBorder, int horBorder) {
+    public static int[][] HorizontalStrips(int backgroundTile, int fillTile, int vertical, int horizontal, int vertBorder, int horBorder, int offset = 0) {
         // Initialize the grid.
         int[][] strips = Square(backgroundTile, fillTile, vertical, horizontal, vertBorder, horBorder);
 
@@ -159,7 +165,7 @@ public class Geometry : MonoBehaviour {
         }
         foreach (int line in lines) {
             for (int i = 0; i < horizontal; i++) {
-                strips[line][i] = fillTile;
+                strips[line - offset][i] = fillTile;
             }
         }
 

@@ -367,6 +367,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1697081069138722141, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6099381139572025144, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: OnSelect.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6099381139572025144, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: OnSelect.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 922542025}
+    - target: {fileID: 6099381139572025144, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: OnSelect.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MapEditor, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6099381139572025144, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: OnSelect.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetValue
+      objectReference: {fileID: 0}
+    - target: {fileID: 6099381139572025144, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: OnSelect.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6099381139572025144, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: OnSelect.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7100417619061957892, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
       propertyPath: m_Name
       value: Map Editor
@@ -418,6 +446,22 @@ PrefabInstance:
     - target: {fileID: 7100417619061957894, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833929364498397139, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963004853395295209, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177529294990073451, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5e39853d0a1652641abbde3396ecdea7, type: 2}
+    - target: {fileID: 8193009011817319460, guid: fb93e9895cc31e04c965221daab3753e, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb93e9895cc31e04c965221daab3753e, type: 3}

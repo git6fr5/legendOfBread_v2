@@ -436,6 +436,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4574733630319668346, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4574733630319668346, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169351869333472007, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: OnSelect.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CreateShapeSelectors
+      objectReference: {fileID: 0}
     - target: {fileID: 9169351869634658282, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
       propertyPath: m_Name
       value: RoomEditor
@@ -485,8 +497,40 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9169351869634658285, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: shapeSprites.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169351869634658285, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
       propertyPath: room
       value: 
       objectReference: {fileID: 679730670}
+    - target: {fileID: 9169351869634658285, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: shapeSprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: ee51240273a0ff849be8910b9b9092eb, type: 3}
+    - target: {fileID: 9169351869634658285, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: shapeSprites.Array.data[1]
+      value: 
+      objectReference: {fileID: -941769597684628784, guid: 2aebedb93f8980c458d243e9f46e0a61, type: 3}
+    - target: {fileID: 9169351869634658285, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: shapeSprites.Array.data[2]
+      value: 
+      objectReference: {fileID: -2151989937092700874, guid: 2aebedb93f8980c458d243e9f46e0a61, type: 3}
+    - target: {fileID: 9169351869634658285, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: shapeSprites.Array.data[3]
+      value: 
+      objectReference: {fileID: 2040186390466137041, guid: 2aebedb93f8980c458d243e9f46e0a61, type: 3}
+    - target: {fileID: 9169351869634658285, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: shapeSprites.Array.data[4]
+      value: 
+      objectReference: {fileID: 5786862245142788840, guid: 2aebedb93f8980c458d243e9f46e0a61, type: 3}
+    - target: {fileID: 9169351869634658285, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: shapeSprites.Array.data[5]
+      value: 
+      objectReference: {fileID: 6761973696573791442, guid: 2aebedb93f8980c458d243e9f46e0a61, type: 3}
+    - target: {fileID: 9169351869634658285, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
+      propertyPath: shapeSprites.Array.data[6]
+      value: 
+      objectReference: {fileID: -3457333137285588629, guid: 2aebedb93f8980c458d243e9f46e0a61, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9120e3973c078784db0bdfe9c0e54cfd, type: 3}
