@@ -26,6 +26,7 @@ public class Weapon : Item {
 
     /* --- Methods --- */
     public void Activate(bool active) {
+        blade.GetComponent<SpriteRenderer>().sprite = blade.swing[0];
         gameObject.SetActive(active);
         SetRotation();
         hitbox.Reset();

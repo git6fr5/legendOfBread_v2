@@ -20,7 +20,6 @@ public class ASCII : MonoBehaviour {
         letters = new Dictionary<char, Sprite>();
         int length = (int)Mathf.Min(ascii.Length, letterSprites.Length);
         for (int i = 0; i < length; i++) {
-            print(ascii[i]);
             letters.Add(ascii[i], letterSprites[i]);
         }
     }

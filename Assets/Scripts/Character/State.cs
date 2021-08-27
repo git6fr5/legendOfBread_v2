@@ -17,12 +17,17 @@ public class State : MonoBehaviour {
     public ORIENTATION orientation;
     public bool isMoving;
     public bool isAttacking;
+    public bool isTalking;
+    public bool isCarrying;
+    public bool isThrowing;
     public bool isHurt;
     public bool isDead;
 
     // Flags
     Coroutine attackFlag;
     public float attackBuffer = 0.4f;
+    Coroutine throwFlag;
+    public float throwBuffer = 0.2f;
     Coroutine hurtFlag;
     public float hurtBuffer = 0.4f;
     Coroutine deathFlag;
@@ -32,6 +37,7 @@ public class State : MonoBehaviour {
     // Runs every frame.
     void Update() {
         AttackFlag();
+        ThrowFlag();
         HurtFlag();
         DeathFlag();
     }
@@ -41,6 +47,13 @@ public class State : MonoBehaviour {
     void AttackFlag() {
         if (isAttacking && attackFlag == null) {
             attackFlag = StartCoroutine(IEAttackFlag(attackBuffer));
+        }
+    }
+
+    // Flags if this state is throwing
+    void ThrowFlag() {
+        if (isThrowing && throwFlag == null) {
+            throwFlag = StartCoroutine(IEThrowFlag(throwBuffer));
         }
     }
 
@@ -64,6 +77,14 @@ public class State : MonoBehaviour {
         yield return new WaitForSeconds(buffer);
         isAttacking = false;
         attackFlag = null;
+        yield return null;
+    }
+
+    // Unflags this state as throwing
+    IEnumerator IEThrowFlag(float buffer) {
+        yield return new WaitForSeconds(buffer);
+        isThrowing = false;
+        throwFlag = null;
         yield return null;
     }
 

@@ -13,10 +13,13 @@ public class Dialogue : MonoBehaviour {
     public static string path = "DataFiles/Dialogue/";
 
     /* --- Variables --- */
-    private static float talkDelay = 0.075f; // time between letters appearing;
+    public float talkDelay = 0.075f; // time between letters appearing;
+    public float regularTalkDelay = 0.075f; // time between letters appearing;
+    public float fastTalkDelay = 0.025f; // time between letters appearing;
     private static float talkBuffer = 0.1f; // time before the next line starts
 
-    public static bool isRunningCommand = false;
+    public bool isRunningCommand = false;
+    public bool isPrintingDialogue = false;
 
     /* --- Unity --- */
     void Update() {
@@ -32,18 +35,15 @@ public class Dialogue : MonoBehaviour {
 
     // run through the talk command
     bool Talk(string outputString) {
-        IEnumerator talkCoroutine = IETalk(talkDelay, outputString);
+        IEnumerator talkCoroutine = IETalk(outputString);
         StartCoroutine(talkCoroutine);
         return true;
     }
 
     // run through each letter of the talk command
-    IEnumerator IETalk(float delay, string outputString) {
+    IEnumerator IETalk(string outputString) {
         // the list of characters that have been printed
         List<char> partialCharList = new List<char>();
-        // store the time in between letters locally
-        // so that we can adjust its rate easily
-        float localDelay = delay;
 
         // print each letter one at a time
         for (int i = 0; i < outputString.Length; i++) {
@@ -58,7 +58,7 @@ public class Dialogue : MonoBehaviour {
             }
             // wait before printing the next letter
             else {
-                yield return new WaitForSeconds(localDelay);
+                yield return new WaitForSeconds(talkDelay);
             }
 
             // print the string to the dialogue box
@@ -66,17 +66,18 @@ public class Dialogue : MonoBehaviour {
             if (partialString.Length > charactersPerLine) {
                 partialString = partialString.Substring(partialString.Length - charactersPerLine, charactersPerLine);
             }
+            isPrintingDialogue = true;
             ascii.SetText(partialString);
         }
 
         // wait a bit before exiting the current text 
         // to give some time to read
+        isPrintingDialogue = false;
         yield return new WaitForSeconds(talkBuffer);
 
         // when this command has completed
         // switch this to inform the overhead
         // to run the next command
-        print("finished");
         isRunningCommand = false;
         yield return null;
     }

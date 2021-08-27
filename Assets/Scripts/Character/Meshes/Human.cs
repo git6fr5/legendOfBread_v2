@@ -10,7 +10,10 @@ public class Human : Mesh {
     /* --- Components --- */
     public State state;
     public Sprite[] idle;
+    public Sprite[] carryIdle;
     public Sprite[] walk;
+    public Sprite[] carryWalk;
+    public Sprite[] throwing;
     public Sprite[] attack;
     public Material defaultMaterial;
     public Material hurtMaterial;
@@ -21,6 +24,7 @@ public class Human : Mesh {
     Sprite[] active; // This is solely to be used as a switch
     int walkCycle = 4;
     int attackCycle = 6;
+    int throwCycle = 2;
     int frameRate = 8;
     [HideInInspector] public float timeInterval = 0f;
 
@@ -51,20 +55,45 @@ public class Human : Mesh {
             int index = attackCycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * attackCycle / state.attackBuffer) % attackCycle); ;
             spriteRenderer.sprite = attack[index];
         }
-        else if (state.isMoving) {
-            if (active != walk) {
+        else if (state.isThrowing) {
+            if (active != throwing) {
                 timeInterval = 0f;
-                active = walk;
+                active = throwing;
             }
-            int index = walkCycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * frameRate) % walkCycle);
-            spriteRenderer.sprite = walk[index];
-            if (index % 2 == 0) {
-                transform.localPosition = new Vector3(0, 0.05f, 0);
+            int index = throwCycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * throwCycle / state.throwBuffer) % throwCycle); ;
+            spriteRenderer.sprite = throwing[index];
+        }
+        else if (state.isMoving) {
+            int index;
+            if (state.isCarrying) {
+                if (active != carryWalk) {
+                    timeInterval = 0f;
+                    active = carryWalk;
+                }
+                index = walkCycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * frameRate) % walkCycle);
+                spriteRenderer.sprite = carryWalk[index];
             }
+            else {
+                if (active != walk) {
+                    timeInterval = 0f;
+                    active = walk;
+                }
+                index = walkCycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * frameRate) % walkCycle);
+                spriteRenderer.sprite = walk[index];
+                if (index % 2 == 0) {
+                    transform.localPosition = new Vector3(0, 0.05f, 0);
+                }
+            }         
         }
         else {
-            active = idle;
-            spriteRenderer.sprite = idle[(int)state.orientation];
+            if (state.isCarrying) {
+                active = carryIdle;
+                spriteRenderer.sprite = carryIdle[(int)state.orientation];
+            }
+            else {
+                active = idle;
+                spriteRenderer.sprite = idle[(int)state.orientation];
+            }
         }
     }
 

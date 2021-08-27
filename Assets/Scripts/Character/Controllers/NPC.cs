@@ -9,7 +9,6 @@ public class NPC : Controller {
     /* --- Variables --- */
     // NPC-Specific Components
     public Vision vision;
-    public bool isInteractable;
 
     void Start() {
         body.mass = 1e9f;
@@ -20,18 +19,13 @@ public class NPC : Controller {
     protected override void Think() {
         //
         movementVector = Vector2.zero;
+        Interact();
+    }
 
+    void Interact() {
         Player player = vision.LookFor(GameRules.playerTag)?.controller?.GetComponent<Player>();
-        if (player != null) {
-            isInteractable = true;
-        }
-        else {
-            isInteractable = false;
-        }
-
-        if (isInteractable && !player.isInteracting && Input.GetKeyDown(player.interactKey)) {
-            player.isInteracting = true;
-            player.dialogue.Run(npcFilename);
+        if (player != null && !player.state.isTalking && Input.GetKeyDown(player.interactKey)) {
+            player.Talk(npcFilename);
         }
     }
 

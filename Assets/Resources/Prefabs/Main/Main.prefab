@@ -228,6 +228,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ascii: {fileID: 1917436143617059161}
   charactersPerLine: 36
+  talkDelay: 0.075
+  regularTalkDelay: 0.075
+  fastTalkDelay: 0.025
+  isRunningCommand: 0
+  isPrintingDialogue: 0
 --- !u!1 &3307687742804212356
 GameObject:
   m_ObjectHideFlags: 0

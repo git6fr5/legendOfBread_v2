@@ -209,6 +209,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7993923673921461959}
+  - {fileID: 4670913362061426907}
   m_Father: {fileID: 7993923673991456149}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -232,6 +233,11 @@ MonoBehaviour:
   - {fileID: 2416434504916517810, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
   - {fileID: 1008816216748069464, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
   - {fileID: 7929438602540414932, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
+  carryIdle:
+  - {fileID: 4035959289877228764, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 1553940418269799609, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 7500509103958437945, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 2315132830120601726, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
   walk:
   - {fileID: 4035959289877228764, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
   - {fileID: -982904232830982447, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
@@ -249,6 +255,32 @@ MonoBehaviour:
   - {fileID: 7929438602540414932, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
   - {fileID: 5250438378151091228, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
   - {fileID: -1258472680374559522, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
+  carryWalk:
+  - {fileID: 4035959289877228764, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -982904232830982447, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -350908408369970039, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -5409570386352685021, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 1553940418269799609, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 2416434504916517810, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -6428935122508569504, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 7144598999076838305, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 7500509103958437945, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 1008816216748069464, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 11406907883527339, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 8030128826893041618, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 2315132830120601726, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 7929438602540414932, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 5250438378151091228, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -1258472680374559522, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  throwing:
+  - {fileID: 7611234267549935525, guid: bb16e696ade34cd4199c005da1949dec, type: 3}
+  - {fileID: -5454654668164359685, guid: bb16e696ade34cd4199c005da1949dec, type: 3}
+  - {fileID: 3065693834672313655, guid: bb16e696ade34cd4199c005da1949dec, type: 3}
+  - {fileID: 4187856940011678118, guid: bb16e696ade34cd4199c005da1949dec, type: 3}
+  - {fileID: -4261516837158581153, guid: bb16e696ade34cd4199c005da1949dec, type: 3}
+  - {fileID: -8364220074957833946, guid: bb16e696ade34cd4199c005da1949dec, type: 3}
+  - {fileID: 6260529513302378182, guid: bb16e696ade34cd4199c005da1949dec, type: 3}
+  - {fileID: -9214824769850916761, guid: bb16e696ade34cd4199c005da1949dec, type: 3}
   attack:
   - {fileID: -7159386292705165497, guid: 796b811c4e539cf458a32149cc06a3ff, type: 3}
   - {fileID: 8810571313023917626, guid: 796b811c4e539cf458a32149cc06a3ff, type: 3}
@@ -478,9 +510,13 @@ MonoBehaviour:
   orientation: 0
   isMoving: 0
   isAttacking: 0
+  isTalking: 0
+  isCarrying: 0
+  isThrowing: 0
   isHurt: 0
   isDead: 0
   attackBuffer: 0.4
+  throwBuffer: 0.2
   hurtBuffer: 0.4
   deathBuffer: 0.6
 --- !u!114 &7993923673991456151
@@ -503,13 +539,15 @@ MonoBehaviour:
   moveSpeed: 0
   activateAttack: 0
   weapon: {fileID: 7993923673465999843}
+  overhead: {fileID: 4670913362061426907}
   runKey: 122
   attackKey: 106
   attackMoveFactor: 0.25
+  carryMoveFactor: 0.5
   runMoveFactor: 2
-  isInteracting: 0
   interactKey: 32
   dialogue: {fileID: 0}
+  carried: {fileID: 0}
 --- !u!50 &7993923673991456170
 Rigidbody2D:
   serializedVersion: 4
@@ -665,3 +703,33 @@ MonoBehaviour:
   controller: {fileID: 7993923673991456151}
   targetTag: Mob
   container: []
+--- !u!1 &8237203019948248435
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4670913362061426907}
+  m_Layer: 0
+  m_Name: Overhead
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4670913362061426907
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8237203019948248435}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7993923673131168229}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
