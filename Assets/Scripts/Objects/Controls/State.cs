@@ -9,9 +9,11 @@ public class State : MonoBehaviour {
     // Health
     [Range(0, 10)] public int maxHealth;
     public int health;
+    public float height;
 
     // Stats
     [Range(0f, 5f)] public float baseSpeed;
+    [Range(0f, 5f)] public float jumpPulse;
 
     // Switches
     public ORIENTATION orientation;
@@ -20,6 +22,7 @@ public class State : MonoBehaviour {
     public bool isTalking;
     public bool isCarrying;
     public bool isThrowing;
+    public bool isJumping;
     public bool isHurt;
     public bool isDead;
 

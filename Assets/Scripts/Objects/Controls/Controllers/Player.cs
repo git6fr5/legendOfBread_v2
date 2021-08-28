@@ -29,8 +29,9 @@ public class Player : Controller {
 
     // Interactions
     public KeyCode interactKey = KeyCode.Space;
+    public KeyCode jumpKey = KeyCode.M;
     public Dialogue dialogue;
-    public Carriable carried;
+    public Throwable throwable;
 
     /* --- Override --- */
     // Sets the action controls.
@@ -38,6 +39,7 @@ public class Player : Controller {
         AttackInput();
         MoveInput();
         InteractInput();
+        JumpInput();
     }
 
     /* --- Thinking Actions --- */
@@ -51,7 +53,7 @@ public class Player : Controller {
     // Get the movement input.
     void MoveInput() {
 
-        // Reset the movement.
+        // Reset the controls.
         movementVector = Vector2.zero;
         moveSpeed = state.baseSpeed;
 
@@ -118,34 +120,50 @@ public class Player : Controller {
         }
     }
 
-    public void Carry(Carriable carriable) {
-        carriable.transform.parent = overhead;
-        carriable.transform.localPosition = Vector3.zero;
-        carriable.GetComponent<Rigidbody2D>().mass = 0f;
-        carriable.GetComponent<Rigidbody2D>().isKinematic = true;
-        foreach (Transform child in carriable.transform) {
+    public void Carry(Throwable _throwable) {
+        throwable = _throwable;
+        // Set the position of the object over the player's head.
+        throwable.transform.parent = overhead;
+        throwable.transform.localPosition = Vector3.zero;
+        foreach (Transform child in transform) {
             if (child.tag == GameRules.meshTag) {
-                child.GetComponent<Mesh>().hull.localPosition = new Vector3(0, -1.5f, 0);
-                child.GetComponent<Collider2D>().enabled = false;
+                throwable.mesh.hull.position = child.GetComponent<Mesh>().hull.position + GameRules.movementPrecision * -Vector3.up;
             }
         }
-        carried = carriable;
+        throwable.mesh.GetComponent<Collider2D>().enabled = false;
         state.isCarrying = true;
     }
 
     void Carrying() {
         //
         moveSpeed = state.baseSpeed * carryMoveFactor;
-        if (Input.GetKeyDown(interactKey) && carried != null && carried.isThrowable) {
+        if (Input.GetKeyDown(interactKey) && throwable != null && throwable.isCarried) {
             Throw();
         }
     }
 
     void Throw() {
-        carried.transform.parent = null;
+        throwable.transform.parent = null;
         state.isCarrying = false;
         state.isThrowing = true;
-        carried.Throw(state.orientation, transform.position);
+        throwable.Throw(state.orientation, transform.position);
+    }
+
+
+    public void Push(Pushable pushable) {
+        pushable.Push(state.orientation, transform.position);
+        state.isThrowing = true;
+    }
+
+    void JumpInput() {
+        if (Input.GetKeyDown(jumpKey) && !state.isJumping && !state.isCarrying && !state.isAttacking) {
+            state.isJumping = true;
+            fieldPulse += state.jumpPulse; 
+        }
+        else if (state.isJumping) {
+            //
+        }
     }
 
 }
+

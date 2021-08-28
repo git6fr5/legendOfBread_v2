@@ -22,7 +22,6 @@ public class Dungeon : MonoBehaviour {
     public Dictionary<string, Controller[]> controllerDirectory = new Dictionary<string, Controller[]>();
     public Exitbox[] exitDirectory = new Exitbox[0];
 
-
     void Start() {
         seed = GameRules.PrimeRandomizer(seed);
         map.Open(mapfile);

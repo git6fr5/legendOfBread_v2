@@ -9,11 +9,13 @@ public class Mesh : MonoBehaviour {
 
     /* --- Variables --- */
     public float depth;
+    protected Vector3 groundPosition;
 
     /* --- Unity --- */
     // Runs once before the first frame
     void Awake() {
         tag = GameRules.meshTag;
+        groundPosition = transform.localPosition;
     }
 
     // Runs every frame.
@@ -31,7 +33,7 @@ public class Mesh : MonoBehaviour {
     /* --- Depth --- */
     // Sets the depth of this mesh
     void SetDepth() {
-        depth = -(transform.position.y + hull.localPosition.y);
+        depth = -(hull.position.y);
     }
 
     // Compare the depth of the meshes.

@@ -14,9 +14,14 @@ public class Controller : MonoBehaviour {
     /* --- Variables --- */
     [SerializeField] public int id;
     [SerializeField] public Vector2 origin;
+    [SerializeField] static float friction = 0.025f;
+    [SerializeField] static float field = -5f;
+    [SerializeField] static float fieldPlane = 0f;
 
     // Action Controls
     [SerializeField] protected Vector2 movementVector;
+    [SerializeField] protected Vector2 momentumVector;
+    [SerializeField] protected float fieldPulse;
     [SerializeField] protected Vector2 orientationVector;
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected bool activateAttack;
@@ -40,6 +45,7 @@ public class Controller : MonoBehaviour {
     // Runs every fixed interval
     void FixedUpdate() {
         state.isMoving = Move();
+        Fall();
         state.orientation = Orientation();
     }
 
@@ -51,12 +57,23 @@ public class Controller : MonoBehaviour {
 
     // Moves the transform in the direction of the movement vector, at the move speed.
     bool Move() {
+        momentumVector *= (1f - friction);
+        body.velocity = moveSpeed * movementVector.normalized + momentumVector ;
         if (movementVector != Vector2.zero) {
-            Vector2 deltaPosition = movementVector.normalized * moveSpeed * Time.fixedDeltaTime;
-            state.transform.position = state.transform.position + (Vector3)deltaPosition;
-            return true;
+            return true; 
         }
         return false;
+    }
+
+    void Fall() {
+        fieldPulse = fieldPulse + Time.fixedDeltaTime * field;
+        // state.height = state.height + Mathf.Sign(fieldPulse) * Mathf.Pow(fieldPulse, 2) * Time.fixedDeltaTime;
+        state.height = state.height + Mathf.Pow(fieldPulse, 3) * Time.fixedDeltaTime;
+        if (state.height <= fieldPlane) {
+            fieldPulse = Mathf.Max(0f, fieldPulse);
+            state.height = fieldPlane;
+            state.isJumping = false;
+        }
     }
 
     ORIENTATION Orientation() {
@@ -112,6 +129,10 @@ public class Controller : MonoBehaviour {
     }
 
     protected virtual void OnDeath() {
+        // Determined by the particular type of controller.
+    }
+
+    protected virtual void Jump() {
         // Determined by the particular type of controller.
     }
 

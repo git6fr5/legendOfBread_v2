@@ -4,7 +4,6 @@ using UnityEngine;
 using ORIENTATION = Compass.ORIENTATION;
 
 [RequireComponent(typeof(SpriteRenderer))]
-[RequireComponent(typeof(CapsuleCollider2D))]
 public class Human : Mesh {
 
     /* --- Components --- */
@@ -27,12 +26,20 @@ public class Human : Mesh {
     int throwCycle = 2;
     int frameRate = 8;
     [HideInInspector] public float timeInterval = 0f;
+    // For the colliders.
+    public float height = 1f;
+    public float width = 12f / 16f;
 
     /* --- Unity --- */
     // Runs once before the first frame.
     void Start() {
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingLayerName = GameRules.midGround;
+        //
+        groundPosition = new Vector3(0, height / 2, 0);
+        CapsuleCollider2D hullCollider = hull.gameObject.AddComponent(typeof(CapsuleCollider2D)) as CapsuleCollider2D;
+        hullCollider.direction = CapsuleDirection2D.Horizontal;
+        hullCollider.size = new Vector2(width, 1f / 16f);
     }
 
     /* --- Override --- */
@@ -46,7 +53,7 @@ public class Human : Mesh {
     // Renders the sprite based on the state.
     void RenderSprite() {
         timeInterval += Time.deltaTime;
-        transform.localPosition = new Vector3(0, 0, 0);
+        transform.localPosition = groundPosition + new Vector3(0, state.height * Mathf.Sin(Mathf.PI / 4), 0f);
         if (state.isAttacking) {
             if (active != attack) {
                 timeInterval = 0f;
@@ -81,7 +88,7 @@ public class Human : Mesh {
                 index = walkCycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * frameRate) % walkCycle);
                 spriteRenderer.sprite = walk[index];
                 if (index % 2 == 0) {
-                    transform.localPosition = new Vector3(0, 0.05f, 0);
+                    transform.localPosition += new Vector3(0, 0.05f, 0);
                 }
             }         
         }
