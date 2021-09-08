@@ -29,6 +29,8 @@ public class GameRules : MonoBehaviour {
 
     /* --- Settings --- */
     public static float movementPrecision = 0.05f;
+    public static float dynamicFriction = 0.025f;
+    public static float gravityScale = 10f;
     public static float perspectiveAngle = Mathf.PI / 6;
 
     /* --- Unity --- */
@@ -77,6 +79,10 @@ public class GameRules : MonoBehaviour {
                 meshes[i].GetComponent<TilemapRenderer>().sortingOrder = i;
             }
         }
+    }
+
+    public static void CameraShake() {
+        Camera.main.GetComponent<View>().shake = true;
     }
 
 }

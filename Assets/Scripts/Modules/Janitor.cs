@@ -135,7 +135,7 @@ public class Janitor : MonoBehaviour {
     // Load a new object.
     public static void LoadNewController(Controller controllerPrefab, Vector3 position) {
         // Instantiate the new controller.
-        Controller controller = Instantiate(controllerPrefab, position, Quaternion.identity, GameObject.FindWithTag(GameRules.roomTag).transform).GetComponent<Controller>();
+        Controller controller = Instantiate(controllerPrefab, position, Quaternion.identity, GameObject.FindWithTag(GameRules.roomTag)?.transform).GetComponent<Controller>();
 
         // Update the dungeon information.
         Dungeon dungeon = GameObject.FindWithTag(GameRules.dungeonTag)?.GetComponent<Dungeon>();
