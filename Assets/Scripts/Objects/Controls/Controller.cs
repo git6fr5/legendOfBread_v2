@@ -1,37 +1,44 @@
-﻿using System.Collections;
+﻿/* --- Libraries --- */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+/* --- Enumerations --- */
 using ORIENTATION = Compass.ORIENTATION;
 
+/// <summary>
+/// Controls the behaviour of an entity.
+/// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(State))]
 public class Controller : MonoBehaviour {
     
     /* --- Components --- */
     [HideInInspector] public State state;
-    protected Rigidbody2D body;
+    [HideInInspector] protected Rigidbody2D body;
 
     /* --- Variables --- */
-    [SerializeField] public int id;
-    [SerializeField] public Vector2 origin;
-    [SerializeField] static float friction = 0.025f;
-    [SerializeField] static float field = -5f;
-    [SerializeField] static float fieldPlane = 0f;
+    [SerializeField] public int id; // The id of this entity (used to distinguish between types of entities in a particular class).
+    [SerializeField] public Vector2 origin; // The initial position of the entity (usually associated with spawn position).
+    [SerializeField] static float friction = 0.025f; // The degree to which momentum fades.
+    [SerializeField] static float field = -5f; // The force field the entity is subject to (usually gravity).
+    [SerializeField] static float fieldPlane = 0f; // The level above which the field applies.
 
     // Action Controls
-    [SerializeField] protected Vector2 movementVector;
-    [SerializeField] protected Vector2 momentumVector;
-    [SerializeField] protected float fieldPulse;
-    [SerializeField] protected Vector2 orientationVector;
-    [SerializeField] protected float moveSpeed;
-    [SerializeField] protected bool activateAttack;
+    [SerializeField] protected Vector2 movementVector; // The internal movement control.
+    [SerializeField] protected float moveSpeed; // The internal speed at which this entity is moving.
+    [SerializeField] protected Vector2 momentumVector; // The external movement control.
+    [SerializeField] protected Vector2 orientationVector; // The direction this entity is facing.
+    [SerializeField] protected float fieldPulse; // The incremental field value (per frame).
 
     /* --- Unity --- */
-    // Runs once on compilation.
+    // Runs once on instantiation.
     void Awake() {
+        // Cache these references.
         origin = transform.position;
         state = GetComponent<State>();
         body = GetComponent<Rigidbody2D>();
+        // Set up the attached components.
         body.constraints = RigidbodyConstraints2D.FreezeRotation;
         body.gravityScale = 0f;
         body.angularDrag = 0f;
@@ -45,8 +52,8 @@ public class Controller : MonoBehaviour {
     // Runs every fixed interval
     void FixedUpdate() {
         state.isMoving = Move();
-        Fall();
-        state.orientation = Orientation();
+        state.isFalling = Fall();
+        state.orientation = Turn();
     }
 
     /* --- Thinking Actions --- */
@@ -55,7 +62,7 @@ public class Controller : MonoBehaviour {
         // Determined by the particular type of controller.
     }
 
-    // Moves the transform in the direction of the movement vector, at the move speed.
+    // Adjusts the velocity of this entity with respect to internal and external movement controls.
     bool Move() {
         momentumVector *= (1f - friction);
         body.velocity = moveSpeed * movementVector.normalized + momentumVector ;
@@ -65,7 +72,8 @@ public class Controller : MonoBehaviour {
         return false;
     }
 
-    void Fall() {
+    // Adjusts the height of this state based on the field and any internal impulses.
+    bool Fall() {
         fieldPulse = fieldPulse + Time.fixedDeltaTime * field;
         // state.height = state.height + Mathf.Sign(fieldPulse) * Mathf.Pow(fieldPulse, 2) * Time.fixedDeltaTime;
         state.height = state.height + Mathf.Pow(fieldPulse, 3) * Time.fixedDeltaTime;
@@ -73,10 +81,13 @@ public class Controller : MonoBehaviour {
             fieldPulse = Mathf.Max(0f, fieldPulse);
             state.height = fieldPlane;
             state.isJumping = false;
+            return false;
         }
+        return true;
     }
 
-    ORIENTATION Orientation() {
+    // Adjusts the internal orientation enumerator of the entity.
+    ORIENTATION Turn() {
         if (orientationVector != Vector2.zero) {
             return Compass.VectorOrientations[orientationVector]; // Compass.SnapVectorToOrientation(orientationVector);
         }
@@ -91,6 +102,15 @@ public class Controller : MonoBehaviour {
     }
 
     protected virtual void OnAttack() {
+        // Determined by the particular type of controller.
+    }
+
+    protected void Jump() {
+        OnJump();
+        state.isJumping = true;
+    }
+
+    protected virtual void OnJump() {
         // Determined by the particular type of controller.
     }
 
@@ -129,10 +149,6 @@ public class Controller : MonoBehaviour {
     }
 
     protected virtual void OnDeath() {
-        // Determined by the particular type of controller.
-    }
-
-    protected virtual void Jump() {
         // Determined by the particular type of controller.
     }
 

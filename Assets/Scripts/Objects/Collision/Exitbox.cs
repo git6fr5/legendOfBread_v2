@@ -2,23 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A collider to detect when the player is leaving a room.
+/// </summary>
 [RequireComponent(typeof(CircleCollider2D))]
 public class Exitbox : MonoBehaviour {
 
     /* --- Components --- */
-    Dungeon dungeon;
+    [HideInInspector] protected Dungeon dungeon;
+    [HideInInspector] protected Collider2D area;
 
     /* --- Variables --- */
-    public int[] id = new int[] { 0, 0 };
+    [HideInInspector] public int[] id = new int[] { 0, 0 }; // Used to indicate which direction this exit faces.
+    [HideInInspector] static float offset = 8.85f; // The value to offset the player position by.
 
     /* --- Unity --- */
     // Runs once on instantiation
     void Awake() {
-        GameObject dungeonObject = GameObject.FindWithTag(GameRules.dungeonTag);
-        if (dungeonObject != null) {
-            dungeon = dungeonObject.GetComponent<Dungeon>();
-        }
-        GetComponent<CircleCollider2D>().isTrigger = true;
+        // Cache these references.
+        dungeon = GameObject.FindWithTag(GameRules.dungeonTag)?.GetComponent<Dungeon>();
+        area = GetComponent<Collider2D>();
+        // Set up the attached components.
+        area.isTrigger = true;
     }
 
     // Called when the attached collider intersects with another collider
@@ -27,6 +32,7 @@ public class Exitbox : MonoBehaviour {
     }
 
     /* --- Methods --- */
+    // Scans for whether to trigger an exit event.
     void ScanExit(Collider2D collider) {
         if (collider.GetComponent<Hurtbox>() != null) {
             Hurtbox hurtbox = collider.GetComponent<Hurtbox>();
@@ -36,23 +42,17 @@ public class Exitbox : MonoBehaviour {
         }
     }
 
-    // if colliding with a players hitbox, then exit
+    // The logic to execute when an exit event is triggered.
     void OnExit(Hurtbox hurtbox) {
-        print("exit");
-
-        // move the player
+        // Move the player
         Vector3 currPosition = hurtbox.controller.transform.position;
-
-        // slightly different values along the x and y axis because of the rectangular shape
-        // of the players hitbox
-        float dist = 8.85f;
-        Vector3 deltaPosition = new Vector3(-id[1] * dist, id[0] * dist, 0);
+        Vector3 deltaPosition = new Vector3(-id[1] * offset, id[0] * offset, 0);
         hurtbox.controller.transform.position = currPosition + deltaPosition;
 
-        // load the new room
+        // Load the new room.
         if (id[0] != 0 || id[1] != 0) {
+            // Get the new room id.
             int[] newID = new int[] { dungeon.id[0] + id[0], dungeon.id[1] + id[1] };
-            // dungeon.DeloadRoom();
             dungeon.LoadRoom(newID);
         }
     }

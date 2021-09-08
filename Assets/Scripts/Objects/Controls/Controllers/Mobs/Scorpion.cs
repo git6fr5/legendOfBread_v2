@@ -9,7 +9,7 @@ public class Scorpion : Mob {
         id = 2;
     }
 
-    /* --- Components --- */
+    /* --- Controls --- */
     [Range(0, 5)] public int damage;
 
     /* --- Variables --- */
@@ -18,8 +18,11 @@ public class Scorpion : Mob {
     int syncTicks = 300;
 
     /* --- Unity --- */
+    // Runs once before the first frame.
     void Start() {
-        room = GameObject.FindWithTag(GameRules.roomTag).GetComponent<Room>();
+        // Cache these references.
+        room = GameObject.FindWithTag(GameRules.roomTag)?.GetComponent<Room>();
+        // Set these parameters.
         orientationVector = Vector2.right;
     }
 

@@ -9,7 +9,7 @@ public class Slime : Mob {
         id = 1;
     }
 
-    /* --- Components --- */
+    /* --- Controls --- */
     public Slime childSlime;
     public Slime parentSlime;
     [Range(0, 5)] public int damage;
@@ -51,6 +51,7 @@ public class Slime : Mob {
                 Grow();
             }
         }
+        Trail();
     }
     
     /* --- Event Actions --- */
@@ -73,9 +74,15 @@ public class Slime : Mob {
         Destroy(gameObject);
     }
 
+    // Grows from a child slime to a parent slime.
     void Grow() {
         Janitor.LoadNewController(parentSlime, transform.position);
         Destroy(gameObject);
+    }
+
+    // Leaves a trail of goo behind.
+    void Trail() {
+        //
     }
 
 }

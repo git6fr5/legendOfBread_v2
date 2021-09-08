@@ -10,12 +10,22 @@ public class Mesh : MonoBehaviour {
     /* --- Variables --- */
     public float depth;
     protected Vector3 groundPosition;
+    // For the colliders.
+    public float height = 1f;
+    public float width = 12f / 16f;
 
     /* --- Unity --- */
     // Runs once before the first frame
     void Awake() {
         tag = GameRules.meshTag;
-        groundPosition = transform.localPosition;
+
+        groundPosition = new Vector3(0, height / 2, 0);
+        BoxCollider2D meshCollider = hull.gameObject.AddComponent(typeof(BoxCollider2D)) as BoxCollider2D;
+        meshCollider.size = new Vector2(width, height * Mathf.Sin(GameRules.perspectiveAngle));
+        meshCollider.offset = new Vector2(0f, height * Mathf.Sin(GameRules.perspectiveAngle) / 2f);
+        CapsuleCollider2D hullCollider = hull.gameObject.AddComponent(typeof(CapsuleCollider2D)) as CapsuleCollider2D;
+        hullCollider.direction = CapsuleDirection2D.Horizontal;
+        hullCollider.size = new Vector2(width, 1f / 16f);
     }
 
     // Runs every frame.

@@ -6,16 +6,14 @@ using ORIENTATION = Compass.ORIENTATION;
 public class State : MonoBehaviour {
 
     /* --- Variables --- */
-    // Health
-    [Range(0, 10)] public int maxHealth;
-    public int health;
-    public float height;
-
     // Stats
-    [Range(0f, 5f)] public float baseSpeed;
-    [Range(0f, 5f)] public float jumpPulse;
+    [Range(0, 10)] public int maxHealth;
+    [SerializeField] public int health; // The health 
+    [Range(0f, 10f)] public float height; // The height of the floor this entity is at.
+    [Range(0.05f, 20f)] public float baseSpeed; // How fast the entity moves.
+    [Range(0.05f, 20f)] public float jumpPulse; // How high the entity jumps.
 
-    // Switches
+    // State Flags.
     public ORIENTATION orientation;
     public bool isMoving;
     public bool isAttacking;
@@ -23,20 +21,27 @@ public class State : MonoBehaviour {
     public bool isCarrying;
     public bool isThrowing;
     public bool isJumping;
+    public bool isFalling;
     public bool isHurt;
     public bool isDead;
 
-    // Flags
-    Coroutine attackFlag;
-    public float attackBuffer = 0.4f;
-    Coroutine throwFlag;
-    public float throwBuffer = 0.2f;
-    Coroutine hurtFlag;
-    public float hurtBuffer = 0.4f;
-    Coroutine deathFlag;
-    public float deathBuffer = 0.6f;
+    // Timers.
+    [HideInInspector] Coroutine attackTimer;
+    [Range(0.05f, 1f)] public float attackBuffer = 0.4f;
+    [HideInInspector] Coroutine throwTimer;
+    [Range(0.05f, 1f)] public float throwBuffer = 0.2f;
+    [HideInInspector] Coroutine hurtTimer;
+    [Range(0.05f, 1f)] public float hurtBuffer = 0.4f; // The interval an entity becomes invulnerable after being hurt.
+    [HideInInspector] Coroutine deathTimer;
+    [Range(0.05f, 1f)] public float deathBuffer = 0.6f; // The interval between dying and despawning.
 
     /* --- Unity --- */
+    // Runs once on instantiation.
+    void Awake() {
+        // Set the required state..
+        health = maxHealth;
+    }
+
     // Runs every frame.
     void Update() {
         AttackFlag();
@@ -48,29 +53,29 @@ public class State : MonoBehaviour {
     /* --- Flags --- */
     // Flags if this state is attacking
     void AttackFlag() {
-        if (isAttacking && attackFlag == null) {
-            attackFlag = StartCoroutine(IEAttackFlag(attackBuffer));
+        if (isAttacking && attackTimer == null) {
+            attackTimer = StartCoroutine(IEAttackFlag(attackBuffer));
         }
     }
 
     // Flags if this state is throwing
     void ThrowFlag() {
-        if (isThrowing && throwFlag == null) {
-            throwFlag = StartCoroutine(IEThrowFlag(throwBuffer));
+        if (isThrowing && throwTimer == null) {
+            throwTimer = StartCoroutine(IEThrowFlag(throwBuffer));
         }
     }
 
     // Flags if this state is hurt
     void HurtFlag() {
-        if (isHurt && hurtFlag == null) {
-            hurtFlag = StartCoroutine(IEHurtFlag(hurtBuffer));
+        if (isHurt && hurtTimer == null) {
+            hurtTimer = StartCoroutine(IEHurtFlag(hurtBuffer));
         }
     }
 
     // Flags if this state is hurt
     void DeathFlag() {
-        if (isDead && deathFlag == null) {
-            deathFlag = StartCoroutine(IEDeathFlag(deathBuffer));
+        if (isDead && deathTimer == null) {
+            deathTimer = StartCoroutine(IEDeathFlag(deathBuffer));
         }
     }
 
@@ -79,7 +84,7 @@ public class State : MonoBehaviour {
     IEnumerator IEAttackFlag(float buffer) {
         yield return new WaitForSeconds(buffer);
         isAttacking = false;
-        attackFlag = null;
+        attackTimer = null;
         yield return null;
     }
 
@@ -87,7 +92,7 @@ public class State : MonoBehaviour {
     IEnumerator IEThrowFlag(float buffer) {
         yield return new WaitForSeconds(buffer);
         isThrowing = false;
-        throwFlag = null;
+        throwTimer = null;
         yield return null;
     }
 
@@ -95,7 +100,7 @@ public class State : MonoBehaviour {
     IEnumerator IEHurtFlag(float buffer) {
         yield return new WaitForSeconds(buffer);
         isHurt = false;
-        hurtFlag = null;
+        hurtTimer = null;
         yield return null;
     }
 

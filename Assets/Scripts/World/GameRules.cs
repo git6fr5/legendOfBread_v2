@@ -27,8 +27,9 @@ public class GameRules : MonoBehaviour {
     public static string midGround = "Midground";
     public static string foreGround = "Foreground";
 
-    /* --- Movement Precision --- */
+    /* --- Settings --- */
     public static float movementPrecision = 0.05f;
+    public static float perspectiveAngle = Mathf.PI / 6;
 
     /* --- Unity --- */
     void Update() {

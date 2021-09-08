@@ -38,8 +38,8 @@ public class Player : Controller {
     protected override void Think() {
         AttackInput();
         MoveInput();
-        InteractInput();
         JumpInput();
+        InteractInput();
     }
 
     /* --- Thinking Actions --- */
@@ -81,6 +81,23 @@ public class Player : Controller {
         }
     }
 
+    // Get the jump input.
+    void JumpInput() {
+        if (Input.GetKeyDown(jumpKey) && !state.isJumping && !state.isCarrying && !state.isAttacking) {
+            Jump();
+        }
+    }
+
+    // Check whether the player wants to interact with anything.
+    void InteractInput() {
+        if (state.isTalking) {
+            Talking();
+        }
+        else if (state.isCarrying) {
+            Carrying();
+        }
+    }
+
     /* --- Event Actions --- */
     // Activate the weapon
     protected override void OnAttack() {
@@ -92,16 +109,14 @@ public class Player : Controller {
         weapon.OnHit(hurtbox);
     }
 
-    /* --- Interactions --- */
-    void InteractInput() {
-        if (state.isTalking) {
-            Talking();
-        }
-        else if (state.isCarrying) {
-            Carrying();
-        }
+    // Add a jump pulse.
+    protected override void OnJump() {
+        state.isJumping = true;
+        fieldPulse += state.jumpPulse;
     }
 
+    // Need to clean below.
+    /* --- Interactions --- */
     public void Talk(string npcName) {
         dialogue.talkDelay = dialogue.regularTalkDelay;
         dialogue.Run(npcName);
@@ -153,16 +168,6 @@ public class Player : Controller {
     public void Push(Pushable pushable) {
         pushable.Push(state.orientation, transform.position);
         state.isThrowing = true;
-    }
-
-    void JumpInput() {
-        if (Input.GetKeyDown(jumpKey) && !state.isJumping && !state.isCarrying && !state.isAttacking) {
-            state.isJumping = true;
-            fieldPulse += state.jumpPulse; 
-        }
-        else if (state.isJumping) {
-            //
-        }
     }
 
 }
