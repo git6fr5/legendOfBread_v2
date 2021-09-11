@@ -13,24 +13,36 @@ public class State : MonoBehaviour {
     [Range(0.05f, 20f)] public float baseSpeed; // How fast the entity moves.
     [Range(0.05f, 20f)] public float jumpPulse; // How high the entity jumps.
 
+    [HideInInspector] public Equipable activeItem = null;
+    public List<Equipable> equipment = new List<Equipable>();
+
     // State Flags.
     public ORIENTATION orientation;
     public bool isMoving;
-    public bool isSliding;
-    public bool isAttacking;
-    public bool isTalking;
-    public bool isCarrying;
-    public bool isThrowing;
-    public bool isJumping;
-    public bool isFalling;
     public bool isHurt;
     public bool isDead;
+    public bool isActive;
+    // Action Enumerations
+    public enum ActionState {
+        Inactive,
+        // Timed Actions.
+        Attacking,
+        Jumping,
+        Throwing,
+        timedActionCount,
+        // Continous Actions.
+        Sliding,
+        Talking,
+        Carrying,
+        continiousActionCount
+    }
+    public ActionState actionState = ActionState.Inactive;
 
-    // Timers.
-    [HideInInspector] Coroutine attackTimer;
-    [Range(0.05f, 1f)] public float attackBuffer = 0.4f;
-    [HideInInspector] Coroutine throwTimer;
-    [Range(0.05f, 1f)] public float throwBuffer = 0.2f;
+    // Timed Action Buffer
+    [HideInInspector] Coroutine actionTimer;
+    [HideInInspector] public float actionBuffer;
+
+    // Timed State Buffers
     [HideInInspector] Coroutine hurtTimer;
     [Range(0.05f, 1f)] public float hurtBuffer = 0.4f; // The interval an entity becomes invulnerable after being hurt.
     [HideInInspector] Coroutine deathTimer;
@@ -45,24 +57,18 @@ public class State : MonoBehaviour {
 
     // Runs every frame.
     void Update() {
-        AttackFlag();
-        ThrowFlag();
+        ActionFlag();
         HurtFlag();
         DeathFlag();
     }
 
     /* --- Flags --- */
-    // Flags if this state is attacking
-    void AttackFlag() {
-        if (isAttacking && attackTimer == null) {
-            attackTimer = StartCoroutine(IEAttackFlag(attackBuffer));
-        }
-    }
-
-    // Flags if this state is throwing
-    void ThrowFlag() {
-        if (isThrowing && throwTimer == null) {
-            throwTimer = StartCoroutine(IEThrowFlag(throwBuffer));
+    // Flags if this state is performing an action
+    void ActionFlag() {
+        if (activeItem != null && actionTimer == null) {
+            activeItem.Activate(orientation);
+            float buffer = activeItem.actionBuffer;
+            actionTimer = StartCoroutine(IEActionFlag(buffer));
         }
     }
 
@@ -81,19 +87,12 @@ public class State : MonoBehaviour {
     }
 
     /* --- Coroutines --- */
-    // Unflags this state as attacking
-    IEnumerator IEAttackFlag(float buffer) {
+    // Unflags this state as doing an action
+    IEnumerator IEActionFlag(float buffer) {
         yield return new WaitForSeconds(buffer);
-        isAttacking = false;
-        attackTimer = null;
-        yield return null;
-    }
-
-    // Unflags this state as throwing
-    IEnumerator IEThrowFlag(float buffer) {
-        yield return new WaitForSeconds(buffer);
-        isThrowing = false;
-        throwTimer = null;
+        activeItem.Deactivate();
+        activeItem = null;
+        actionTimer = null;
         yield return null;
     }
 

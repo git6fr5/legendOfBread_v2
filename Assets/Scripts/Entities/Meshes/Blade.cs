@@ -5,42 +5,34 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class Blade : Mesh {
 
-    /* --- Components --- */
-    public Human holder;
-    public Hitbox hitbox;
-    public Sprite[] swing;
+    ///* --- Components --- */
+    //public Human holder;
+    //public Hitbox hitbox;
 
-    /* --- Variables --- */
-    SpriteRenderer spriteRenderer;
+    ///* --- Animations --- */
+    //public Sprite[] swing;
 
-    /* --- Unity --- */
-    // Runs once before the first frame.
-    void Start() {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sortingLayerName = GameRules.midGround;
-    }
+    ///* --- Override --- */
+    //// The parameters to be rendered every frame
+    //public override void Render() {
+    //    RenderSprite();
+    //    RenderHitbox();
+    //}
 
-    /* --- Override --- */
-    // The parameters to be rendered every frame
-    public override void Render() {
-        RenderSprite();
-        RenderHitbox();
-    }
+    ///* --- Parameters --- */
+    //// Renders the sprite based on the state.
+    //void RenderSprite() {
+    //    if (holder.state.isAttacking) {
+    //        int index = ((int)Mathf.Floor(holder.timeInterval * swing.Length / holder.state.attackBuffer) % swing.Length); ;
+    //        spriteRenderer.sprite = swing[index];
+    //    }
+    //}
 
-    /* --- Parameters --- */
-    // Renders the sprite based on the state.
-    void RenderSprite() {
-        if (holder.state.isAttacking) {
-            int index = ((int)Mathf.Floor(holder.timeInterval * swing.Length / holder.state.attackBuffer) % swing.Length); ;
-            spriteRenderer.sprite = swing[index];
-        }
-    }
-
-    void RenderHitbox() {
-        if (holder.state.isAttacking) {
-            int index = ((int)Mathf.Floor(holder.timeInterval * swing.Length / holder.state.attackBuffer) % swing.Length); ;
-            hitbox.transform.localRotation = Quaternion.Euler(0, 0, -(index * 180 / (swing.Length - 1)));
-        }
-    }
+    //void RenderHitbox() {
+    //    if (holder.state.isAttacking) {
+    //        int index = ((int)Mathf.Floor(holder.timeInterval * swing.Length / holder.state.attackBuffer) % swing.Length); ;
+    //        hitbox.transform.localRotation = Quaternion.Euler(0, 0, -(index * 180 / (swing.Length - 1)));
+    //    }
+    //}
 
 }

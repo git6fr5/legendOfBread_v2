@@ -2,38 +2,77 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Particle : Mesh
-{
+[RequireComponent(typeof(SpriteRenderer))]
+public class Particle : MonoBehaviour {
+
     /* --- Components --- */
+    [HideInInspector] public SpriteRenderer spriteRenderer;
+
+    /* --- Animations --- */
     public Sprite[] effect;
 
     /* --- Variables --- */
-    SpriteRenderer spriteRenderer;
+    public bool inFront = true;
     public bool isLoop = true;
-    public int frameRate = 8;
-    float timeInterval = 0f;
+    public bool isDisposable = true;
+    public float frameRate = 8f;
+    public float timeInterval = 0f;
 
     /* --- Unity --- */
     // Runs once before the first frame.
-    void Start() {
+    void Awake() {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sortingLayerName = GameRules.midGround;
+        // Set the layer of this mesh;
+        if (inFront) {
+            spriteRenderer.sortingLayerName = GameRules.particleFront;
+        }
+        else {
+            spriteRenderer.sortingLayerName = GameRules.particleBehind;
+        }
+    }
+
+    // Runs every frame.
+    void Update() {
+        if (gameObject.activeSelf) {
+            Render();
+        }
+    }
+
+    public void Activate(bool activate) {
+        timeInterval = 0f;
+        gameObject.SetActive(activate);
+        isLoop = true;
+    }
+
+    public void Fire() {
+        Activate(true);
+        isLoop = false;
+    }
+
+    public void ControlledFire(float duration) {
+        frameRate = (float)(effect.Length - 1) / duration;
+        Fire();
+    }
+
+    public void ControlledActivate(float duration) {
+        frameRate = (float)(effect.Length) / duration;
+        Activate(true);
     }
 
     /* --- Override --- */
     // The parameters to be rendered every frame
-    public override void Render() {
-        RenderSprite();
-    }
-
-    /* --- Parameters --- */
-    // Renders the sprite based on the state.
-    void RenderSprite() {
+    void Render() {
         timeInterval += Time.deltaTime;
         int index = ((int)Mathf.Floor(timeInterval * frameRate) % effect.Length);
         if (index == effect.Length - 1 && !isLoop) {
-            Destroy(gameObject);
+            if (isDisposable) {
+                Destroy(gameObject);
+            }
+            else {
+                Activate(false);
+            }
         }
         spriteRenderer.sprite = effect[index];
     }
+
 }

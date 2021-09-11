@@ -9,6 +9,8 @@ TagManager:
   - Room
   - Dungeon
   - Map
+  - Bombable
+  - Particle
   layers:
   - Default
   - TransparentFX
@@ -49,8 +51,14 @@ TagManager:
   - name: Background
     uniqueID: 817825301
     locked: 0
+  - name: Particle Background
+    uniqueID: 2419138769
+    locked: 0
   - name: Midground
     uniqueID: 160454865
+    locked: 0
+  - name: Particle Foreground
+    uniqueID: 718078391
     locked: 0
   - name: Foreground
     uniqueID: 2409012843

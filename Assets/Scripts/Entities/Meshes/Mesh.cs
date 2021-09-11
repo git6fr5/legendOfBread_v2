@@ -2,25 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Mesh : MonoBehaviour {
 
     /* --- Components --- */
-    public Transform hull;
+    [HideInInspector] public SpriteRenderer spriteRenderer;
 
     /* --- Variables --- */
-    public float depth;
-    protected Vector3 groundPosition;
+    [SerializeField] public Transform overhead; // The position from which the entities carries structures.
+    [SerializeField] public Transform castpoint; // The position from which the entities casts items.
+    [SerializeField] public Transform hull; // The position where this entities feet contacts the ground.
+    [SerializeField] public Collider2D frame; // The collision frame of this entity.
 
     /* --- Unity --- */
     // Runs once before the first frame
     void Awake() {
         tag = GameRules.meshTag;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        // Set the layer of this mesh;
+        spriteRenderer.sortingLayerName = GameRules.midGround;
     }
 
     // Runs every frame.
     void Update() {
         Render();
-        SetDepth();
     }
 
     /* --- Rendering --- */
@@ -29,15 +34,9 @@ public class Mesh : MonoBehaviour {
         // Determined by the particular type of mesh.
     }
 
-    /* --- Depth --- */
-    // Sets the depth of this mesh
-    void SetDepth() {
-        depth = -(hull.position.y);
-    }
-
     // Compare the depth of the meshes.
     public static int Compare(Mesh meshA, Mesh meshB) {
-        return meshA.depth.CompareTo(meshB.depth);
+        return (-meshA.hull.position.y).CompareTo((-meshB.hull.position.y));
     }
 
 }

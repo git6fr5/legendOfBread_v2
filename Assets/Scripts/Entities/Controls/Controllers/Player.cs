@@ -5,12 +5,7 @@ using UnityEngine;
 public class Player : Controller {
 
     /* --- Variables --- */
-    // Player-Specific Components
-    public Weapon weapon;
-    public Transform overhead;
-
     // Movement Keys
-    public KeyCode runKey = KeyCode.Z;
     public Dictionary<KeyCode, Vector2> movementKeys = new Dictionary<KeyCode, Vector2>() {
         { KeyCode.W, Vector2.up },
         { KeyCode.A, -Vector2.right },
@@ -19,12 +14,11 @@ public class Player : Controller {
     };
     List<KeyCode> pressedKeys = new List<KeyCode>();
 
-    // Attack Keys
-    public KeyCode attackKey = KeyCode.J;
+    // Action Keys
+    public KeyCode[] actionKeys = new KeyCode[] { KeyCode.J, KeyCode.K, KeyCode.L };
 
     // Player-Specific Action Controls
-    [Range(0.05f, 1f)] public float attackMoveFactor = 0.25f;
-    [Range(0.05f, 1f)] public float carryMoveFactor = 0.5f;
+    [Range(0.05f, 1f)] public float actionMoveFactor = 0.25f;
     [Range(0.05f, 2f)] public float runMoveFactor = 1.25f;
 
     // Interactions
@@ -36,17 +30,19 @@ public class Player : Controller {
     /* --- Override --- */
     // Sets the action controls.
     protected override void Think() {
-        AttackInput();
+        ActionInput();
         MoveInput();
-        JumpInput();
-        InteractInput();
     }
 
     /* --- Thinking Actions --- */
-    // Activate an attack on input.
-    void AttackInput() {
-        if (Input.GetKeyDown(attackKey) && !state.isAttacking) {
-            Attack();
+    // Activate an action on input if the state is not active already.
+    void ActionInput() {
+        if (state.activeItem == null) {
+            for (int i = 0; i < actionKeys.Length; i++) {
+                if (Input.GetKeyDown(actionKeys[i]) && state.equipment.Count > i && state.equipment[i] != null) {
+                    Action(i);
+                }
+            }
         }
     }
 
@@ -56,10 +52,6 @@ public class Player : Controller {
         // Reset the controls.
         movementVector = Vector2.zero;
         moveSpeed = state.baseSpeed;
-
-        // Factor for any move speed modifiers.
-        if (state.isAttacking) { moveSpeed *= attackMoveFactor; }
-        else if (Input.GetKey(runKey)) { moveSpeed *= runMoveFactor; }
 
         // Itterate through the movement keys.
         foreach (KeyValuePair<KeyCode, Vector2> movement in movementKeys) {
@@ -75,38 +67,24 @@ public class Player : Controller {
             }
         }
 
-        // Adjust the orientation if a key is pressed
-        if (!state.isAttacking && !state.isThrowing && pressedKeys.Count > 0) {
+        // Adjust the orientation if a key is pressed and no items are active.
+        if (state.activeItem == null && pressedKeys.Count > 0) {
             orientationVector = movementKeys[pressedKeys[0]];
         }
-    }
+        else if (state.activeItem) {
+            // moveSpeed *= state.activeItem.moveSpeedFactor;
+        }
 
-    // Get the jump input.
-    void JumpInput() {
-        if (Input.GetKeyDown(jumpKey) && !state.isJumping && !state.isCarrying && !state.isAttacking) {
-            Jump();
-        }
-    }
-
-    // Check whether the player wants to interact with anything.
-    void InteractInput() {
-        if (state.isTalking) {
-            Talking();
-        }
-        else if (state.isCarrying) {
-            Carrying();
-        }
     }
 
     /* --- Event Actions --- */
     // Activate the weapon
-    protected override void OnAttack() {
-        weapon.Activate(true);
+    protected override void OnAction(int index) {
+        state.activeItem = state.equipment[index];
     }
 
     // When hitting something through an attack
     protected override void OnHit(Hurtbox hurtbox) {
-        weapon.OnHit(hurtbox);
         GameRules.CameraShake();
     }
 
@@ -114,22 +92,12 @@ public class Player : Controller {
         GameRules.CameraShake();
     }
 
-    // Add a jump pulse.
-    protected override void OnJump() {
-        state.isJumping = true;
-        fieldPulse += state.jumpPulse;
-    }
-
-    protected override void OnLand() {
-        state.isJumping = false; 
-    }
-
     // Need to clean below.
     /* --- Interactions --- */
     public void Talk(string npcName) {
         dialogue.talkDelay = dialogue.regularTalkDelay;
         dialogue.Run(npcName);
-        state.isTalking = true;
+        // state.isTalking = true;
     }
 
     void Talking() {
@@ -140,43 +108,8 @@ public class Player : Controller {
         if (Input.GetKeyUp(interactKey) && !dialogue.isRunningCommand) {
             dialogue.Clear();
             dialogue.gameObject.SetActive(false);
-            state.isTalking = false;
+            // state.isTalking = false;
         }
-    }
-
-    public void Carry(Throwable _throwable) {
-        throwable = _throwable;
-        // Set the position of the object over the player's head.
-        throwable.transform.parent = overhead;
-        throwable.transform.localPosition = Vector3.zero;
-        foreach (Transform child in transform) {
-            if (child.tag == GameRules.meshTag) {
-                throwable.mesh.hull.position = child.GetComponent<Mesh>().hull.position + GameRules.movementPrecision * -Vector3.up;
-            }
-        }
-        throwable.mesh.GetComponent<Collider2D>().enabled = false;
-        state.isCarrying = true;
-    }
-
-    void Carrying() {
-        //
-        moveSpeed = state.baseSpeed * carryMoveFactor;
-        if (Input.GetKeyDown(interactKey) && throwable != null && throwable.isCarried) {
-            Throw();
-        }
-    }
-
-    void Throw() {
-        throwable.transform.parent = null;
-        state.isCarrying = false;
-        state.isThrowing = true;
-        throwable.Throw(state.orientation, transform.position);
-    }
-
-
-    public void Push(Pushable pushable) {
-        pushable.Push(state.orientation, transform.position);
-        state.isThrowing = true;
     }
 
 }

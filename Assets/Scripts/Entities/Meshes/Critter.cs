@@ -8,22 +8,18 @@ public class Critter : Mesh {
     
     /* --- Components --- */
     public State state;
+
+    /* --- Animations --- */
     public Sprite[] idle;
+
+    /* --- Materials --- */
     public Material defaultMaterial;
     public Material hurtMaterial;
     public Material deathMaterial;
 
     /* --- Variables --- */
-    SpriteRenderer spriteRenderer;
     int frameRate = 8;
     float timeInterval = 0f;
-
-    /* --- Unity --- */
-    // Runs once before the first frame.
-    void Start() {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sortingLayerName = GameRules.midGround;
-    }
 
     /* --- Override --- */
     // The parameters to be rendered every frame

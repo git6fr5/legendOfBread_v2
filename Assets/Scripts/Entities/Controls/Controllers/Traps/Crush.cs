@@ -48,20 +48,18 @@ public class Crush : Trap {
 
     protected override void On() {
         //
-        Attack();
+        Action();
 
         movementVector = targetPoint - transform.position;
         onTicks += Time.deltaTime;
         if (onTicks >= onMaxTime) {
             targetPoint = origin;
-            spike.Activate(false);
             isCharging = false;
         }
         if (isCharging) {
             moveSpeed = state.baseSpeed * onSpeed;
             if (Vector2.Distance(transform.position, targetPoint) < GameRules.movementPrecision) {
                 targetPoint = origin;
-                spike.Activate(false);
                 isCharging = false;
             }
         }
@@ -95,8 +93,8 @@ public class Crush : Trap {
         hurtbox.controller.Hurt(damage); 
     }
 
-    protected override void OnAttack() {
-        spike.Activate(true);
+    protected override void OnAction(int index = 0) {
+        // spike.Activate();
     }
 
 }

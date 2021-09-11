@@ -21,11 +21,17 @@ public class GameRules : MonoBehaviour {
     public static string playerTag = "Player";
     public static string mobTag = "Mob";
     public static string meshTag = "Mesh";
+    public static string hullTag = "Hull";
+
+    /* --- Structure Tags --- */
+    public static string bombableTag = "Bombable";
 
     /* --- Layers --- */
     public static string backGround = "Background";
     public static string midGround = "Midground";
     public static string foreGround = "Foreground";
+    public static string particleFront = "Particle Foreground";
+    public static string particleBehind = "Particle Background";
 
     /* --- Settings --- */
     public static float movementPrecision = 0.05f;

@@ -16,11 +16,11 @@ public class Controller : MonoBehaviour {
     /* --- Components --- */
     [HideInInspector] public State state;
     [HideInInspector] public Rigidbody2D body;
+    [SerializeField] public Mesh mesh;
 
     /* --- Variables --- */
     [SerializeField] public int id; // The id of this entity (used to distinguish between types of entities in a particular class).
     [SerializeField] public Vector2 origin; // The initial position of the entity (usually associated with spawn position).
-    [SerializeField] static float fieldPlane = 0f; // The level above which the field applies.
 
     // Action Controls
     [SerializeField] protected Vector2 movementVector; // The internal movement control.
@@ -50,7 +50,6 @@ public class Controller : MonoBehaviour {
     // Runs every fixed interval
     void FixedUpdate() {
         state.isMoving = Move();
-        state.isFalling = Fall();
         state.orientation = Turn();
     }
 
@@ -63,32 +62,11 @@ public class Controller : MonoBehaviour {
     // Adjusts the velocity of this entity with respect to internal and external movement controls.
     bool Move() {
         momentumVector *= (1f - GameRules.dynamicFriction);
-        if (state.isSliding) {
-            body.velocity = moveSpeed * (body.velocity * (1f - GameRules.dynamicFriction) + movementVector).normalized + momentumVector;
-        }
-        else {
-            body.velocity = moveSpeed * movementVector.normalized + momentumVector;
-        }
+        body.velocity = moveSpeed * movementVector.normalized + momentumVector;
         if (movementVector != Vector2.zero) {
             return true; 
         }
         return false;
-    }
-
-    // Adjusts the height of this state based on the field and any internal impulses.
-    bool Fall() {
-        fieldPulse = fieldPulse + Time.fixedDeltaTime * -GameRules.gravityScale;
-        // state.height = state.height + Mathf.Sign(fieldPulse) * Mathf.Pow(fieldPulse, 2) * Time.fixedDeltaTime;
-        state.height = state.height + Mathf.Pow(fieldPulse, 3) * Time.fixedDeltaTime;
-        if (state.height <= fieldPlane) {
-            fieldPulse = Mathf.Max(0f, fieldPulse);
-            state.height = fieldPlane;
-            if (state.isJumping) {
-                OnLand();
-            }
-            return false;
-        }
-        return true;
     }
 
     // Adjusts the internal orientation enumerator of the entity.
@@ -101,25 +79,11 @@ public class Controller : MonoBehaviour {
 
     /* --- Internal Event Actions --- */
     // Activates the attack of this controller.
-    protected void Attack() {
-        OnAttack();
-        state.isAttacking = true;
+    protected void Action(int index = 0) {
+        OnAction(index);
     }
 
-    protected virtual void OnAttack() {
-        // Determined by the particular type of controller.
-    }
-
-    protected void Jump() {
-        OnJump();
-        state.isJumping = true;
-    }
-
-    protected virtual void OnJump() {
-        // Determined by the particular type of controller.
-    }
-
-    protected virtual void OnLand() {
+    protected virtual void OnAction(int index = 0) {
         // Determined by the particular type of controller.
     }
 

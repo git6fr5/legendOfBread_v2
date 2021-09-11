@@ -2,41 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ORIENTATION = Compass.ORIENTATION;
+using ActionState = State.ActionState;
 
-[RequireComponent(typeof(CapsuleCollider2D))]
-[RequireComponent(typeof(SpriteRenderer))]
 public class Human : Mesh {
 
     /* --- Components --- */
     public State state;
+
+    /* --- Animations --- */
     public Sprite[] idle;
     public Sprite[] carryIdle;
     public Sprite[] walk;
     public Sprite[] carryWalk;
     public Sprite[] throwing;
     public Sprite[] attack;
-    public Sprite[] jump;
+
+    /* --- Materials --- */
     public Material defaultMaterial;
     public Material hurtMaterial;
     public Material deathMaterial;
 
     /* --- Variables --- */
-    SpriteRenderer spriteRenderer;
-    CapsuleCollider2D capsuleCollider;
     Sprite[] active; // This is solely to be used as a switch
     int walkCycle = 4;
     int attackCycle = 6;
     int throwCycle = 2;
-    int jumpCycle = 4;
     int frameRate = 8;
     [HideInInspector] public float timeInterval = 0f;
 
-    /* --- Unity --- */
-    // Runs once before the first frame.
+    public Dictionary<ActionState, (Sprite[], int)> actionAnim;
+
     void Start() {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sortingLayerName = GameRules.midGround;
-        capsuleCollider = GetComponent<CapsuleCollider2D>();
+        actionAnim = new Dictionary<ActionState, (Sprite[], int)>() {
+            {ActionState.Attacking, (attack, attackCycle) },
+            {ActionState.Throwing, (throwing, throwCycle) }
+        };
     }
 
     /* --- Override --- */
@@ -50,41 +50,20 @@ public class Human : Mesh {
     // Renders the sprite based on the state.
     void RenderSprite() {
         timeInterval += Time.deltaTime;
-        transform.localPosition = groundPosition + new Vector3(0, state.height * Mathf.Sin(GameRules.perspectiveAngle), 0f);
-
-        if (state.isJumping) {
-            capsuleCollider.enabled = false;
-            //if (active != jump) {
-            //    timeInterval = 0f;
-            //    active = jump;
-            //}
-            //int index = ((int)Mathf.Floor(timeInterval * jumpCycle / __jumpTime__? ) % jumpCycle); ;
-            //spriteRenderer.sprite = jump[index];
-            int index = walkCycle * (int)state.orientation;
-            spriteRenderer.sprite = walk[index];
-            return;
-        }
-        capsuleCollider.enabled = true;
-
-        if (state.isAttacking) {
-            if (active != attack) {
+        transform.localPosition = Vector3.zero;
+        if (state.activeItem != null && actionAnim.ContainsKey(state.activeItem.action)) {
+            Sprite[] action = actionAnim[state.activeItem.action].Item1;
+            int cycle = actionAnim[state.activeItem.action].Item2;
+            if (active != action) {
                 timeInterval = 0f;
-                active = attack;
+                active = action;
             }
-            int index = attackCycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * attackCycle / state.attackBuffer) % attackCycle); ;
-            spriteRenderer.sprite = attack[index];
-        }
-        else if (state.isThrowing) {
-            if (active != throwing) {
-                timeInterval = 0f;
-                active = throwing;
-            }
-            int index = throwCycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * throwCycle / state.throwBuffer) % throwCycle); ;
-            spriteRenderer.sprite = throwing[index];
+            int index = cycle * (int)state.orientation + ((int)Mathf.Floor(timeInterval * cycle / state.activeItem.actionBuffer) % cycle);
+            spriteRenderer.sprite = action[index];
         }
         else if (state.isMoving) {
             int index;
-            if (state.isCarrying) {
+            if (state.actionState == ActionState.Carrying) {
                 if (active != carryWalk) {
                     timeInterval = 0f;
                     active = carryWalk;
@@ -105,7 +84,7 @@ public class Human : Mesh {
             }         
         }
         else {
-            if (state.isCarrying) {
+            if (state.actionState == ActionState.Carrying) {
                 active = carryIdle;
                 spriteRenderer.sprite = carryIdle[(int)state.orientation];
             }
