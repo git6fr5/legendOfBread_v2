@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Action = State.Action;
+
 public class Structure : MonoBehaviour {
 
     /* --- Enumerations --- */
@@ -29,7 +31,7 @@ public class Structure : MonoBehaviour {
 
     void InteractFlag() {
         Player player = interactVision.LookFor(GameRules.playerTag)?.controller?.GetComponent<Player>();
-        if (player != null && !player.state.isActive && Input.GetKeyDown(player.interactKey)) {
+        if (player != null && player.state.action == Action.Inactive && Input.GetKeyDown(player.interactKey)) {
             Interact(player);
         }
     }

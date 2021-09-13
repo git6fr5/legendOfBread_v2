@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ORIENTATION = Compass.ORIENTATION;
+using Action = State.Action;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Throwable : Structure {
@@ -53,7 +54,7 @@ public class Throwable : Structure {
 
         // Disable the 
         mesh.frame.enabled = false;
-        player.state.isActive = true;
+        player.state.action = Action.Carrying;
     }
 
     protected virtual void OnCarry() {

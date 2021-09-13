@@ -34,6 +34,7 @@ public class GameRules : MonoBehaviour {
     public static string particleBehind = "Particle Background";
 
     /* --- Settings --- */
+    public static float defaultFrameRate = 8f;
     public static float movementPrecision = 0.05f;
     public static float dynamicFriction = 0.025f;
     public static float gravityScale = 10f;

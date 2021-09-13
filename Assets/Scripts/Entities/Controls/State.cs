@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ORIENTATION = Compass.ORIENTATION;
+using Orientation = Compass.ORIENTATION;
 
 public class State : MonoBehaviour {
 
@@ -16,14 +16,21 @@ public class State : MonoBehaviour {
     [HideInInspector] public Equipable activeItem = null;
     public List<Equipable> equipment = new List<Equipable>();
 
-    // State Flags.
-    public ORIENTATION orientation;
-    public bool isMoving;
-    public bool isHurt;
-    public bool isDead;
-    public bool isActive;
-    // Action Enumerations
-    public enum ActionState {
+    // Movement Flags
+    public enum Movement {
+        Idle,
+        Moving
+    }
+
+    // Danger Flags(?)
+    public enum Vitality {
+        Healthy,
+        Hurt,
+        Dead
+    }
+
+    // Action Flags
+    public enum Action {
         Inactive,
         // Timed Actions.
         Attacking,
@@ -36,17 +43,19 @@ public class State : MonoBehaviour {
         Carrying,
         continiousActionCount
     }
-    public ActionState actionState = ActionState.Inactive;
+
+    public Orientation orientation = Orientation.RIGHT;
+    public Movement movement = Movement.Idle;
+    public Vitality vitality = Vitality.Healthy;
+    public Action action = Action.Inactive;
 
     // Timed Action Buffer
     [HideInInspector] Coroutine actionTimer;
     [HideInInspector] public float actionBuffer;
 
     // Timed State Buffers
-    [HideInInspector] Coroutine hurtTimer;
-    [Range(0.05f, 1f)] public float hurtBuffer = 0.4f; // The interval an entity becomes invulnerable after being hurt.
-    [HideInInspector] Coroutine deathTimer;
-    [Range(0.05f, 1f)] public float deathBuffer = 0.6f; // The interval between dying and despawning.
+    [HideInInspector] Coroutine vitalityTimer;
+    [Range(0.05f, 1f)] public float vitalityBuffer = 0.4f; // The interval between dying and despawning.
 
     /* --- Unity --- */
     // Runs once on instantiation.
@@ -58,8 +67,7 @@ public class State : MonoBehaviour {
     // Runs every frame.
     void Update() {
         ActionFlag();
-        HurtFlag();
-        DeathFlag();
+        VitalityFlag();
     }
 
     /* --- Flags --- */
@@ -73,16 +81,9 @@ public class State : MonoBehaviour {
     }
 
     // Flags if this state is hurt
-    void HurtFlag() {
-        if (isHurt && hurtTimer == null) {
-            hurtTimer = StartCoroutine(IEHurtFlag(hurtBuffer));
-        }
-    }
-
-    // Flags if this state is hurt
-    void DeathFlag() {
-        if (isDead && deathTimer == null) {
-            deathTimer = StartCoroutine(IEDeathFlag(deathBuffer));
+    void VitalityFlag() {
+        if (vitality != Vitality.Healthy && vitalityTimer == null) {
+            vitalityTimer = StartCoroutine(IEVitalityTimer(vitalityBuffer));
         }
     }
 
@@ -96,18 +97,16 @@ public class State : MonoBehaviour {
         yield return null;
     }
 
-    // Unflags this state as being hurt
-    IEnumerator IEHurtFlag(float buffer) {
+    // Unflags this state as being hurt or dead
+    IEnumerator IEVitalityTimer(float buffer) {
         yield return new WaitForSeconds(buffer);
-        isHurt = false;
-        hurtTimer = null;
-        yield return null;
-    }
-
-    // Deactivates the Game Object
-    IEnumerator IEDeathFlag(float buffer) {
-        yield return new WaitForSeconds(buffer);
-        gameObject.SetActive(false);
+        if (vitality == Vitality.Dead) {
+            gameObject.SetActive(false);
+        }
+        else {
+            vitality = Vitality.Healthy;
+            vitalityTimer = null;
+        }
         yield return null;
     }
 

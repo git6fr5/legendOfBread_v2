@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Action = State.Action;
+
 public class NPC : Controller {
 
     public string npcFilename;
@@ -23,10 +25,10 @@ public class NPC : Controller {
     }
 
     void Interact() {
-        Player player = vision.LookFor(GameRules.playerTag)?.controller?.GetComponent<Player>();
-        if (player != null && !player.state.isActive && Input.GetKeyDown(player.interactKey)) {
-            player.Talk(npcFilename);
-        }
+        //Player player = vision.LookFor(GameRules.playerTag)?.controller?.GetComponent<Player>();
+        //if (player != null && player.state.action == Action.Inactive && Input.GetKeyDown(player.interactKey)) {
+        //    player.Talk(npcFilename);
+        //}
     }
 
 }

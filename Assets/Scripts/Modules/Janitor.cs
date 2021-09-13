@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 using ORIENTATION = Compass.ORIENTATION;
 using DIRECTION = Compass.DIRECTION;
+using Vitality = State.Vitality;
 
 public class Janitor : MonoBehaviour {
 
@@ -108,7 +109,7 @@ public class Janitor : MonoBehaviour {
     // Load already instantiated objects
     public static void LoadControllers(Controller[] controllers, bool activate) {
         for (int i = 0; i < controllers.Length; i++) {
-            if (controllers[i] != null && !controllers[i].state.isDead) {
+            if (controllers[i] != null && controllers[i].state.vitality != Vitality.Dead) {
                 controllers[i].gameObject.SetActive(activate);
                 controllers[i].transform.position = controllers[i].origin;
             }

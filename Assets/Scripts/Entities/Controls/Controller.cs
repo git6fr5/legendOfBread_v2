@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /* --- Enumerations --- */
-using ORIENTATION = Compass.ORIENTATION;
+using Orientation = Compass.ORIENTATION;
+using Movement = State.Movement;
+using Action = State.Action;
+using Vitality = State.Vitality;
 
 /// <summary>
 /// Controls the behaviour of an entity.
@@ -49,7 +52,7 @@ public class Controller : MonoBehaviour {
 
     // Runs every fixed interval
     void FixedUpdate() {
-        state.isMoving = Move();
+        state.movement = Move();
         state.orientation = Turn();
     }
 
@@ -60,21 +63,21 @@ public class Controller : MonoBehaviour {
     }
 
     // Adjusts the velocity of this entity with respect to internal and external movement controls.
-    bool Move() {
+    Movement Move() {
         momentumVector *= (1f - GameRules.dynamicFriction);
         body.velocity = moveSpeed * movementVector.normalized + momentumVector;
         if (movementVector != Vector2.zero) {
-            return true; 
+            return Movement.Moving; 
         }
-        return false;
+        return Movement.Idle;
     }
 
     // Adjusts the internal orientation enumerator of the entity.
-    ORIENTATION Turn() {
+    Orientation Turn() {
         if (orientationVector != Vector2.zero) {
             return Compass.VectorOrientations[orientationVector]; // Compass.SnapVectorToOrientation(orientationVector);
         }
-        return ORIENTATION.UP;
+        return Orientation.UP;
     }
 
     /* --- Internal Event Actions --- */
@@ -107,10 +110,10 @@ public class Controller : MonoBehaviour {
 
     // Damages the state by the given damage.
     public void Hurt(int damage) {
-        if (!state.isHurt) {
+        if (state.vitality == Vitality.Healthy) {
             OnHurt();
             state.health -= damage;
-            state.isHurt = true;
+            state.vitality = Vitality.Hurt;
             if (state.health <= 0) {
                 Death();
             }
@@ -124,7 +127,7 @@ public class Controller : MonoBehaviour {
     // Deactivates the controller and sets the state to dead.
     public void Death() {
         OnDeath();
-        state.isDead = true;
+        state.vitality = Vitality.Dead;
         enabled = false;
     }
 

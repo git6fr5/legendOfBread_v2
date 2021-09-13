@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using ORIENTATION = Compass.ORIENTATION;
-using ActionState = State.ActionState;
+using Action = State.Action;
 
 public class Weapon : Equipable {
 
     public Hitbox hitbox;
 
     void Awake() {
-        action = ActionState.Attacking;
+        action = Action.Attacking;
     }
 
     protected override void Act(float timeInterval) {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using ActionState = State.ActionState;
+using Action = State.Action;
 using Orientation = Compass.ORIENTATION;
 
 public class Equipable : MonoBehaviour {
@@ -13,7 +13,7 @@ public class Equipable : MonoBehaviour {
     [Range(0.025f, 2f)] public float actionBuffer = 0.4f;
     [SerializeField] protected float timeInterval = 0f;
 
-    public ActionState action;
+    public Action action;
     public bool isActive;
 
     /* --- Variables --- */
@@ -30,7 +30,7 @@ public class Equipable : MonoBehaviour {
     }
 
     /* --- Methods --- */
-    public ActionState Activate(Orientation orientation) {
+    public Action Activate(Orientation orientation) {
         OnActivate();
         isActive = true;
         timeInterval = 0f;
@@ -46,11 +46,11 @@ public class Equipable : MonoBehaviour {
     protected virtual void OnDeactivate() {
     }
 
-    public ActionState Deactivate() {
+    public Action Deactivate() {
         OnDeactivate();
         isActive = false;
         effect.Activate(false);
-        return ActionState.Inactive;
+        return Action.Inactive;
     }
 
     public void SetRotation() {
