@@ -134,7 +134,7 @@ public class Janitor : MonoBehaviour {
     }
 
     // Load a new object.
-    public static void LoadNewController(Controller controllerPrefab, Vector3 position) {
+    public static Controller LoadNewController(Controller controllerPrefab, Vector3 position) {
         // Instantiate the new controller.
         Controller controller = Instantiate(controllerPrefab, position, Quaternion.identity, GameObject.FindWithTag(GameRules.roomTag)?.transform).GetComponent<Controller>();
 
@@ -150,6 +150,8 @@ public class Janitor : MonoBehaviour {
             newControllers[currControllers.Length] = controller;
             dungeon.controllerDirectory[str_id] = newControllers;
         }
+
+        return controller;
     }
 
     static Controller InstantiateController(int[] coord, Transform gridTransform, Controller controllerPrefab) {

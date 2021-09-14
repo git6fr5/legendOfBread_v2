@@ -64,12 +64,18 @@ public class Controller : MonoBehaviour {
 
     // Adjusts the velocity of this entity with respect to internal and external movement controls.
     Movement Move() {
+        int movement = 0;
         momentumVector *= (1f - GameRules.dynamicFriction);
-        body.velocity = moveSpeed * movementVector.normalized + momentumVector;
         if (movementVector != Vector2.zero) {
-            return Movement.Moving; 
+            movement++;
         }
-        return Movement.Idle;
+        if (state.carryingStructure != null) {
+            moveSpeed = moveSpeed * state.carryingStructure.carryWeight;
+            movement = movement + 2;
+        }
+        body.velocity = moveSpeed * movementVector.normalized + momentumVector;
+
+        return (Movement)movement;
     }
 
     // Adjusts the internal orientation enumerator of the entity.
@@ -84,6 +90,9 @@ public class Controller : MonoBehaviour {
     // Activates the attack of this controller.
     protected void Action(int index = 0) {
         OnAction(index);
+        if (index < state.equipment.Count) {
+            state.equipment[index].Activate(this);
+        }
     }
 
     protected virtual void OnAction(int index = 0) {
@@ -101,7 +110,7 @@ public class Controller : MonoBehaviour {
     // If we hit something, then perform the hit actions.
     public void Hit(Hurtbox hurtbox) {
         OnHit(hurtbox);
-        // state.hitSomething?
+        hurtbox.controller.Hurt((int)state.activeItem?.damage);
     }
 
     protected virtual void OnHit(Hurtbox hurtbox) {

@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// A collider to detect hostile entities.
 /// </summary>
-[RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(Collider2D))]
 public class Vision : MonoBehaviour {
 
     /* --- Components --- */

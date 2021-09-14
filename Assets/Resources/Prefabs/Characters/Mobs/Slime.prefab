@@ -178,7 +178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: {fileID: 0}
   body: {fileID: 0}
-  mesh: {fileID: 0}
+  mesh: {fileID: 3060322277969949687}
   id: 1
   origin: {x: 0, y: 0}
   movementVector: {x: 0, y: 0}

@@ -11,12 +11,17 @@ public class Particle : MonoBehaviour {
     /* --- Animations --- */
     public Sprite[] effect;
 
-    /* --- Variables --- */
+    /* --- Rendering Variables --- */
     public bool inFront = true;
     public bool isLoop = true;
     public bool isDisposable = true;
     public float frameRate = 8f;
     public float timeInterval = 0f;
+
+    /* --- Pause Variables --- */
+    public bool isPaused = false;
+    public int pauseFrame = -1;
+
 
     /* --- Unity --- */
     // Runs once before the first frame.
@@ -33,7 +38,7 @@ public class Particle : MonoBehaviour {
 
     // Runs every frame.
     void Update() {
-        if (gameObject.activeSelf) {
+        if (gameObject.activeSelf && !isPaused) {
             Render();
         }
     }
@@ -59,6 +64,19 @@ public class Particle : MonoBehaviour {
         Activate(true);
     }
 
+    public void InheritLayer(string layerName, int index, int discrepancy = 1) {
+        spriteRenderer.sortingLayerName = layerName;
+        spriteRenderer.sortingOrder = index + discrepancy;
+    }
+
+    public void PauseAtFrame(int _pauseFrame) {
+        pauseFrame = _pauseFrame;
+    }
+
+    public void Pause(bool pause) {
+        isPaused = pause;
+    }
+
     /* --- Override --- */
     // The parameters to be rendered every frame
     void Render() {
@@ -72,6 +90,10 @@ public class Particle : MonoBehaviour {
                 Activate(false);
             }
         }
+        else if (index == pauseFrame) {
+            Pause(true);
+        }
+
         spriteRenderer.sprite = effect[index];
     }
 

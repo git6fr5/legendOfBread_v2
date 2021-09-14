@@ -14,12 +14,13 @@ public class Throwable : Structure {
     /* --- Variables --- */
     [Range(0.005f, 0.1f)] public float throwBuffer = 0.025f; // The buffer time between which this can be picked up and thrown.
     [Range(0.5f, 4f)] public float throwDistance = 1f; // The distance this can be thrown. Consider moving this to a player stat?
+    [Range(0.05f, 1f)] public float carryWeight = 0.65f;
     // Internal Throwing Mechanics.
     [HideInInspector] protected Vector2 targetPosition; // The position this object is interpolating towards.
 
     /* --- Unity --- */
     // Runs once on instantiation.
-    void Awake() {
+   void Awake() {
         // Cache these references.
         body = GetComponent<Rigidbody2D>();
         // Set up the attached components.
@@ -30,13 +31,15 @@ public class Throwable : Structure {
 
     /* --- Overridden Methods --- */
     // Picks the structure up or throws it, depending on the current state.
-    protected override void Interact(Player player) {
-        if (condition == Condition.Interacting) {
-            Throw(player);
+    public override bool Interact(Controller controller) {
+        print("interacting");
+        if (condition == Condition.Interactable) {
+            return Carry(controller);
         }
-        else if (condition == Condition.Interactable) {
-            Carry(player);
+        else if (condition == Condition.Interacting) {
+            return Throw(controller);
         }
+        return false;
     }
 
     // Runs while the structure is being interacted with.
@@ -44,25 +47,45 @@ public class Throwable : Structure {
         // Slow down the player.
     }
 
-    void Carry(Player player) {
+    bool Carry(Controller controller) {
         OnCarry();
         // Set the position of the object over the player's head.
-        transform.parent = player.mesh.overhead;
+        transform.parent = controller.mesh.overhead;
         transform.localPosition = Vector3.zero;
 
-        // throwable.mesh.hull.position = //
+        mesh.hull.parent = controller.mesh.hull;
+        mesh.hull.localPosition = new Vector3(0f, -GameRules.movementPrecision, 0f);
 
-        // Disable the 
+        // Getting weird bounce effect.
+        body.simulated = false;
+        body.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        // Disable the collision frame.
         mesh.frame.enabled = false;
-        player.state.action = Action.Carrying;
+        controller.state.carryingStructure = this;
+        // interactAction = Action.Throwing;
+        return true;
     }
 
     protected virtual void OnCarry() {
         //
     }
 
-    void Throw(Player player) {
+    public bool Throw(Controller controller) {
         OnThrow();
+        print("throwing");
+        transform.parent = null;
+        mesh.hull.parent = mesh.transform;
+
+        // Getting weird bounce effect.
+        body.simulated = true;
+        body.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        // Disable the collision frame.
+        mesh.frame.enabled = true;
+        controller.state.carryingStructure = null;
+        // interactAction = Action.Carrying;
+        return true;
     }
 
     protected virtual void OnThrow() {
@@ -70,7 +93,7 @@ public class Throwable : Structure {
     }
 
     public void Thrown() {
-        
+
     }
 
 }

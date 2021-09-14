@@ -13,13 +13,18 @@ public class State : MonoBehaviour {
     [Range(0.05f, 20f)] public float baseSpeed; // How fast the entity moves.
     [Range(0.05f, 20f)] public float jumpPulse; // How high the entity jumps.
 
-    [HideInInspector] public Equipable activeItem = null;
     public List<Equipable> equipment = new List<Equipable>();
+    [HideInInspector] public Equipable activeItem = null;
+    public Throwable carryingStructure = null;
 
     // Movement Flags
     public enum Movement {
         Idle,
-        Moving
+        Moving,
+        CarryingIdle,
+        CarryingMoving,
+        Sliding,
+        Talking,
     }
 
     // Danger Flags(?)
@@ -32,16 +37,11 @@ public class State : MonoBehaviour {
     // Action Flags
     public enum Action {
         Inactive,
-        // Timed Actions.
-        Attacking,
-        Jumping,
+        Attacking, // Attack etc. as "ing" should be for movement and actions should just be verbs
+        Jumping, // Jump
+        Carrying, // Carry
         Throwing,
-        timedActionCount,
-        // Continous Actions.
-        Sliding,
-        Talking,
-        Carrying,
-        continiousActionCount
+        Pushing,
     }
 
     public Orientation orientation = Orientation.RIGHT;
@@ -74,7 +74,6 @@ public class State : MonoBehaviour {
     // Flags if this state is performing an action
     void ActionFlag() {
         if (activeItem != null && actionTimer == null) {
-            activeItem.Activate(orientation);
             float buffer = activeItem.actionBuffer;
             actionTimer = StartCoroutine(IEActionFlag(buffer));
         }
@@ -90,7 +89,8 @@ public class State : MonoBehaviour {
     /* --- Coroutines --- */
     // Unflags this state as doing an action
     IEnumerator IEActionFlag(float buffer) {
-        yield return new WaitForSeconds(buffer);
+        // This is to adjust for the 1 frame difference.
+        yield return new WaitForSeconds(buffer - Time.deltaTime);
         activeItem.Deactivate();
         activeItem = null;
         actionTimer = null;

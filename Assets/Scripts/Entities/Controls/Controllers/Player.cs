@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using StateAction = State.Action;
+
 public class Player : Controller {
 
     /* --- Variables --- */
@@ -17,21 +19,25 @@ public class Player : Controller {
     // Action Keys
     public KeyCode[] actionKeys = new KeyCode[] { KeyCode.J, KeyCode.K, KeyCode.L };
 
+    // Interact Key
+    public Interactbox interactbox;
+    public KeyCode interactKey = KeyCode.Space;
+    public Equipable[] internalEquipment;
+
     // Player-Specific Action Controls
     [Range(0.05f, 1f)] public float actionMoveFactor = 0.25f;
     [Range(0.05f, 2f)] public float runMoveFactor = 1.25f;
 
-    // Interactions
-    public KeyCode interactKey = KeyCode.Space;
-    public KeyCode jumpKey = KeyCode.M;
-    public Dialogue dialogue;
-    public Throwable throwable;
+    //// Interactions
+    //public Dialogue dialogue;
+    //public Throwable throwable;
 
     /* --- Override --- */
     // Sets the action controls.
     protected override void Think() {
         ActionInput();
         MoveInput();
+        InteractInput();
     }
 
     /* --- Thinking Actions --- */
@@ -72,15 +78,24 @@ public class Player : Controller {
             orientationVector = movementKeys[pressedKeys[0]];
         }
         else if (state.activeItem) {
-            // moveSpeed *= state.activeItem.moveSpeedFactor;
+            moveSpeed *= state.activeItem.moveSpeed;
         }
 
+    }
+
+    void InteractInput() {
+        if (Input.GetKeyDown(interactKey)) {
+            for (int i = 0; i < internalEquipment.Length; i++) {
+                if (state.action != StateAction.Inactive) { break; }
+                internalEquipment[i].Activate(this);
+            }
+        }
     }
 
     /* --- Event Actions --- */
     // Activate the weapon
     protected override void OnAction(int index) {
-        state.activeItem = state.equipment[index];
+
     }
 
     // When hitting something through an attack
@@ -90,26 +105,6 @@ public class Player : Controller {
 
     protected override void OnHurt() {
         GameRules.CameraShake();
-    }
-
-    // Need to clean below.
-    /* --- Interactions --- */
-    public void Talk(string npcName) {
-        dialogue.talkDelay = dialogue.regularTalkDelay;
-        dialogue.Run(npcName);
-        // state.isTalking = true;
-    }
-
-    void Talking() {
-        movementVector = Vector2.zero;
-        if (Input.GetKeyDown(interactKey) && dialogue.isPrintingDialogue) {
-            dialogue.talkDelay = dialogue.fastTalkDelay;
-        }
-        if (Input.GetKeyUp(interactKey) && !dialogue.isRunningCommand) {
-            dialogue.Clear();
-            dialogue.gameObject.SetActive(false);
-            // state.isTalking = false;
-        }
     }
 
 }

@@ -8,7 +8,9 @@ public class Trap : Controller {
     // Controls the decision flow of the trap.
     public enum BUTTON {
         OFF,
+        POWER_UP,
         ON,
+        POWER_DOWN,
         count
     }
     public BUTTON button = BUTTON.OFF;
@@ -25,8 +27,14 @@ public class Trap : Controller {
             case (BUTTON.OFF):
                 Off();
                 break;
+            case (BUTTON.POWER_UP):
+                PowerUp();
+                break;
             case (BUTTON.ON):
                 On();
+                break;
+            case (BUTTON.POWER_DOWN):
+                PowerDown();
                 break;
             default:
                 break;
@@ -41,6 +49,16 @@ public class Trap : Controller {
 
     // The action logic while this trap is on.
     protected virtual void On() {
+        // Determined by the particular type of trap.
+    }
+
+    // The action logic while this trap is turning on.
+    protected virtual void PowerUp() {
+        // Determined by the particular type of trap.
+    }
+
+    // The action logic while this trap is turning off.
+    protected virtual void PowerDown() {
         // Determined by the particular type of trap.
     }
 

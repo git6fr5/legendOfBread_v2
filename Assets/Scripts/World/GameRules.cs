@@ -80,10 +80,10 @@ public class GameRules : MonoBehaviour {
         Array.Sort<Mesh>(meshes, new Comparison<Mesh>((meshA, meshB) => Mesh.Compare(meshA, meshB)));
         for (int i = 0; i < meshes.Length; i++) {
             if (meshes[i]?.GetComponent<SpriteRenderer>() != null) {
-                meshes[i].GetComponent<SpriteRenderer>().sortingOrder = i;
+                meshes[i].GetComponent<SpriteRenderer>().sortingOrder = 5 * i;
             }
             else if (meshes[i]?.GetComponent<TilemapRenderer>() != null) {
-                meshes[i].GetComponent<TilemapRenderer>().sortingOrder = i;
+                meshes[i].GetComponent<TilemapRenderer>().sortingOrder = 5 * i;
             }
         }
     }

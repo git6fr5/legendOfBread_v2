@@ -9,21 +9,23 @@ public class Slime : Mob {
         id = 1;
     }
 
-    /* --- Controls --- */
-    public Slime childSlime;
-    public Slime parentSlime;
-    public GameObject trailObject;
-    [Range(0, 5)] public int damage;
+    /* --- Spawning Variables --- */
+    [SerializeField] protected Slime childSlime;
+    [SerializeField] protected Slime parentSlime;
+    [SerializeField] protected bool isChild; // Flags if this slime is a child.
+    [SerializeField] protected float growTime = 3f; // The time it takes for a child slime to grow into an adult.
+    [HideInInspector] protected float aliveInterval = 0f; // The time that this slime has been alive for.
 
-    /* --- Variables --- */
-    public bool isChild;
-    float aliveInterval = 0f;
-    float growTime = 3f;
-    Vector3 targetPoint;
-    float idleDistance = 0.75f;
-    float idleTicks = 0f;
-    float idleInterval = 1f;
-    float trailTime;
+    /* --- Control Variables --- */
+    [Range(0, 5)] public int damage; // The amount of damage this slime does.
+    [HideInInspector] protected Vector3 targetPoint; // The location this slime is travelling to.
+    [SerializeField] protected float idleDistance = 0.75f; // The distance this slime travels during a single idle interval.
+    [SerializeField] protected float idleInterval = 1f; // The duration of a single idle interval.
+    [HideInInspector] protected float idleTicks = 0f; // How long into an idle interval this slime is.
+
+    /* --- Trail Variables --- */
+    [SerializeField] protected GameObject trailObject;
+    [SerializeField] protected float trailInterval; // The interval between leaving a trail.
 
     /* --- Action Flow --- */
     protected override void Idle() {
@@ -71,7 +73,8 @@ public class Slime : Mob {
     // Splits into two child slimes
     void Split() {
         for (int i = 0; i < 2; i++) {
-            Janitor.LoadNewController(childSlime, transform.position);
+            Controller newSlime = Janitor.LoadNewController(childSlime, transform.position);
+            newSlime.state.vitality = State.Vitality.Hurt;
         }
         Destroy(gameObject);
     }
@@ -84,9 +87,9 @@ public class Slime : Mob {
 
     // Leaves a trail of goo behind.
     void Trail() {
-        trailTime += Time.deltaTime;
-        if (trailTime >= 0.5f) {
-            trailTime = 0f;
+        trailInterval += Time.deltaTime;
+        if (trailInterval >= 0.5f) {
+            trailInterval = 0f;
             Vector3 offset = new Vector3(0, -0.2f, 0);
             GameObject newTrailObject = Instantiate(trailObject, transform.position + offset, Quaternion.identity, GameObject.FindWithTag(GameRules.roomTag)?.transform);
             newTrailObject.SetActive(true);

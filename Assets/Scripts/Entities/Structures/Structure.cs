@@ -15,29 +15,18 @@ public class Structure : MonoBehaviour {
     }
 
     public Condition condition;
-    public Vision interactVision;
+    public Action interactAction;
     public Mesh mesh;
 
     void Update() {
-        // Check for interactions if this is interactable.
-        if (condition != Condition.Uninteractable){
-            InteractFlag();
-        }
         // Check if this is currently being interacted with.
         if (condition == Condition.Interacting) {
             Interacting();
         }
     }
 
-    void InteractFlag() {
-        Player player = interactVision.LookFor(GameRules.playerTag)?.controller?.GetComponent<Player>();
-        if (player != null && player.state.action == Action.Inactive && Input.GetKeyDown(player.interactKey)) {
-            Interact(player);
-        }
-    }
-
-    protected virtual void Interact(Player player) {
-        //
+    public virtual bool Interact(Controller controller) {
+        return false;
     }
 
     protected virtual void Interacting() {

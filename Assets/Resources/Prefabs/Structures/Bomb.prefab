@@ -337,7 +337,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2236573993185955963}
   - component: {fileID: 2236573993185955962}
-  - component: {fileID: 2236573993185955961}
+  - component: {fileID: 7391290024303804447}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: Untagged
@@ -383,7 +383,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &2236573993185955961
+--- !u!114 &7391290024303804447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -392,15 +392,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2236573993185955960}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfa97107d915b2b4d83af2a2c1550a66, type: 3}
+  m_Script: {fileID: 11500000, guid: 57c84403aa714804ab9a05aacc77fb27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   condition: 0
+  interactAction: 0
   interactVision: {fileID: 0}
   mesh: {fileID: 0}
   body: {fileID: 0}
   throwBuffer: 0.025
   throwDistance: 1
-  bombVision: {fileID: 0}
-  explosionTickDuration: 0.5
-  explosionTicks: 4
