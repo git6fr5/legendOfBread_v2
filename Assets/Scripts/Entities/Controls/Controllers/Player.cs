@@ -43,7 +43,7 @@ public class Player : Controller {
     /* --- Thinking Actions --- */
     // Activate an action on input if the state is not active already.
     void ActionInput() {
-        if (state.activeItem == null) {
+        if (state.activeItem == null && state.carryingStructure == null) {
             for (int i = 0; i < actionKeys.Length; i++) {
                 if (Input.GetKeyDown(actionKeys[i]) && state.equipment.Count > i && state.equipment[i] != null) {
                     Action(i);

@@ -46,12 +46,18 @@ public class Particle : MonoBehaviour {
     public void Activate(bool activate) {
         timeInterval = 0f;
         gameObject.SetActive(activate);
+        isPaused = false;
         isLoop = true;
     }
 
     public void Fire() {
         Activate(true);
         isLoop = false;
+    }
+
+    public void FireAndDestroy() {
+        Fire();
+        isDisposable = true;
     }
 
     public void ControlledFire(float duration) {

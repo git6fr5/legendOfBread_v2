@@ -4,24 +4,26 @@ using UnityEngine;
 
 using Orientation = Compass.ORIENTATION;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class Pushable : Structure {
 
+    /* --- Components --- */
+    [HideInInspector] public Rigidbody2D body;
+
     /* --- Variables --- */
-    
-    public float pushBuffer = 0.025f; // port this to structure?
+    [SerializeField] [Range(0f, 5f)] protected float pushDistance = 1f; // The distance this structure is pushed.
+    [SerializeField] [Range(0f, 5f)] protected float pushSpeed = 3f; // The speed at which this structure is pushed.
+    // Internal Pushing Mechanics.
+    [SerializeField] protected Vector2 targetPoint; // The position this object is interpolating towards.
+    [SerializeField] protected float pushFriction; // The factor by which this object slows down.
+    [HideInInspector] protected Vector3 origin; // The last snapped position of this object.
+    [HideInInspector] public float pushedTime = 0f; // The amount of time this has been pushed for.
+    [HideInInspector] public float pushInterval = 1f; // The maximum interval that this can be pushed for before snapping.
+    [HideInInspector] protected float pushBuffer; // The time between being interacted with and being pushed.
 
-    [SerializeField] protected Vector2 targetPoint; // port this to structure as well?
-    [SerializeField] protected float speed = 3f;
-    [SerializeField] protected float pushDistance = 1f;
-    [SerializeField] protected float friction;
-
-    public Vector3 origin;
-    public float pushedTime = 0f;
-    public float maxPushedTime = 1f;
-
-    Rigidbody2D body;
-
-    void Start() {
+    /* --- Unity --- */
+    // Runs once on instantiation.
+    void Awake() {
         // Cache these references.
         body = GetComponent<Rigidbody2D>();
         // Set up these components.
@@ -30,17 +32,35 @@ public class Pushable : Structure {
         body.angularDrag = 0f;
         // Initialize these variables.
         origin = transform.position;
-        friction = 2 * pushDistance / speed;
+        pushFriction = 2 * pushDistance / pushSpeed;
         interactAction = State.Action.Pushing;
+    }
+
+    /* --- Overridden Methods --- */
+    public override bool Interact(Controller controller) {
+
+        Orientation pusherOrientation = controller.state.orientation;
+        Vector3 pusherPosition = controller.transform.position;
+        float pushBuffer = controller.state.activeItem ? controller.state.activeItem.actionBuffer / 2f : 0f;
+
+        if (condition != Condition.Interactable) { return false; }
+
+        condition = Condition.Interacting;
+        body.constraints = RigidbodyConstraints2D.FreezeRotation;
+        if (ValidPushDirection(pusherOrientation, pusherPosition)) {
+            Push(pusherOrientation, pusherPosition);
+            return true;
+        }
+        return false;
     }
 
     protected override void Interacting() {
         pushedTime += Time.deltaTime;
         
         // Slow down this structure.
-        body.velocity = body.velocity - (body.velocity * friction * Time.deltaTime);
+        body.velocity = body.velocity - (body.velocity * pushFriction * Time.deltaTime);
 
-        if (Vector2.Distance(transform.position, targetPoint) < GameRules.movementPrecision || pushedTime >= maxPushedTime || body.velocity.magnitude < GameRules.movementPrecision) {            
+        if (Vector2.Distance(transform.position, targetPoint) < GameRules.movementPrecision || pushedTime >= pushInterval || body.velocity.magnitude < GameRules.movementPrecision) {            
             // Snap to the nearest grid.
             transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), transform.position.z);
 
@@ -55,22 +75,7 @@ public class Pushable : Structure {
         }
     }
 
-    public override bool Interact(Controller controller) {
-
-        Orientation pusherOrientation = controller.state.orientation;
-        Vector3 pusherPosition = controller.transform.position;
-
-        if (condition != Condition.Interactable) { return false; }
-
-        condition = Condition.Interacting;
-        body.constraints = RigidbodyConstraints2D.FreezeRotation;
-        if (ValidPushDirection(pusherOrientation, pusherPosition)) {
-            Push(pusherOrientation, pusherPosition);
-            return true;
-        }
-        return false;
-    }
-
+    /* --- Action Methods --- */
     void Push(Orientation pusherOrientation, Vector3 pusherPosition) {
         // Get the push direction.
         Vector2 pushDirection = Compass.OrientationVectors[pusherOrientation];
@@ -80,7 +85,7 @@ public class Pushable : Structure {
         targetPoint = new Vector2((float)(int)targetPoint.x, (float)(int)targetPoint.y);
 
         // Apply the force.
-        body.velocity = speed * pushDirection;
+        body.velocity = pushSpeed * pushDirection;
     }
 
     // Checks that the player orientation and position are aligned such that
@@ -94,6 +99,13 @@ public class Pushable : Structure {
 
         // Check that the directions are aligned.
         return (Vector2.Dot(pushDirection, pusherDirection) > 0) ? true : false;
+    }
+
+    /* --- Coroutines --- */
+    protected IEnumerator IEPush(float delay, Orientation pusherOrientation, Vector3 pusherPosition) {
+        yield return new WaitForSeconds(delay);
+        Push(pusherOrientation, pusherPosition);
+        yield return null;
     }
 
 }

@@ -7,38 +7,49 @@ using UnityEngine;
 /// </summary>
 public class Bomb : Throwable {
 
-    ///* --- Variables --- */
-    //public Vision bombVision; // The radius that this bomb will have an effect.
-    //public float explosionTickDuration = 0.5f; // The duration of a counting tick.
-    //public int explosionTicks = 4; // The amount of ticks before the bomb explodes.
+    /* --- Variables --- */
+    public Vision bombVision; // The radius that this bomb will have an effect.
+    public float explosionTickDuration = 0.25f; // The duration of a counting tick.
+    public int explosionTicks = 16; // The amount of ticks before the bomb explodes.
 
-    ///* --- Event Actions --- */
-    //// Runs when this object is thrown.
-    //protected override void OnThrow() {
-    //    StartCoroutine(IEExplode(explosionTickDuration));
-    //}
+    public Sequence bombSequence;
+    bool isCharging = false;
 
-    ///* --- Internal Actions --- */
-    //// Explodes and effects the bombable structures in vision radius.
-    //void Explode() {
-    //    for (int i = 0; i < bombVision.container.Count; i++) {
-    //        if (bombVision.container[i].tag == GameRules.bombableTag) {
-    //            bombVision.container[i].GetComponent<Bombable>()?.Blast();
-    //        }
-    //    }
-    //    Destroy(gameObject);
-    //}
+    /* --- Event Actions --- */
+    // Runs when this object is thrown.
+    protected override void OnThrow() {
+        mesh.spriteRenderer.enabled = false;
+        bombSequence.Activate(true);
+        StartCoroutine(IEExplode(explosionTickDuration));
+    }
 
-    ///* --- Coroutines --- */
-    //// Counts down until the explosion.
-    //IEnumerator IEExplode(float delay) {
-    //    for (int i = 0; i < explosionTicks; i++) {
-    //        mesh.spriteRenderer.enabled = !mesh.spriteRenderer.enabled;
-    //        yield return new WaitForSeconds(delay);
-    //    }
-    //    Explode();
-    //    yield return null;
-    //}
+    /* --- Internal Actions --- */
+    // Explodes and effects the bombable structures in vision radius.
+    void Explode() {
+        for (int i = 0; i < bombVision.container.Count; i++) {
+            if (bombVision.container[i].tag == GameRules.bombableTag) {
+                bombVision.container[i].GetComponent<Bombable>()?.Blast();
+            }
+        }
+        bombSequence.transform.parent = null;
+        bombSequence.NextAndLast();
+        Destroy(gameObject);
+    }
+
+    /* --- Coroutines --- */
+    // Counts down until the explosion.
+    IEnumerator IEExplode(float delay) {
+        for (int i = 0; i < explosionTicks; i++) {
+            if (i >= explosionTicks * 2f / 3f && !isCharging) {
+                bombSequence.Next();
+                isCharging = true;
+            }
+            yield return new WaitForSeconds(delay);
+            bombSequence.InheritLayer(mesh.spriteRenderer.sortingLayerName, mesh.spriteRenderer.sortingOrder, 0);
+        }
+        Explode();
+        yield return null;
+    }
 
 
 }

@@ -20,8 +20,18 @@ public class Structure : MonoBehaviour {
 
     void Update() {
         // Check if this is currently being interacted with.
-        if (condition == Condition.Interacting) {
-            Interacting();
+        switch (condition) {
+            case (Condition.Interacting):
+                Interacting();
+                return;
+            case (Condition.Interactable):
+                Interactable();
+                return;
+            case (Condition.Uninteractable):
+                Uninteractable();
+                return;
+            default:
+                return;
         }
     }
 
@@ -29,7 +39,15 @@ public class Structure : MonoBehaviour {
         return false;
     }
 
+    protected virtual void Interactable() {
+        //
+    }
+
     protected virtual void Interacting() {
+        //
+    }
+
+    protected virtual void Uninteractable() {
         //
     }
 

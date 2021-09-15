@@ -262,6 +262,10 @@ public class Geometry : MonoBehaviour {
         return (coordinate[0] < grid.Length && coordinate[0] >= 0 && coordinate[1] < grid[0].Length && coordinate[1] >= 0);
     }
 
+    public static bool WithinBorder(int[] coordinate, int[][] grid, int borderSize) {
+        return (coordinate[0] < grid.Length - (borderSize + 1) && coordinate[0] >= (borderSize + 1) && coordinate[1] < grid[0].Length - (borderSize + 1) && coordinate[1] >= (borderSize + 1));
+    }
+
     public static int[][] RotateClockwise(int[][] grid) {
         int[][] rotatedGrid = new int[grid[0].Length][];
         for (int i = 0; i < grid.Length; i++) {

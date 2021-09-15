@@ -10,6 +10,7 @@ public class Environment : MonoBehaviour {
     public TileBase[] floor;
     public TileBase[] border;
     // Controllers
+    public Structure[] structures;
     public Mob[] mobs;
     public Trap[] traps;
     // Exit
