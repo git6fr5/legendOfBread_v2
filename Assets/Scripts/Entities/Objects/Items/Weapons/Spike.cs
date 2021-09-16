@@ -9,7 +9,7 @@ using Action = State.Action;
 /// <summary>
 /// A spike that extends out from a crush trap.
 /// </summary>
-public class Spike : Equipable {
+public class Spike : Item {
 
     /* --- Components --- */
     public Hitbox hitbox;

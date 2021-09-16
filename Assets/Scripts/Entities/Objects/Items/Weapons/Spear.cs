@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Action = State.Action;
 
-public class Spear : Equipable {
+public class Spear : Item {
 
     public Projectile projectile;
 

@@ -8,7 +8,7 @@ using Orientation = Compass.ORIENTATION;
 /// <summary>
 /// Any item that is equippable.
 /// </summary>
-public class Equipable : MonoBehaviour {
+public class Item : MonoBehaviour {
 
     /* --- Variables --- */
     [SerializeField] public Action action;

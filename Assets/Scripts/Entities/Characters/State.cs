@@ -9,12 +9,11 @@ public class State : MonoBehaviour {
     // Stats
     [Range(0, 10)] public int maxHealth;
     [SerializeField] public int health; // The health 
-    [Range(0f, 10f)] public float height; // The height of the floor this entity is at.
     [Range(0.05f, 20f)] public float baseSpeed; // How fast the entity moves.
-    [Range(0.05f, 20f)] public float jumpPulse; // How high the entity jumps.
+    [SerializeField] public List<string> enemyTags = new List<string>(); // The entities this state considers an enemy.
 
-    public List<Equipable> equipment = new List<Equipable>();
-    [HideInInspector] public Equipable activeItem = null;
+    public List<Item> equipment = new List<Item>();
+    [HideInInspector] public Item activeItem = null;
     public Throwable carryingStructure = null;
 
     // Movement Flags

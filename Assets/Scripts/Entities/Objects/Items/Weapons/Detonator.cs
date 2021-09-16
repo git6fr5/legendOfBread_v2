@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Detonator : Equipable {
+public class Detonator : Item {
 
     public Bomb bomb;
 

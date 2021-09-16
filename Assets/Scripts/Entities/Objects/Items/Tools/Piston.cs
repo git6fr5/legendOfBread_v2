@@ -7,22 +7,25 @@ using UnityEngine;
 using Action = State.Action;
 
 /// <summary>
-/// Used to pick up objects.
+/// Used to push objects around.
 /// </summary>
-public class Glove : Equipable
+public class Piston : Item
 {
     /* --- Unity --- */
     // Runs once on initialisation.
     void Awake() {
-        action = Action.Carrying;
+        action = Action.Pushing;
     }
 
     protected override bool OnActivate(Controller controller) {
-        action = Action.Carrying;
+        if (controller.state.carryingStructure != null) {
+            controller.state.carryingStructure.Throw(controller);
+            return true;
+        }
         Interactbox interactbox = controller.GetComponent<Player>()?.interactbox;
         Structure structure = interactbox?.LookFor(action);
         if (structure != null && structure.condition != Structure.Condition.Uninteractable) {
-            return structure.Interact(controller);
+            return structure.Interact(controller.GetComponent<Player>());
         }
         return false;
     }

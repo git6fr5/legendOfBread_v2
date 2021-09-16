@@ -43,6 +43,8 @@ public class Controller : MonoBehaviour {
         body.constraints = RigidbodyConstraints2D.FreezeRotation;
         body.gravityScale = 0f;
         body.angularDrag = 0f;
+        // Set the state's enemies.
+        SetEnemies();
     }
 
     // Runs every frame.
@@ -87,6 +89,11 @@ public class Controller : MonoBehaviour {
     }
 
     /* --- Internal Event Actions --- */
+    // Sets the enemies of this state.
+    protected virtual void SetEnemies() {
+        // Determined by the particular type of controller.
+    }
+
     // Activates the attack of this controller.
     protected void Action(int index = 0) {
         if (index < state.equipment.Count) {

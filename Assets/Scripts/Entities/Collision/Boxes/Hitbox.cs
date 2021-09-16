@@ -14,7 +14,6 @@ public class Hitbox : MonoBehaviour {
 
     /* --- Variables ---*/
     [SerializeField] public Controller controller; // A reference to the parent controlling this hitbox.
-    [SerializeField] protected string targetTag; // The type of hurtboxes that this targets.
     [SerializeField] public List<Hurtbox> container = new List<Hurtbox>(); // A list of hurtboxes currently intersected with, to avoid doubling events.
 
     /* --- Unity --- */
@@ -42,9 +41,13 @@ public class Hitbox : MonoBehaviour {
         // If we intersected with a new hurtbox, then hit it.
         if (collider.GetComponent<Hurtbox>() != null) {
             Hurtbox hurtbox = collider.GetComponent<Hurtbox>();
-            if (!container.Contains(hurtbox) && hit && hurtbox.controller.tag == targetTag) {
-                container.Add(hurtbox);
-                OnAdd(hurtbox);
+            if (!container.Contains(hurtbox) && hit) {
+                for (int i = 0; i < controller.state.enemyTags.Count; i++) {
+                    if (hurtbox.controller.tag == controller.state.enemyTags[i]) {
+                        container.Add(hurtbox);
+                        OnAdd(hurtbox);
+                    }
+                }
             }
             else if (container.Contains(hurtbox) && !hit) {
                 container.Remove(hurtbox);

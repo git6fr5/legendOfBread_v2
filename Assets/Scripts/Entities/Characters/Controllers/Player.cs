@@ -22,15 +22,11 @@ public class Player : Controller {
     // Interact Key
     public Interactbox interactbox;
     public KeyCode interactKey = KeyCode.Space;
-    public Equipable[] internalEquipment;
+    public Item[] interactItems;
 
     // Player-Specific Action Controls
     [Range(0.05f, 1f)] public float actionMoveFactor = 0.25f;
     [Range(0.05f, 2f)] public float runMoveFactor = 1.25f;
-
-    //// Interactions
-    //public Dialogue dialogue;
-    //public Throwable throwable;
 
     /* --- Override --- */
     // Sets the action controls.
@@ -85,14 +81,18 @@ public class Player : Controller {
 
     void InteractInput() {
         if (Input.GetKeyDown(interactKey)) {
-            for (int i = 0; i < internalEquipment.Length; i++) {
+            for (int i = 0; i < interactItems.Length; i++) {
                 if (state.action != StateAction.Inactive) { break; }
-                internalEquipment[i].Activate(this);
+                interactItems[i].Activate(this);
             }
         }
     }
 
     /* --- Event Actions --- */
+    protected override void SetEnemies() {
+        state.enemyTags = new List<string>() { GameRules.mobTag };
+    }
+
     // Activate the weapon
     protected override void OnAction(int index) {
 

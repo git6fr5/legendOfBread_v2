@@ -62,4 +62,9 @@ public class Trap : Controller {
         // Determined by the particular type of trap.
     }
 
+    /* --- Event Actions --- */
+    protected override void SetEnemies() {
+        state.enemyTags = new List<string>() { GameRules.playerTag };
+    }
+
 }

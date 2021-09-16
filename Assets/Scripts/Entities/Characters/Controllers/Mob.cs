@@ -54,4 +54,9 @@ public class Mob : Controller {
         // Determined by the particular type of mob.
     }
 
+    /* --- Event Actions --- */
+    protected override void SetEnemies() {
+        state.enemyTags = new List<string>() { GameRules.playerTag };
+    }
+
 }

@@ -9,7 +9,7 @@ using Action = State.Action;
 /// <summary>
 /// A sweeping blade attack.
 /// </summary>
-public class Sword : Equipable {
+public class Sword : Item {
 
     /* --- Components --- */
     public Hitbox hitbox;
