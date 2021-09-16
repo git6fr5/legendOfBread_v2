@@ -31,7 +31,7 @@ public class Throwable : Structure {
         body.gravityScale = 0f;
         body.angularDrag = 0f;
         // Set these variables
-        groundHeight = transform.position.y - mesh.hull.position.y;
+        groundHeight = mesh.transform.position.y - mesh.hull.position.y;
     }
 
     /* --- Overridden Methods --- */
@@ -45,26 +45,11 @@ public class Throwable : Structure {
 
     // Makes the structure fall towards its hull.
     protected override void Uninteractable() {
-        float fallspeed = carryHeight / (throwDistance / throwSpeed);
-        body.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-        if ((mesh.transform.position - mesh.hull.position).y > groundHeight) {
-            mesh.transform.position -= fallspeed * Vector3.up * Time.deltaTime;
-        }
-        else {
-            body.velocity *= 0.95f;
-        }
-
-        if (body.velocity.magnitude < GameRules.movementPrecision) {
-            condition = Condition.Interactable;
-            body.velocity = Vector3.zero;
-            body.constraints = RigidbodyConstraints2D.FreezeAll;
-        }
-
+        Falling();
     }
 
     /* --- Action Methods --- */
-    bool Carry(Controller controller) {
+    public bool Carry(Controller controller) {
         OnCarry();
 
         // Set the hull under the main object.
@@ -110,6 +95,24 @@ public class Throwable : Structure {
         condition = Condition.Uninteractable;
 
         return true;
+    }
+
+    protected virtual void Falling() {
+        float fallspeed = carryHeight / (throwDistance / throwSpeed);
+        body.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        if ((mesh.transform.position - mesh.hull.position).y > groundHeight) {
+            mesh.transform.position -= fallspeed * Vector3.up * Time.deltaTime;
+        }
+        else {
+            body.velocity *= 0.95f;
+        }
+
+        if (body.velocity.magnitude < GameRules.movementPrecision) {
+            condition = Condition.Interactable;
+            body.velocity = Vector3.zero;
+            body.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
     }
 
     /* --- Event Methods --- */

@@ -89,10 +89,10 @@ public class Controller : MonoBehaviour {
     /* --- Internal Event Actions --- */
     // Activates the attack of this controller.
     protected void Action(int index = 0) {
-        OnAction(index);
         if (index < state.equipment.Count) {
             state.equipment[index].Activate(this);
         }
+        OnAction(index);
     }
 
     protected virtual void OnAction(int index = 0) {
@@ -110,7 +110,6 @@ public class Controller : MonoBehaviour {
     // If we hit something, then perform the hit actions.
     public void Hit(Hurtbox hurtbox) {
         OnHit(hurtbox);
-        hurtbox.controller.Hurt((int)state.activeItem?.damage);
     }
 
     protected virtual void OnHit(Hurtbox hurtbox) {

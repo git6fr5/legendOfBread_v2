@@ -9,9 +9,10 @@ public class Pig : Mob {
     [SerializeField] protected float idleDistance = 3f; // The distance this slime travels during a single idle interval.
     [SerializeField] protected float idleInterval = 5f; // The duration of a single idle interval.
     [SerializeField] protected float idleTicks = 0f; // How long into an idle interval this slime is.
-    protected Vector3 previousPosition;
-    protected float stuckTime = 0f;
-    protected float stuckInterval = 0.25f;
+
+    [SerializeField] bool canAttack = false;
+    [SerializeField] float attackRadius = 3f;
+    [SerializeField] float attackInterval = 3f;
 
     /* --- Components --- */
     Room room;
@@ -23,7 +24,8 @@ public class Pig : Mob {
         room = GameObject.FindWithTag(GameRules.roomTag)?.GetComponent<Room>();
         // Set these parameters.
         orientationVector = Vector2.right;
-        previousPosition = transform.position - Vector3.right;
+        canAttack = false;
+        StartCoroutine(IEAttackCooldown(attackInterval));
     }
 
     /* --- Action Flow --- */
@@ -31,57 +33,47 @@ public class Pig : Mob {
         // Look for a target, but otherwise move randomly
         Hurtbox target = vision.LookFor(GameRules.playerTag);
         if (vision.LookFor(GameRules.playerTag) != null) {
-            // currently don't do anything.
-        }
-
-        idleTicks += Time.deltaTime;
-
-        if (idleTicks >= idleInterval || targetPoint == Vector3.zero) {
-            orientationVector = Vector2.right; // Compass.OrientationVectors[(Compass.ORIENTATION)Random.Range(0, (int)Compass.ORIENTATION.count)];
-            targetPoint = idleDistance * orientationVector + new Vector2((int)transform.position.x, (int)(int)transform.position.y);
-            idleTicks = 0f;
-        }
-
-        movementVector = targetPoint - transform.position;
-        if ((transform.position - previousPosition).magnitude == 0f) {
-            stuckTime += Time.deltaTime;
-            if (stuckTime >= stuckInterval) {
-                NewDirection();
+            targetPoint = target.transform.position;
+            if ((target.transform.position - transform.position).magnitude < attackRadius) {
+                if (canAttack) {
+                    Action();
+                }
             }
         }
         else {
-            stuckTime = 0f;
-        }
-        if (movementVector.magnitude < GameRules.movementPrecision) {
-            movementVector = Vector2.zero;
-            transform.position = targetPoint;
-            NewDirection();
-        }
-
-        previousPosition = transform.position;
-
-    }
-
-    // IEnumerator  
-
-    void NewDirection() {
-        orientationVector = Compass.OrientationVectors[(Compass.ORIENTATION)Random.Range(0, (int)Compass.ORIENTATION.count)];
-
-        float length = idleDistance;
-        targetPoint = length * orientationVector + new Vector2((int)transform.position.x, (int)(int)transform.position.y);
-        if (room != null) {
-            print("hello");
-            int[] coordinate = Geometry.PointToGrid(targetPoint, room.transform);
-            while (!Geometry.WithinBorder(coordinate, room.borderGrid, room.border)) {
-                length -= 1f;
-                targetPoint = length * orientationVector + new Vector2((int)transform.position.x, (int)(int)transform.position.y);
-                coordinate = Geometry.PointToGrid(targetPoint, room.transform);
+            idleTicks += Time.deltaTime;
+            if (idleTicks >= idleInterval || targetPoint == Vector3.zero) {
+                targetPoint = idleDistance * Random.insideUnitCircle + (Vector2)transform.position;
+                idleTicks = 0f;
             }
         }
 
-        idleTicks = 0f;
+        moveSpeed *= state.activeItem ? state.activeItem.moveSpeed : 1f;
+        moveSpeed *= canAttack ? 1f : -1;
+        movementVector = targetPoint - transform.position;
+
+        if (movementVector.magnitude < GameRules.movementPrecision) {
+            movementVector = Vector2.zero;
+        }
+        else {
+            orientationVector = Compass.SnapVector(movementVector);
+        }
+
+        movementVector = canAttack ? movementVector : new Vector2( -movementVector.y, movementVector.x);
+
     }
 
+    protected override void OnAction(int index = 0) {
+        canAttack = false;
+        float cooldown = attackInterval;
+        cooldown += state.activeItem ? state.activeItem.actionBuffer : 0.5f;
+        StartCoroutine(IEAttackCooldown(cooldown));
+    }
 
+    IEnumerator IEAttackCooldown(float delay) {
+        yield return new WaitForSeconds(delay);
+        canAttack = true;
+        yield return null;
+    }
 
 }

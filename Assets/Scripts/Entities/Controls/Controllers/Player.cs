@@ -100,6 +100,7 @@ public class Player : Controller {
 
     // When hitting something through an attack
     protected override void OnHit(Hurtbox hurtbox) {
+        hurtbox.controller.Hurt((int)state.activeItem?.damage);
         GameRules.CameraShake();
     }
 
