@@ -21,6 +21,7 @@ public class Creature : Mesh {
     public Material deathMaterial;
 
     /* --- Variables --- */
+    [SerializeField] public bool isBobbly;
     Sprite[] active; // This is solely to be used as a switch
     [HideInInspector] public float timeInterval = 0f;
 
@@ -45,9 +46,13 @@ public class Creature : Mesh {
     /* --- Parameters --- */
     // Renders the sprite based on the state.
     void RenderAnimation() {
+
         timeInterval += Time.deltaTime;
         float? buffer = null;
         (Sprite[], bool) animationData;
+        bool movementBob = false;
+        transform.localPosition = Vector3.zero;
+
         // Check action animations.
         if (state.activeItem != null && actionAnimations.ContainsKey(state.activeItem.action)) {
             animationData = actionAnimations[state.activeItem.action];
@@ -56,6 +61,7 @@ public class Creature : Mesh {
         // Check movement animations.
         else if (movementAnimations.ContainsKey(state.movement)) {
             animationData = movementAnimations[state.movement];
+            movementBob = isBobbly;
         }
         // Default to idle animation.
         else {
@@ -79,6 +85,7 @@ public class Creature : Mesh {
         int cycle = (int)(animation.Length * 0.25f * orientatable + animation.Length * (1 - orientatable));
         float frameRate = (buffer != null) ? cycle / (float)buffer : GameRules.defaultFrameRate;
         int index = (orientatable * cycle * (int)state.orientation) + ((int)Mathf.Floor(timeInterval * frameRate) % cycle);
+        transform.localPosition = (movementBob && index % 2 == 1) ? new Vector3(0f, 0.05f, 0f) : Vector3.zero;
         spriteRenderer.sprite = animation[index];
     }
 
