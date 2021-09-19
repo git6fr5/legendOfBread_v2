@@ -108,24 +108,9 @@ public class Synth : MonoBehaviour {
             }
         }
 
-        else {
-            audioSource.enabled = false;
-        }
-
     }
 
     void OnAudioFilterRead(float[] data, int channels) {
-
-        if (isActive) {
-            float[] dataPacket = GetData(data.Length, channels);
-            for (int i = 0; i < data.Length; i++) {
-                data[i] = dataPacket[i]; 
-            }
-        }
-
-    }
-
-    public float[] GetData(int packetSize, int channels) {
 
         // Increment the time.
         if (newKey) {
@@ -134,18 +119,17 @@ public class Synth : MonoBehaviour {
         }
         float currTime = (float)AudioSettings.dspTime - startTime;
 
+
         // play the current note
         float fundamental = Score.NoteFrequencies[root] * Score.MajorScale[tone];
 
-        float[] dataPacket = new float[packetSize];
+        for (int i = 0; i < data.Length; i++) { data[i] = 0f; }
         Parameters waveA = new Parameters(shapeA, fundamental, overtones, overtoneDistributionA);
         Parameters waveB = new Parameters(shapeB, fundamental, overtones, overtoneDistributionB);
 
-        dataPacket = AddWave(dataPacket, channels, currTime, waveA, factorA);
-        dataPacket = AddWave(dataPacket, channels, currTime, waveB, factorB);
-        dataPacket = AddModifiers(dataPacket, channels, currTime, attack, sustain, decay);
-
-        return dataPacket;
+        data = AddWave(data, channels, currTime, waveA, factorA);
+        data = AddWave(data, channels, currTime, waveB, factorB);
+        data = AddModifiers(data, channels, currTime, attack, sustain, decay);
 
     }
 

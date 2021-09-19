@@ -15,7 +15,7 @@ public class Score {
     }
 
     public enum NoteLength {
-        WHOLE, HALF, QUARTER, EIGTH, SIXTEENTH, noteLengthCount
+        WHOLE, HALF, QUARTER, EIGTH, noteLengthCount, SIXTEENTH
     }
 
     public enum Tone {
@@ -80,7 +80,7 @@ public class Score {
 
     }
 
-    public static Sheet GetBar() {
+    public static Sheet GetRandomBar() {
 
         float barLengthLeft = 4f;
         List<Tone> tones = new List<Tone>();
@@ -94,13 +94,53 @@ public class Score {
             }
             tones.Add(tone);
 
-            NoteLength noteLength = (NoteLength)Random.Range(2, (int)NoteLength.noteLengthCount);
+            NoteLength noteLength = (NoteLength)Random.Range((int)NoteLength.HALF, (int)NoteLength.noteLengthCount);
+            while (LengthMultipliers[noteLength] > barLengthLeft) {
+                noteLength = (NoteLength)Random.Range((int)noteLength, (int)NoteLength.noteLengthCount);
+            }
+
             lengths.Add(noteLength);
             barLengthLeft -= LengthMultipliers[noteLength];//
         }
 
         Sheet sheet = new Sheet(tones, lengths);
         PrintSheet(sheet);
+        return sheet;
+
+    }
+
+    public static Sheet GetBasicBar() {
+
+        List<Tone> tones = new List<Tone>();
+        List<NoteLength> lengths = new List<NoteLength>();
+
+        for (int i = 0; i < 4; i++) {
+            tones.Add(Tone.P1);
+            lengths.Add(NoteLength.EIGTH);
+            tones.Add(Tone.REST);
+            lengths.Add(NoteLength.EIGTH);
+        }
+       
+        Sheet sheet = new Sheet(tones, lengths);
+        PrintSheet(sheet);
+        return sheet;
+
+    }
+
+    public static Sheet GetOffbeatBar() {
+
+        List<Tone> tones = new List<Tone>();
+        List<NoteLength> lengths = new List<NoteLength>();
+
+        for (int i = 0; i < 4; i++) {
+            tones.Add(Tone.REST);
+            lengths.Add(NoteLength.EIGTH);
+            tones.Add(Tone.P1);
+            lengths.Add(NoteLength.EIGTH);
+        }
+
+        Sheet sheet = new Sheet(tones, lengths);
+        // PrintSheet(sheet);
         return sheet;
 
     }

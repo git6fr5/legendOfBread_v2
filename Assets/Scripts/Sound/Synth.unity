@@ -1051,11 +1051,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   synthA: {fileID: 1404549153}
   synthB: {fileID: 1795007262}
-  audioSource: {fileID: 0}
   BPMKnob: {fileID: 637231721}
   BPM: 0
   minBPM: 30
   maxBPM: 240
+  editingChannel: 1
 --- !u!4 &882876898
 Transform:
   m_ObjectHideFlags: 0
