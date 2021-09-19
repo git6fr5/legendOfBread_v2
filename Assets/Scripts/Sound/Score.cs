@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class Score {
 
+    public struct Sheet {
+        public List<Tone> tones;
+        public List<NoteLength> lengths;
+
+        public Sheet(List<Tone> _tones, List<NoteLength> _lengths) {
+            tones = _tones;
+            lengths = _lengths;
+        }
+    }
+
     public enum NoteLength {
         WHOLE, HALF, QUARTER, EIGTH, SIXTEENTH, noteLengthCount
     }
@@ -58,7 +68,7 @@ public class Score {
         { Note.G, 783.99f },
     };
 
-    public static (List<Tone>, List<NoteLength>) GetTone() {
+    public static Sheet GetTone() {
 
         List<Tone> tones = new List<Tone>();
         List<NoteLength> lengths = new List<NoteLength>();
@@ -66,11 +76,11 @@ public class Score {
         tones.Add(Tone.P1);
         lengths.Add(NoteLength.WHOLE);
 
-        return (tones, lengths);
+        return new Sheet(tones, lengths);
 
     }
 
-    public static (List<Tone>, List<NoteLength>) GetBar() {
+    public static Sheet GetBar() {
 
         float barLengthLeft = 4f;
         List<Tone> tones = new List<Tone>();
@@ -89,8 +99,20 @@ public class Score {
             barLengthLeft -= LengthMultipliers[noteLength];//
         }
 
-        return (tones, lengths);
+        Sheet sheet = new Sheet(tones, lengths);
+        PrintSheet(sheet);
+        return sheet;
 
+    }
+
+
+    public static void PrintSheet(Sheet sheet) {
+
+        string _str = "";
+        for (int i = 0; i < sheet.tones.Count; i++) {
+            _str += sheet.tones[i].ToString() + " (" + sheet.lengths[i] + ")" + ", ";
+        }
+        Debug.Log(_str);
     }
 
 }
