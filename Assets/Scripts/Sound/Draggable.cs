@@ -15,7 +15,7 @@ public class Draggable : MonoBehaviour {
 
     public GameObject point;
 
-    public static float dragFactor = 0.2f;
+    public static float dragFactor = 0.25f;
 
     void Awake() {
         gameObject.layer = LayerMask.NameToLayer("UI");
@@ -35,7 +35,7 @@ public class Draggable : MonoBehaviour {
         }
 
         boxCollider.offset = (Vector2)lineRenderer.GetPosition(1) - (Vector2)transform.position;
-        point.transform.position = lineRenderer.GetPosition(1);
+        point.transform.position = lineRenderer.GetPosition(1) +new Vector3(0f, 0f, -1f);
     }
 
     void OnMouseDown() {

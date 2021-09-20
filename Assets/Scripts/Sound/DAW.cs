@@ -7,7 +7,7 @@ using Tone = Score.Tone;
 using Value = Score.NoteLength;
 using Shape = Wave.Shape;
 using Parameters = Wave.Parameters;
-using Sheet = Score.Sheet;
+using Clef = Score.Clef;
 
 public class DAW : MonoBehaviour {
 
@@ -15,15 +15,15 @@ public class DAW : MonoBehaviour {
     public Synth synthB;
 
     public class Channel {
-        public Sheet sheet;
+        public Clef clef;
         public Synth synth;
         public int index;
         public float timeInterval;
 
-        public Channel(Sheet _sheet, Synth _synth) {
+        public Channel(Clef _clef, Synth _synth) {
             timeInterval = 0f;
             index = 0;
-            sheet = _sheet;
+            clef = _clef;
             synth = _synth;
             synth.isActive = false;
         }
@@ -40,9 +40,13 @@ public class DAW : MonoBehaviour {
 
     public int editingChannel = 1;
 
+    public Score score;
+
     void Awake() {
-        channels.Add(new Channel(Score.GetBasicBar(), synthA));
-        channels.Add(new Channel(Score.GetRandomBar(), synthB));
+        score.RandomScore();
+        channels.Add(new Channel(score.treble, synthA));
+        channels.Add(new Channel(score.bass, synthB));
+
     }
 
     void Update() {
@@ -56,15 +60,23 @@ public class DAW : MonoBehaviour {
             timeInterval -= subdividedInterval * secondsPerQuarterNote;
             subdividedIndex++;
         }
-        maxIndex = (int)(barLength / subdividedInterval);
+        maxIndex = (int)(barLength * score.bars / subdividedInterval);
         if (subdividedIndex >= maxIndex) {
             subdividedIndex = 0;
         }
 
+        //if (Input.GetKeyDown(KeyCode.M)) {
+        //    sheet = Score.MarioTheme();
+        //    channels[0].clef = sheet.treble;
+        //    channels[1].clef = sheet.bass;
+        //}
+
 
         for (int i = 0; i < channels.Count; i++) {
 
-            if (channels[i].index >= channels[i].sheet.tones.Count && channels[i].synth.audioSource.isPlaying) {
+            channels[i].synth.root = score.root;
+
+            if (channels[i].index >= channels[i].clef.tones.Count && channels[i].synth.audioSource.isPlaying) {
                 ReplayChannel(channels[i]);
                 print("Replaying");
             }
@@ -83,7 +95,7 @@ public class DAW : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.N)) {
                 if (i == editingChannel) {
-                    channels[i].sheet = Score.GetRandomBar();
+                    channels[i].clef = Score.GetRandomBar(score.bars);
                 }
                 StopChannel(channels[i]);
                 PlayChannel(channels[i]);
@@ -97,7 +109,7 @@ public class DAW : MonoBehaviour {
     }
 
     void PlayChannel(Channel channel) {
-        Score.PrintSheet(channel.sheet);
+        Score.PrintClef(channel.clef);
         channel.synth.audioSource.Play();
         channel.synth.newKey = true;
         channel.index = 0;
@@ -124,11 +136,11 @@ public class DAW : MonoBehaviour {
         // Figure out which note of the lowest subdivision that we're in.
 
         int channelSubdivisionIndex = 0;
-        for (int i = 0; i < channel.sheet.lengths.Count; i++) {
-            channelSubdivisionIndex += (int)(Score.LengthMultipliers[channel.sheet.lengths[i]] * barLength);
+        for (int i = 0; i < channel.clef.lengths.Count; i++) {
+            channelSubdivisionIndex += (int)(Score.LengthMultipliers[channel.clef.lengths[i]] * barLength);
             if (channelSubdivisionIndex > subdividedIndex) {
                 if (channel.index != i) {
-                    channel.synth.tone = channel.sheet.tones[i];
+                    channel.synth.tone = channel.clef.tones[i];
                     channel.synth.newKey = true;
                     channel.index = i;
                 }

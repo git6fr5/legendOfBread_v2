@@ -73,7 +73,7 @@ public class Display : MonoBehaviour {
             yValues[i] = synth.factorA * waveAValues[i] + synth.factorB * waveBValues[i];
         }
         if (!periodDisplay) {
-            yValues = synth.AddModifiers(yValues, 1, 0f, synth.attack, synth.sustain, synth.decay, sampleRate);
+            yValues = synth.AddModifiers(yValues, 1, 0, synth.attack, synth.sustain, synth.decay, sampleRate);
         }
 
         for (int i = 0; i < samples; i++) {

@@ -57,6 +57,8 @@ public class Synth : MonoBehaviour {
     [SerializeField] [ReadOnly] public float decay;
     [SerializeField] [ReadOnly] public float maxDecay = 10f;
 
+    public int octaveShift;
+
 
     // Playback.
     [Space(5)] [Header("Playback")]
@@ -127,8 +129,15 @@ public class Synth : MonoBehaviour {
         }
         // float currTime = (float)AudioSettings.dspTime - startTime;
 
+        //if (octave == 0) { octaveFactor = 1; }
+        //else if (octave > 0) { octaveFactor = octave + 1; }
+        //else { octaveFactor = 1 / Mathf.Abs(octave - 1); }
+
+        float octaveFactor = (octaveShift == 0) ? 1 : ((octaveShift > 0) ? Mathf.Pow(2, octaveShift) : 1f / Mathf.Pow(2, Mathf.Abs(octaveShift)));
+        print(octaveFactor);
+
         // Play the current note.
-        float fundamental = Score.NoteFrequencies[root] * Score.MajorScale[tone];
+        float fundamental = Score.NoteFrequencies[root] * Score.MajorScale[tone] * octaveFactor; // Mathf.Max(1, octave + 1) / Mathf.Min(1, octave - 1);
 
         for (int i = 0; i < data.Length; i++) { data[i] = 0f; }
         Parameters waveA = new Parameters(shapeA, fundamental, overtones, overtoneDistributionA);
@@ -136,7 +145,7 @@ public class Synth : MonoBehaviour {
 
         data = AddWave(data, channels, waveA, factorA);
         data = AddWave(data, channels, waveB, factorB);
-        // data = AddModifiers(data, channels, currTime, attack, sustain, decay);
+        data = AddModifiers(data, channels, timeOffset, attack, sustain, decay);
 
         timeOffset += (int)((float)data.Length); // / channels ??? I don't get it.
         // print(timeOffset);
@@ -162,7 +171,7 @@ public class Synth : MonoBehaviour {
         return dataPacket;
     }
 
-    public float[] AddModifiers(float[] data, int channels, float startTime, float attack, float sustain, float decay, float sampleRate = -1f) {
+    public float[] AddModifiers(float[] data, int channels, int timeOffset, float attack, float sustain, float decay, float sampleRate = -1f) {
 
         if (sampleRate == -1f) {
             sampleRate = Synth.sampleRate;
@@ -170,7 +179,7 @@ public class Synth : MonoBehaviour {
 
         // Apply the modifiers
         for (int i = 0; i < data.Length; i += channels) {
-            float time = startTime + (float)i / (float)sampleRate / (float)channels;
+            float time =  (float)(i + timeOffset) / (float)sampleRate / (float)channels;
             float factor = 1f;
 
             if (time < attack) {

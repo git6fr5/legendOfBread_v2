@@ -2,13 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Score {
 
-    public struct Sheet {
+public class Score : MonoBehaviour {
+
+    public Note root;
+
+    public Clef treble;
+    public Clef bass;
+    public int bars;
+
+    public void RandomScore() {
+        treble = Score.GetBasicBar(bars);
+        bass = Score.GetRandomBar(bars);
+    }
+
+    /* --- Hide this stuff --- */
+
+
+    public struct Clef {
         public List<Tone> tones;
         public List<NoteLength> lengths;
 
-        public Sheet(List<Tone> _tones, List<NoteLength> _lengths) {
+        public Clef(List<Tone> _tones, List<NoteLength> _lengths) {
             tones = _tones;
             lengths = _lengths;
         }
@@ -19,7 +34,7 @@ public class Score {
     }
 
     public enum Tone {
-        REST, P1, m2, M2, m3, M3, P4, P5, m6, M6, m7, M7, P8, m9, M9, toneCount
+        REST, P1, m2, M2, m3, M3, P4, b5, P5, m6, M6, m7, M7, P8, m9, M9, m10, M10, P11, b12, P12, toneCount
     }
 
     public enum Note { A, B, C, D, E, F, G, noteCount }
@@ -42,11 +57,15 @@ public class Score {
         { Tone.P5 , 3f/2f },
         { Tone.M6 , 5f/3f },
         { Tone.M7 , 15f/8f },
-        { Tone.P8 , 2f }
+        { Tone.P8 , 2f },
+        { Tone.M9 , 18f/8f },
+        { Tone.M10 , 10f/4f },
+        { Tone.P11 , 8f/3f },
+        { Tone.P12 , 6f / 2f }
     };
 
     public static Dictionary<KeyCode, Tone> MajorInstrument = new Dictionary<KeyCode, Tone>(){
-        { KeyCode.Alpha0, Tone.REST },
+        // { KeyCode.Alpha0, Tone.REST },
         { KeyCode.Alpha1, Tone.P1 },
         { KeyCode.Alpha2, Tone.M2 },
         { KeyCode.Alpha3, Tone.M3 },
@@ -54,7 +73,10 @@ public class Score {
         { KeyCode.Alpha5, Tone.P5 },
         { KeyCode.Alpha6, Tone.M6 },
         { KeyCode.Alpha7, Tone.M7 },
-        { KeyCode.Alpha8, Tone.P8 }
+        { KeyCode.Alpha8, Tone.P8 },
+        { KeyCode.Alpha9, Tone.M9 },
+        { KeyCode.Alpha0, Tone.M10 }
+
     };
 
 
@@ -68,7 +90,7 @@ public class Score {
         { Note.G, 783.99f },
     };
 
-    public static Sheet GetTone() {
+    public static Clef GetTone() {
 
         List<Tone> tones = new List<Tone>();
         List<NoteLength> lengths = new List<NoteLength>();
@@ -76,13 +98,13 @@ public class Score {
         tones.Add(Tone.P1);
         lengths.Add(NoteLength.WHOLE);
 
-        return new Sheet(tones, lengths);
+        return new Clef(tones, lengths);
 
     }
 
-    public static Sheet GetRandomBar() {
+    public static Clef GetRandomBar(int bars = 1) {
 
-        float barLengthLeft = 4f;
+        float barLengthLeft = 4f * bars;
         List<Tone> tones = new List<Tone>();
         List<NoteLength> lengths = new List<NoteLength>();
 
@@ -103,31 +125,31 @@ public class Score {
             barLengthLeft -= LengthMultipliers[noteLength];//
         }
 
-        Sheet sheet = new Sheet(tones, lengths);
-        PrintSheet(sheet);
-        return sheet;
+        Clef clef = new Clef(tones, lengths);
+        PrintClef(clef);
+        return clef;
 
     }
 
-    public static Sheet GetBasicBar() {
+    public static Clef GetBasicBar(int bars = 1) {
 
         List<Tone> tones = new List<Tone>();
         List<NoteLength> lengths = new List<NoteLength>();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4 * bars; i++) {
             tones.Add(Tone.P1);
             lengths.Add(NoteLength.EIGTH);
             tones.Add(Tone.REST);
             lengths.Add(NoteLength.EIGTH);
         }
        
-        Sheet sheet = new Sheet(tones, lengths);
-        PrintSheet(sheet);
-        return sheet;
+        Clef clef = new Clef(tones, lengths);
+        PrintClef(clef);
+        return clef;
 
     }
 
-    public static Sheet GetOffbeatBar() {
+    public static Clef GetOffbeatBar() {
 
         List<Tone> tones = new List<Tone>();
         List<NoteLength> lengths = new List<NoteLength>();
@@ -139,18 +161,40 @@ public class Score {
             lengths.Add(NoteLength.EIGTH);
         }
 
-        Sheet sheet = new Sheet(tones, lengths);
+        Clef clef = new Clef(tones, lengths);
         // PrintSheet(sheet);
-        return sheet;
+        return clef;
 
     }
 
+    //public static Sheet MarioTheme() {
 
-    public static void PrintSheet(Sheet sheet) {
+    //    List<Tone> trebleTones = new List<Tone> { Tone.M10, Tone.M10, Tone.REST, Tone.P8, Tone.REST, Tone.M10, Tone.P12, Tone.REST, Tone.P5, Tone.REST, Tone.REST };
+    //    List<Tone> bassTones = new List<Tone> { Tone.M9, Tone.M9, Tone.REST, Tone.M9, Tone.REST, Tone.M9, Tone.P12, Tone.REST, Tone.P5, Tone.REST , Tone.REST};
+    //    List<NoteLength> rhythm = new List<NoteLength> { NoteLength.EIGTH, NoteLength.EIGTH, NoteLength.EIGTH, NoteLength.EIGTH,
+    //                                            NoteLength.EIGTH,NoteLength.EIGTH,NoteLength.QUARTER,
+    //                                            NoteLength.QUARTER, NoteLength.QUARTER, NoteLength.QUARTER, NoteLength.QUARTER,
+    //                                            NoteLength.WHOLE };
+
+    //    Clef treble = new Clef(trebleTones, rhythm);
+    //    Clef bass = new Clef(bassTones, rhythm);
+
+    //    Sheet sheet = new Sheet(treble, bass, 3);
+    //    //3 + 7e 3 + 7e re 3 + 7e re 1 + 7e 3 + 7q / 5 + 7q rq 5q rq /
+
+    //    //9 9 r 9 9 9q / 12 5
+    //    // e e e e 
+
+    //    return sheet;
+
+    //}
+
+
+    public static void PrintClef(Clef clef) {
 
         string _str = "";
-        for (int i = 0; i < sheet.tones.Count; i++) {
-            _str += sheet.tones[i].ToString() + " (" + sheet.lengths[i] + ")" + ", ";
+        for (int i = 0; i < clef.tones.Count; i++) {
+            _str += clef.tones[i].ToString() + " (" + clef.lengths[i] + ")" + ", ";
         }
         Debug.Log(_str);
     }
