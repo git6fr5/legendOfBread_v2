@@ -50,6 +50,17 @@ public class DAW : MonoBehaviour {
         BPM = (int)(BPMKnob.value * (maxBPM - minBPM)) + minBPM;
         secondsPerQuarterNote = 60f / BPM;
 
+        timeInterval += Time.deltaTime;
+        float subdividedInterval = Score.LengthMultipliers[Value.SIXTEENTH];
+        if (timeInterval >= subdividedInterval * secondsPerQuarterNote) {
+            timeInterval -= subdividedInterval * secondsPerQuarterNote;
+            subdividedIndex++;
+        }
+        maxIndex = (int)(barLength / subdividedInterval);
+        if (subdividedIndex >= maxIndex) {
+            subdividedIndex = 0;
+        }
+
 
         for (int i = 0; i < channels.Count; i++) {
 
@@ -59,6 +70,8 @@ public class DAW : MonoBehaviour {
             }
 
             if (Input.GetKeyDown(KeyCode.Space) && !channels[i].synth.audioSource.isPlaying) {
+                timeInterval = 0f;
+                subdividedIndex = 0;
                 PlayChannel(channels[i]);
                 print("Playing");
             }
@@ -98,21 +111,57 @@ public class DAW : MonoBehaviour {
         channel.index = 0;
     }
 
+    public int subdividedIndex;
+    public float timeInterval = 0f;
+    public int maxIndex;
+
+    float barLength = 4f;
+
     void WhilePlayingChannel(Channel channel) {
 
         // float timeInterval = (float)AudioSettings.dspTime - channel.synth.startTime;
-        channel.timeInterval += Time.deltaTime; // Need to fix this to be a bit more synchronous.
+        // Need to fix this to be a bit more synchronous.
+        // Figure out which note of the lowest subdivision that we're in.
 
-        // Check if we need to move to the next note
-        Value length = channel.sheet.lengths[channel.index];
-        float noteLength = Score.LengthMultipliers[length];
-
-        if (channel.timeInterval >= noteLength * secondsPerQuarterNote) {
-            channel.synth.tone = channel.sheet.tones[channel.index]; // This feels a little backwards, like I should be incrementing first then changing notes right?
-            channel.synth.newKey = true;
-            channel.timeInterval = 0f;
-            channel.index++;
+        int channelSubdivisionIndex = 0;
+        for (int i = 0; i < channel.sheet.lengths.Count; i++) {
+            channelSubdivisionIndex += (int)(Score.LengthMultipliers[channel.sheet.lengths[i]] * barLength);
+            if (channelSubdivisionIndex > subdividedIndex) {
+                if (channel.index != i) {
+                    channel.synth.tone = channel.sheet.tones[i];
+                    channel.synth.newKey = true;
+                    channel.index = i;
+                }
+                break;
+            }
         }
     }
+
+        //    // Check if we need to move to the next note
+        //Value length = channel.sheet.lengths[channel.index];
+        //float noteLength = Score.LengthMultipliers[length];
+
+        //if (channel.timeInterval >= noteLength * secondsPerQuarterNote) {
+        //    channel.synth.tone = channel.sheet.tones[channel.index]; // This feels a little backwards, like I should be incrementing first then changing notes right?
+        //    channel.synth.newKey = true;
+        //    channel.timeInterval -= noteLength * secondsPerQuarterNote;
+        //    channel.index++;
+        //}
+
+        //    // float timeInterval = (float)AudioSettings.dspTime - channel.synth.startTime;
+        //timeInterval += Time.deltaTime; // Need to fix this to be a bit more synchronous.
+        //if (timeInterval >= 4f) {
+        //    timeInterval -= 4f;
+        //}
+
+        //// 
+        //float index = (int)(timeInterval / noteLength);
+
+        //int channelIndex = 0;
+
+        //float channelNoteTime = 0f;
+        //for (int i = 0; i < channel.index; i++) {
+        //    float channelNoteTime += Score.LengthMultipliers[channel.sheet.lengths[i]];
+        //}
 
 }

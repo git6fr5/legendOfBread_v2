@@ -23,16 +23,38 @@ public class Wave {
         }
     }
 
-    public static float[] Sine(int packetSize, int channels, float currTime, Parameters parameters) {
+    public static float[] GetWave(
+        int packetSize,
+        int channels,
+        int timeOffset,
+        Parameters parameters,
+        float sampleRate = -1f) {
 
-        // Cache the sample rate.
-        float sampleRate = Synth.sampleRate;
+        switch (parameters.shape) {
+            case Shape.Square:
+                return Wave.Square(packetSize, channels, timeOffset, parameters, sampleRate);
+            case Shape.Sine:
+                return Wave.Sine(packetSize, channels, timeOffset, parameters, sampleRate);
+            default:
+                return Wave.Sine(packetSize, channels, timeOffset, parameters, sampleRate);
+        }
+
+    }
+
+    public static float[] Sine(int packetSize, int channels, int timeOffset, Parameters parameters, float sampleRate = -1f) {
+
+        if (sampleRate == -1f) {
+            sampleRate = Synth.sampleRate;
+        }
+
+        Debug.Log(sampleRate);
+
         // Debug.Log(sampleRate);
         float[] wavePacket = new float[packetSize];
 
         // Itterate through the data.
         for (int i = 0; i < packetSize; i += channels) {
-            float time = currTime + (float)i / (float)Synth.sampleRate / (float) channels;
+            float time = (float)(timeOffset + i) / (float)sampleRate / (float) channels;
 
             // Get the value for this index.
             float value = 0f;
@@ -52,15 +74,17 @@ public class Wave {
         return wavePacket;
     }
 
-    public static float[] Square(int packetSize, int channels, float currTime, Parameters parameters) {
+    public static float[] Square(int packetSize, int channels, int timeOffset, Parameters parameters, float sampleRate = -1f) {
 
         // Cache the sample rate.
-        float sampleRate = Synth.sampleRate;
+        if (sampleRate == -1f) {
+            sampleRate = Synth.sampleRate;
+        }
         float[] wavePacket = new float[packetSize];
 
         // Itterate through the data.
         for (int i = 0; i < packetSize; i += channels) {
-            float time = currTime + (float)i / (float)sampleRate / (float) channels;
+            float time = (float)(timeOffset + i) / (float)sampleRate / (float)channels;
 
             // Get the value for this index.
             float value = 0f;

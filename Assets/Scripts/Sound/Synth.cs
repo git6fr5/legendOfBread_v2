@@ -16,7 +16,7 @@ public class Synth : MonoBehaviour {
     /* --- Settings --- */
     [Space(5)] [Header("Settings")]
     [SerializeField] [ReadOnly] public static float sampleRate; // The amount of times per second that the value of the wave is queried.
-    [SerializeField] [ReadOnly] protected int overtones = 5;
+    [SerializeField] [ReadOnly] public int overtones = 5;
 
     [SerializeField] public Note root; // The root note of this
 
@@ -38,8 +38,10 @@ public class Synth : MonoBehaviour {
     public Shape shapeA;
     public Shape shapeB;
 
-    public float[] overtoneDistributionA;
-    public float[] overtoneDistributionB;
+    [SerializeField] public Distribution distributionA; 
+    [SerializeField] [ReadOnly] public float[] overtoneDistributionA;
+    [SerializeField] public Distribution distributionB;
+    [SerializeField] [ReadOnly] public float[] overtoneDistributionB;
 
     // Modifiers.
     [Space(5)] [Header("Modifiers")]
@@ -79,6 +81,9 @@ public class Synth : MonoBehaviour {
         sustain = sustainKnob.value * maxSustain;
         decay = decayKnob.value * maxDecay;
 
+        overtoneDistributionA = distributionA.GetValues();
+        overtoneDistributionB = distributionB.GetValues();
+
         if (isActive) {
             bool keyIsBeingPressed = false;
             foreach (KeyValuePair<KeyCode, Tone> key in Score.MajorInstrument) {
@@ -110,37 +115,41 @@ public class Synth : MonoBehaviour {
 
     }
 
+    int timeOffset = 0;
+
     void OnAudioFilterRead(float[] data, int channels) {
 
         // Increment the time.
         if (newKey) {
+            timeOffset = 0;
             startTime = (float)AudioSettings.dspTime;
             newKey = false;
         }
-        float currTime = (float)AudioSettings.dspTime - startTime;
+        // float currTime = (float)AudioSettings.dspTime - startTime;
 
-
-        // play the current note
+        // Play the current note.
         float fundamental = Score.NoteFrequencies[root] * Score.MajorScale[tone];
 
         for (int i = 0; i < data.Length; i++) { data[i] = 0f; }
         Parameters waveA = new Parameters(shapeA, fundamental, overtones, overtoneDistributionA);
         Parameters waveB = new Parameters(shapeB, fundamental, overtones, overtoneDistributionB);
 
-        data = AddWave(data, channels, currTime, waveA, factorA);
-        data = AddWave(data, channels, currTime, waveB, factorB);
-        data = AddModifiers(data, channels, currTime, attack, sustain, decay);
+        data = AddWave(data, channels, waveA, factorA);
+        data = AddWave(data, channels, waveB, factorB);
+        // data = AddModifiers(data, channels, currTime, attack, sustain, decay);
+
+        timeOffset += (int)((float)data.Length); // / channels ??? I don't get it.
+        // print(timeOffset);
 
     }
 
     public float[] AddWave(
         float[] dataPacket,
         int channels,
-        float currTime,
         Parameters parameters,
         float factor ) {
 
-        float[] wavePacket = GetWave(dataPacket.Length, channels, currTime, parameters);
+        float[] wavePacket = Wave.GetWave(dataPacket.Length, channels, timeOffset, parameters);
         // If we wanted to add modifiers to individual waves, we'd ideally do it at this point.
         // Something like :
         // AddModifiers(wavePacket ... )
@@ -153,24 +162,11 @@ public class Synth : MonoBehaviour {
         return dataPacket;
     }
 
-    public float[] GetWave(
-        int packetSize,
-        int channels,
-        float currTime,
-        Parameters parameters ) {
+    public float[] AddModifiers(float[] data, int channels, float startTime, float attack, float sustain, float decay, float sampleRate = -1f) {
 
-        switch (parameters.shape) {
-            case Shape.Square:
-                return Wave.Square(packetSize, channels, currTime, parameters);
-            case Shape.Sine:
-                return Wave.Sine(packetSize, channels, currTime, parameters);
-            default:
-                return Wave.Sine(packetSize, channels, currTime, parameters);
+        if (sampleRate == -1f) {
+            sampleRate = Synth.sampleRate;
         }
-
-    }
-
-    public float[] AddModifiers(float[] data, int channels, float startTime, float attack, float sustain, float decay) {
 
         // Apply the modifiers
         for (int i = 0; i < data.Length; i += channels) {
