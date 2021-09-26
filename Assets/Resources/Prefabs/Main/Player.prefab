@@ -291,7 +291,7 @@ MonoBehaviour:
   defaultMaterial: {fileID: 2100000, guid: b5fef772705834242a41dac1825e5f73, type: 2}
   hurtMaterial: {fileID: 2100000, guid: 62a228f52b24d234280c1ac2e975764c, type: 2}
   deathMaterial: {fileID: 2100000, guid: 3b78a2eee01003d4f8861952dae809f1, type: 2}
-  isBobbly: 0
+  isBobbly: 1
   timeInterval: 0
   walk:
   - {fileID: 4035959289877228764, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
@@ -310,8 +310,28 @@ MonoBehaviour:
   - {fileID: 7929438602540414932, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
   - {fileID: 5250438378151091228, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
   - {fileID: -1258472680374559522, guid: 98fcfc5e03a90bc40af45e65c9f35774, type: 3}
-  carryIdle: []
-  carryWalk: []
+  carryIdle:
+  - {fileID: -982904232830982447, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 2416434504916517810, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 1008816216748069464, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 7929438602540414932, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  carryWalk:
+  - {fileID: 4035959289877228764, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -982904232830982447, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -350908408369970039, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -5409570386352685021, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 1553940418269799609, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 2416434504916517810, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -6428935122508569504, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 7144598999076838305, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 7500509103958437945, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 1008816216748069464, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 11406907883527339, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 8030128826893041618, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 2315132830120601726, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 7929438602540414932, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: 5250438378151091228, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
+  - {fileID: -1258472680374559522, guid: c3193b7ebc979334c8fc25b555bc0722, type: 3}
   attack:
   - {fileID: -7159386292705165497, guid: 796b811c4e539cf458a32149cc06a3ff, type: 3}
   - {fileID: 8810571313023917626, guid: 796b811c4e539cf458a32149cc06a3ff, type: 3}
