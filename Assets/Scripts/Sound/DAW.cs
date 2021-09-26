@@ -20,12 +20,12 @@ public class DAW : MonoBehaviour {
         public int index;
         public float timeInterval;
 
-        public Channel(Clef _clef, Synth _synth) {
-            timeInterval = 0f;
-            index = 0;
-            clef = _clef;
-            synth = _synth;
-            synth.isActive = false;
+        public Channel(Clef clef, Synth synth) {
+            this.timeInterval = 0f;
+            this.index = 0;
+            this.clef = clef;
+            synth.isPlayable = false;
+            this.synth = synth;
         }
     }
     public List<Channel> channels = new List<Channel>();
@@ -42,11 +42,24 @@ public class DAW : MonoBehaviour {
 
     public Score score;
 
+    public string fileA;
+    public string fileB;
+
     void Awake() {
         score.RandomScore();
-        channels.Add(new Channel(score.treble, synthA));
-        channels.Add(new Channel(score.bass, synthB));
+        // score.SetNodesFromScore();
+        channels.Add(new Channel(score.bass, synthA));
+        channels.Add(new Channel(score.treble, synthB));
 
+        StartCoroutine(IELoadSynths());
+
+    }
+
+    IEnumerator IELoadSynths() {
+        yield return new WaitForSeconds(0.1f);
+        synthA.Open(fileA);
+        synthB.Open(fileB);
+        yield return null;
     }
 
     void Update() {
@@ -71,6 +84,8 @@ public class DAW : MonoBehaviour {
         //    channels[1].clef = sheet.bass;
         //}
 
+        channels[0].clef = score.bass;
+        channels[1].clef = score.treble;
 
         for (int i = 0; i < channels.Count; i++) {
 
@@ -95,8 +110,21 @@ public class DAW : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.N)) {
                 if (i == editingChannel) {
-                    channels[i].clef = Score.GetRandomBar(score.bars);
+                    if (i == 0) {
+                        score.bass = Score.GetRandomBar(score.bars, score.bass);
+                    }
+                    else if (i == 1) {
+                        score.treble = Score.GetRandomBar(score.bars, score.treble);
+                    }
+                    // channels[i].clef = Score.GetRandomBar(score.bars);
                 }
+
+                // Need to make it so these automatically get from treble and bass.
+                score.SetNodesFromScore(score.treble, score.trebleNodes);
+                score.SetNodesFromScore(score.bass, score.bassNodes);
+                //score.SetNodesFromScore(channels[1].clef, score.trebleNodes);
+                //score.SetNodesFromScore(channels[0].clef, score.bassNodes);
+
                 StopChannel(channels[i]);
                 PlayChannel(channels[i]);
             }

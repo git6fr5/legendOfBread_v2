@@ -1328,6 +1328,138 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: dawnColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: dawnColor.g
+      value: 0.7766573
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: dawnColor.b
+      value: 0.43867922
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: morningColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: morningColor.g
+      value: 0.98325473
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: morningColor.b
+      value: 0.6650944
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: ticksPerDay
+      value: 65536
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: afternoonColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: afternoonColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: afternoonColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: eveningColor.r
+      value: 0.56376827
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: eveningColor.g
+      value: 0.77648574
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: eveningColor.b
+      value: 0.9716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: duskColor.r
+      value: 0.4292453
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: duskColor.g
+      value: 0.5942828
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: duskColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: nightColor.r
+      value: 0.5850347
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: nightColor.g
+      value: 0.50980395
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: nightColor.b
+      value: 0.99215686
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: midnightColor.r
+      value: 0.20264596
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: midnightColor.g
+      value: 0.124955505
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: midnightColor.b
+      value: 0.9811321
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: twilightColor.r
+      value: 0.9716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: twilightColor.g
+      value: 0.34376112
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: twilightColor.b
+      value: 0.9594828
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: dawnColor.a
+      value: 0.7372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: morningColor.a
+      value: 0.89411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: afternoonColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: eveningColor.a
+      value: 0.62352943
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: duskColor.a
+      value: 0.53333336
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: nightColor.a
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: midnightColor.a
+      value: 0.23529412
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119601350618026658, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: twilightColor.a
+      value: 0.49803922
+      objectReference: {fileID: 0}
     - target: {fileID: 3433404482511768109, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
       propertyPath: DestroyOnReachingTarget
       value: 1

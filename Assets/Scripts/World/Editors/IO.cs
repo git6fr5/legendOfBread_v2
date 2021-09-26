@@ -20,7 +20,7 @@ public class IO : MonoBehaviour {
     static string GridToCSV(int[][] grid) {
         string csv = "";
         for (int i = 0; i < grid.Length; i++) {
-            for (int j = 0; j < grid[0].Length; j++) {
+            for (int j = 0; j < grid[i].Length; j++) {
                 csv += grid[i][j].ToString() + ",";
             }
             csv += "\n";

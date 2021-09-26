@@ -45,4 +45,10 @@ public class Distribution : MonoBehaviour
         }
         return values;
     }
+
+    public void SetValues(float[] values) {
+        for (int i = 0; i < draggables.Length; i++) {
+            draggables[i].value = values[i];
+        }
+    }
 }

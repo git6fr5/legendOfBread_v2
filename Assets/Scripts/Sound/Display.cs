@@ -65,8 +65,8 @@ public class Display : MonoBehaviour {
         float[] yValues = new float[samples];
         if (!periodDisplay) {
             for (int i = 0; i < samples; i++) {
-                waveAValues[i] = Mathf.Abs(waveAValues[i]);
-                waveBValues[i] = Mathf.Abs(waveBValues[i]);
+                waveAValues[i] = 1.25f;  Mathf.Abs(waveAValues[i]);
+                waveBValues[i] = 1.25f;  Mathf.Abs(waveBValues[i]);
             }
         }
         for (int i = 0; i < samples; i++) {

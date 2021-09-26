@@ -12,6 +12,7 @@ public class GameRules : MonoBehaviour {
 
     /* --- Time Keeping --- */
     public static int gameTicks;
+    public static int ticksPerDay;
     public static float gameTime;
 
     /* --- Tags --- */

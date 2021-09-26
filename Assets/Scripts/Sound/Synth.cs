@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,14 +60,13 @@ public class Synth : MonoBehaviour {
 
     public int octaveShift;
 
-
     // Playback.
     [Space(5)] [Header("Playback")]
-    [SerializeField] [ReadOnly] public float startTime = 0f; // The time since at which the last note was played.
+    [SerializeField] public bool isPlayable; // Determines whether the synth can be directly played or not.
+    [SerializeField] [ReadOnly] protected int timeOffset = 0; // The time since at which the last note was played.
     [SerializeField] [ReadOnly] public Tone tone = Tone.REST; // The current note being played.
     [SerializeField] [ReadOnly] protected KeyCode currKey = KeyCode.None; // The current key being pressed.
     [HideInInspector] public bool newKey; // Triggers if a new key is pressed.
-    public bool isActive;
 
     void Awake() {
         sampleRate = AudioSettings.outputSampleRate;
@@ -86,7 +86,7 @@ public class Synth : MonoBehaviour {
         overtoneDistributionA = distributionA.GetValues();
         overtoneDistributionB = distributionB.GetValues();
 
-        if (isActive) {
+        if (isPlayable) {
             bool keyIsBeingPressed = false;
             foreach (KeyValuePair<KeyCode, Tone> key in Score.MajorInstrument) {
                 if (Input.GetKey(key.Key)) {
@@ -114,30 +114,26 @@ public class Synth : MonoBehaviour {
 
             }
         }
-
     }
 
-    int timeOffset = 0;
 
     void OnAudioFilterRead(float[] data, int channels) {
 
         // Increment the time.
         if (newKey) {
             timeOffset = 0;
-            startTime = (float)AudioSettings.dspTime;
             newKey = false;
         }
-        // float currTime = (float)AudioSettings.dspTime - startTime;
 
-        //if (octave == 0) { octaveFactor = 1; }
-        //else if (octave > 0) { octaveFactor = octave + 1; }
-        //else { octaveFactor = 1 / Mathf.Abs(octave - 1); }
+        // if (octave == 0) { octaveFactor = 1; }
+        // else if (octave > 0) { octaveFactor = octave + 1; }
+        // else { octaveFactor = 1 / Mathf.Abs(octave - 1); }
 
         float octaveFactor = (octaveShift == 0) ? 1 : ((octaveShift > 0) ? Mathf.Pow(2, octaveShift) : 1f / Mathf.Pow(2, Mathf.Abs(octaveShift)));
         print(octaveFactor);
 
         // Play the current note.
-        float fundamental = Score.NoteFrequencies[root] * Score.MajorScale[tone] * octaveFactor; // Mathf.Max(1, octave + 1) / Mathf.Min(1, octave - 1);
+        float fundamental = Score.NoteFrequencies[root] * Score.ToneMultipliers[tone] * octaveFactor; // Mathf.Max(1, octave + 1) / Mathf.Min(1, octave - 1);
 
         for (int i = 0; i < data.Length; i++) { data[i] = 0f; }
         Parameters waveA = new Parameters(shapeA, fundamental, overtones, overtoneDistributionA);
@@ -148,8 +144,74 @@ public class Synth : MonoBehaviour {
         data = AddModifiers(data, channels, timeOffset, attack, sustain, decay);
 
         timeOffset += (int)((float)data.Length); // / channels ??? I don't get it.
-        // print(timeOffset);
 
+    }
+
+    /* --- IO --- */
+    public static string path = "DataFiles/Synths/";
+    public static float savePrecision = 1e6f;
+
+    public void Save(string stream) {
+        List<int[][]> channels = new List<int[][]>();
+        int volumeInt = (int)(volume * savePrecision);
+        float[] modifierFloats = new float[] { volume, attack, sustain, decay };
+        float[] factorFloats = new float[] { factorA, factorB };
+
+        int[] octave = new int[] { octaveShift };
+        int[] modifiers = ConvertToIntArray(modifierFloats);
+        int[] factors = ConvertToIntArray(factorFloats);
+        int[] distributionAInt = ConvertToIntArray(overtoneDistributionA);
+        int[] distributionBInt = ConvertToIntArray(overtoneDistributionB);
+
+        int[][] saveData = new int[][] { octave, modifiers, factors, distributionAInt, distributionBInt };
+        channels.Add(saveData);
+        IO.SaveCSV(channels, path, stream);
+    }
+
+    public void Open(string stream) {
+
+        List<int[][]> channels = IO.OpenCSV(path, stream);
+
+        int[][] saveData = channels[0];
+
+        int octave = saveData[0][0];
+        float[] modifiers = ConvertToFloatArray(saveData[1]);
+        float[] factors = ConvertToFloatArray(saveData[2]);
+        float[] distributionAFloat = ConvertToFloatArray(saveData[3]);
+        float[] distributionBFloat = ConvertToFloatArray(saveData[4]);
+
+        octaveShift = octave;
+
+        volumeKnob.value = modifiers[0] / maxVolume;
+        attackKnob.value = modifiers[1] / maxAttack;
+        sustainKnob.value = modifiers[2] / maxSustain;
+        decayKnob.value = modifiers[3] / maxDecay;
+
+        factorAKnob.value = factors[0];
+        factorBKnob.value = factors[1];
+
+        distributionA.SetValues(distributionAFloat);
+        distributionB.SetValues(distributionBFloat);
+
+
+    }
+
+    int[] ConvertToIntArray(float[] floatArray) {
+        int[] intArray = new int[floatArray.Length];
+        for (int i = 0; i < intArray.Length; i++) {
+            int newInt = (int)(floatArray[i] * savePrecision);
+            intArray[i] = newInt;
+        }
+        return intArray;
+    }
+
+    float[] ConvertToFloatArray(int[] intArray) {
+        float[] floatArray = new float[intArray.Length];
+        for (int i = 0; i < floatArray.Length; i++) {
+            float newFloat = ((float)intArray[i]) / savePrecision;
+            floatArray[i] = newFloat;
+        }
+        return floatArray;
     }
 
     public float[] AddWave(

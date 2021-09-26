@@ -28,6 +28,7 @@ public class Knob : MonoBehaviour {
                 Turn();
             }
         }
+        transform.eulerAngles = Vector3.forward * (-value * rotationRange - minimumRotation);
     }
 
     void OnMouseDown() {
@@ -42,7 +43,6 @@ public class Knob : MonoBehaviour {
         value += valueIncrement * rotationFactor;
         if (value > 1f) { value = 1f; }
         if (value < 0f) { value = 0f; }
-        transform.eulerAngles = Vector3.forward * (-value * rotationRange - minimumRotation);
         mousePos = newMousePos;
 
     }

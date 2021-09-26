@@ -678,7 +678,7 @@ MonoBehaviour:
   m_AssetsPPU: 16
   m_RefResolutionX: 256
   m_RefResolutionY: 144
-  m_UpscaleRT: 0
+  m_UpscaleRT: 1
   m_PixelSnapping: 0
   m_CropFrameX: 1
   m_CropFrameY: 1
@@ -724,6 +724,20 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  dawnColor: {r: 0, g: 0, b: 0, a: 0}
+  morningColor: {r: 0, g: 0, b: 0, a: 0}
+  afternoonColor: {r: 1, g: 1, b: 1, a: 1}
+  eveningColor: {r: 1, g: 1, b: 1, a: 1}
+  duskColor: {r: 1, g: 1, b: 1, a: 1}
+  nightColor: {r: 1, g: 1, b: 1, a: 1}
+  midnightColor: {r: 1, g: 1, b: 1, a: 1}
+  twilightColor: {r: 1, g: 1, b: 1, a: 1}
+  renderDayCycle: 0
+  dayTimeMaterial: {fileID: 2100000, guid: 9b8d83041a23a0545b34885755aa8c94, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: b5fef772705834242a41dac1825e5f73, type: 2}
+  daytime: 0
+  ticks: 0
+  ticksPerDay: 1028
 --- !u!1 &5792782295605092072
 GameObject:
   m_ObjectHideFlags: 0

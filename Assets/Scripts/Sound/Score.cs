@@ -12,14 +12,102 @@ public class Score : MonoBehaviour {
     public int bars;
 
     public void RandomScore() {
-        treble = Score.GetBasicBar(bars);
-        bass = Score.GetRandomBar(bars);
+        print("Getting Score");
+        treble = Score.GetRandomBar(bars);
+        bass = Score.GetBasicBar(bars);
+    }
+
+    public GameObject noteNode;
+    public NoteNode[] trebleNodes;
+    public NoteNode[] bassNodes;
+
+    public float scale;
+
+    [Range(0.1f, 1f)] public float updateRate = 0.25f;
+
+    void Awake() {
+        float subdivision = LengthMultipliers[NoteLength.EIGTH];
+        trebleNodes = new NoteNode[(int)(bars * 4f / subdivision)];
+        bassNodes = new NoteNode[(int)(bars * 4f / subdivision)];
+
+        CreateNodes(trebleNodes, scale * 4f, subdivision);
+        CreateNodes(bassNodes, 0f, subdivision);
+
+        SetNodesFromScore(treble, trebleNodes);
+        SetNodesFromScore(bass, bassNodes);
+
+        StartCoroutine(IEUpdateScore(updateRate, treble, trebleNodes));
+        StartCoroutine(IEUpdateScore(updateRate, bass, bassNodes));
+    }
+
+    void CreateNodes(NoteNode[] nodes, float yOffset, float subdivision) {
+        for (int i = 0; i < bars * 4f / subdivision; i++) {
+            NoteNode newNoteNode = Instantiate(noteNode, new Vector3(i * scale, yOffset, 0f) + noteNode.transform.position, Quaternion.identity, transform).GetComponent<NoteNode>();
+            newNoteNode.gameObject.SetActive(true);
+            nodes[i] = newNoteNode;
+        }
+    }
+
+    IEnumerator IEUpdateScore(float delay, Clef clef, NoteNode[] nodes) {
+        yield return new WaitForSeconds(delay);
+
+        float subdivision = LengthMultipliers[NoteLength.EIGTH];
+        clef.tones = new List<Tone>();
+        clef.lengths = new List<NoteLength>();
+
+        int j = 0;
+        for (int i = 0; i < bars * 4f / subdivision; i++) {
+            // Tone tone = noteNodes[i].isActive ? Tone.P1 : Tone.REST;
+            if (j == 0) {
+                nodes[i].gameObject.SetActive(true);
+                clef.tones.Add(nodes[i].tone);
+                clef.lengths.Add(nodes[i].length);
+                j = nodes[i].skipCount;
+            }
+            else {
+                nodes[i].gameObject.SetActive(false);
+                j--;
+            }
+        }
+        StartCoroutine(IEUpdateScore(updateRate, clef, nodes));
+        yield return null;
+    }
+
+    public void SetNodesFromScore(Clef clef, NoteNode[] nodes) {
+
+        float subdivision = LengthMultipliers[NoteLength.EIGTH];
+
+        int skip = 0;
+        int index = 0;
+
+        for (int i = 0; i < bars * 4f / subdivision; i++) {
+
+            if (skip == 0) {
+                // find the tone in the major scale
+                for (int j = 0; j < MajorScale.Length; j++) {
+                    if ((int)clef.tones[index] == (int)MajorScale[j]) {
+                        nodes[i].UpdateTone(j);
+                        break;
+                    }
+                }
+                skip = (int)(Score.LengthMultipliers[clef.lengths[index]] / subdivision) - 1;
+                nodes[i].length = clef.lengths[index];
+                index++;
+            }
+            else {
+                nodes[i].UpdateTone(0);
+                nodes[i].length = NoteLength.EIGTH;
+                skip--;
+            }
+
+        }
+
     }
 
     /* --- Hide this stuff --- */
 
-
-    public struct Clef {
+    // class not struct because i want this to be by reference.
+    public class Clef {
         public List<Tone> tones;
         public List<NoteLength> lengths;
 
@@ -48,7 +136,7 @@ public class Score : MonoBehaviour {
         {NoteLength.SIXTEENTH, 0.25f },
     };
 
-    public static Dictionary<Tone, float> MajorScale = new Dictionary<Tone, float>(){
+    public static Dictionary<Tone, float> ToneMultipliers = new Dictionary<Tone, float>(){
         { Tone.REST, 0f },
         { Tone.P1 , 1f },
         { Tone.M2 , 9f/8f },
@@ -63,6 +151,8 @@ public class Score : MonoBehaviour {
         { Tone.P11 , 8f/3f },
         { Tone.P12 , 6f / 2f }
     };
+
+    public static Tone[] MajorScale = new Tone[] { Tone.REST, Tone.P1, Tone.M2, Tone.M3, Tone.P4, Tone.P5, Tone.M6, Tone.M7, Tone.P8, Tone.M9, Tone.M10, Tone.P11, Tone.P12 };
 
     public static Dictionary<KeyCode, Tone> MajorInstrument = new Dictionary<KeyCode, Tone>(){
         // { KeyCode.Alpha0, Tone.REST },
@@ -102,7 +192,7 @@ public class Score : MonoBehaviour {
 
     }
 
-    public static Clef GetRandomBar(int bars = 1) {
+    public static Clef GetRandomBar(int bars = 1, Clef clef = null) {
 
         float barLengthLeft = 4f * bars;
         List<Tone> tones = new List<Tone>();
@@ -110,10 +200,11 @@ public class Score : MonoBehaviour {
 
         while (barLengthLeft > 0f) {
 
-            Tone tone = (Tone)Random.Range(0, (int)Tone.toneCount);
-            while (!MajorScale.ContainsKey(tone)) {
-                tone = (Tone)Random.Range(0, (int)Tone.toneCount);
-            }
+            //Tone tone = (Tone)Random.Range(0, (int)Tone.toneCount);
+            //while (!MajorScale.ContainsKey(tone)) {
+            //    tone = (Tone)Random.Range(0, (int)Tone.toneCount);
+            //}
+            Tone tone = MajorScale[Random.Range(0, 8)];
             tones.Add(tone);
 
             NoteLength noteLength = (NoteLength)Random.Range((int)NoteLength.HALF, (int)NoteLength.noteLengthCount);
@@ -125,7 +216,13 @@ public class Score : MonoBehaviour {
             barLengthLeft -= LengthMultipliers[noteLength];//
         }
 
-        Clef clef = new Clef(tones, lengths);
+        if (clef == null) {
+            clef = new Clef(tones, lengths);
+        }
+        else {
+            clef.tones = tones;
+            clef.lengths = lengths;
+        }
         PrintClef(clef);
         return clef;
 
