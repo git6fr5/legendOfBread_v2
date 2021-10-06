@@ -25,7 +25,13 @@ public class Score : MonoBehaviour {
 
     [Range(0.1f, 1f)] public float updateRate = 0.25f;
 
-    void Awake() {
+    public bool isEditing;
+
+    public void Instantiate() {
+        if (!isEditing) { return; }
+
+        print("score");
+
         float subdivision = LengthMultipliers[NoteLength.EIGTH];
         trebleNodes = new NoteNode[(int)(bars * 4f / subdivision)];
         bassNodes = new NoteNode[(int)(bars * 4f / subdivision)];
@@ -100,6 +106,77 @@ public class Score : MonoBehaviour {
                 skip--;
             }
 
+        }
+
+    }
+
+    public static string path = "DataFiles/Scores/";
+
+    public void Save(string stream) {
+        List<int[][]> channels = new List<int[][]>();
+
+        int root = (int)this.root;
+        int bars = this.bars;
+
+        int[] settings = new int[] { root, bars };
+
+        int[] trebleTones = new int[this.treble.tones.Count];
+        int[] trebleLengths = new int[this.treble.lengths.Count];
+        for (int i = 0; i < trebleTones.Length; i++) {
+            trebleTones[i] = (int)this.treble.tones[i];
+            trebleLengths[i] = (int)this.treble.lengths[i];
+        }
+
+        int[] bassTones = new int[this.bass.tones.Count];
+        int[] bassLengths = new int[this.bass.lengths.Count];
+        for (int i = 0; i < bassTones.Length; i++) {
+            bassTones[i] = (int)this.bass.tones[i];
+            bassLengths[i] = (int)this.bass.lengths[i];
+        }
+
+        int[][] saveData = new int[][] { settings, trebleTones, trebleLengths, bassTones, bassLengths };
+        channels.Add(saveData);
+
+        IO.SaveCSV(channels, path, stream);
+    }
+
+    //public GameObject noteNode;
+    //public NoteNode[] trebleNodes;
+    //public NoteNode[] bassNodes;
+
+    public void Open(string stream, bool setNodes = true) {
+
+        List<int[][]> channels = IO.OpenCSV(path, stream);
+
+        int[][] saveData = channels[0];
+
+        int[] settings = saveData[0]; 
+        this.root = (Note)settings[0];
+        this.bars = settings[1];
+
+        List<Tone> trebleTones = new List<Tone>();
+        List<NoteLength> trebleLengths = new List<NoteLength>();
+
+        for (int i = 0; i < saveData[1].Length; i++) {
+            trebleTones.Add((Tone)saveData[1][i]);
+            trebleLengths.Add((NoteLength)saveData[2][i]);
+        }
+
+        this.treble = new Clef(trebleTones, trebleLengths);
+
+        List<Tone> bassTones = new List<Tone>();
+        List<NoteLength> bassLengths = new List<NoteLength>();
+
+        for (int i = 0; i < saveData[3].Length; i++) {
+            bassTones.Add((Tone)saveData[3][i]);
+            bassLengths.Add((NoteLength)saveData[4][i]);
+        }
+
+        this.bass = new Clef(bassTones, bassLengths);
+
+        if (setNodes) {
+            SetNodesFromScore(treble, trebleNodes);
+            SetNodesFromScore(bass, bassNodes);
         }
 
     }

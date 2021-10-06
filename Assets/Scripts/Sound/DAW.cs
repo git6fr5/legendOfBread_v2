@@ -42,20 +42,46 @@ public class DAW : MonoBehaviour {
 
     public Score score;
 
+    public string scoreFile;
     public string fileA;
     public string fileB;
 
+    public bool isEditing;
+
     void Awake() {
-        score.RandomScore();
+        score.Open(scoreFile, false);
+        score.Instantiate();
+
+        print("daw");
+
+        // score.RandomScore();
         // score.SetNodesFromScore();
         channels.Add(new Channel(score.bass, synthA));
         channels.Add(new Channel(score.treble, synthB));
 
-        StartCoroutine(IELoadSynths());
+        StartCoroutine(IELoad());
+
+        if (!isEditing) {
+            DisableSprites(transform);
+        }
 
     }
 
-    IEnumerator IELoadSynths() {
+    private void DisableSprites(Transform transform) {
+        foreach (Transform child in transform) {
+            if (child.GetComponent<SpriteRenderer>() != null) {
+                child.GetComponent<SpriteRenderer>().enabled = false;
+            }
+            if (child.GetComponent<Collider2D>() != null) {
+                child.GetComponent<Collider2D>().enabled = false;
+            }
+            if (child.childCount > 0) {
+                DisableSprites(child);
+            }
+        }
+    }
+
+    IEnumerator IELoad() {
         yield return new WaitForSeconds(0.1f);
         synthA.Open(fileA);
         synthB.Open(fileB);
@@ -64,7 +90,11 @@ public class DAW : MonoBehaviour {
 
     void Update() {
 
-        BPM = (int)(BPMKnob.value * (maxBPM - minBPM)) + minBPM;
+
+        if (!isEditing) { BPM = 120; }
+        else {
+            BPM = (int)(BPMKnob.value * (maxBPM - minBPM)) + minBPM;
+        }
         secondsPerQuarterNote = 60f / BPM;
 
         timeInterval += Time.deltaTime;
@@ -108,7 +138,7 @@ public class DAW : MonoBehaviour {
                 print("Finished");
             }
 
-            if (Input.GetKeyDown(KeyCode.N)) {
+            if (Input.GetKeyDown(KeyCode.N) && isEditing) {
                 if (i == editingChannel) {
                     if (i == 0) {
                         score.bass = Score.GetRandomBar(score.bars, score.bass);

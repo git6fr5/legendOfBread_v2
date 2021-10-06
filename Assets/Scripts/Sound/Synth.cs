@@ -16,6 +16,7 @@ public class Synth : MonoBehaviour {
 
     /* --- Settings --- */
     [Space(5)] [Header("Settings")]
+    [SerializeField] public bool isEditing;
     [SerializeField] [ReadOnly] public static float sampleRate; // The amount of times per second that the value of the wave is queried.
     [SerializeField] [ReadOnly] public int overtones = 5;
 
@@ -56,7 +57,7 @@ public class Synth : MonoBehaviour {
 
     [SerializeField] public Knob decayKnob;
     [SerializeField] [ReadOnly] public float decay;
-    [SerializeField] [ReadOnly] public float maxDecay = 10f;
+    [SerializeField] [ReadOnly] public float maxDecay = 50f;
 
     public int octaveShift;
 
@@ -70,9 +71,12 @@ public class Synth : MonoBehaviour {
 
     void Awake() {
         sampleRate = AudioSettings.outputSampleRate;
+        Wave.NoiseDistribution(50, 0.5f, 0.35f);
     }
 
     void Update() {
+
+        if (!isEditing) { return; }
 
         volume = volumeKnob.value * maxVolume;
 
@@ -182,17 +186,29 @@ public class Synth : MonoBehaviour {
 
         octaveShift = octave;
 
-        volumeKnob.value = modifiers[0] / maxVolume;
-        attackKnob.value = modifiers[1] / maxAttack;
-        sustainKnob.value = modifiers[2] / maxSustain;
-        decayKnob.value = modifiers[3] / maxDecay;
+        volume = modifiers[0];
+        attack = modifiers[1];
+        sustain = modifiers[2];
+        decay = modifiers[3];
 
-        factorAKnob.value = factors[0];
-        factorBKnob.value = factors[1];
+        factorA = factors[0];
+        factorB = factors[1];
 
-        distributionA.SetValues(distributionAFloat);
-        distributionB.SetValues(distributionBFloat);
+        overtoneDistributionA = distributionAFloat;
+        overtoneDistributionB = distributionBFloat;
 
+        if (isEditing) {
+            volumeKnob.value = modifiers[0] / maxVolume;
+            attackKnob.value = modifiers[1] / maxAttack;
+            sustainKnob.value = modifiers[2] / maxSustain;
+            decayKnob.value = modifiers[3] / maxDecay;
+
+            factorAKnob.value = factors[0];
+            factorBKnob.value = factors[1];
+
+            distributionA.SetValues(distributionAFloat);
+            distributionB.SetValues(distributionBFloat);
+        }
 
     }
 

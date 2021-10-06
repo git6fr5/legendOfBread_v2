@@ -4,30 +4,14 @@ using UnityEngine;
 
 public class View : MonoBehaviour {
 
-    public enum Season {
-        Summer,
-        Autumn,
-        Winter,
-        Spring
-    }
-
-    public enum DayTime {
-        Dawn,
-        Morning,
-        Afternoon,
-        Evening,
-
-        Dusk,
-        Night,
-        Midnight,
-        Twilight,
-
-        count
-    }
-
     Vector3 origin;
-    public Transform followTransform;
     public bool isOverworld;
+
+    public Overworld overworld;
+    public Transform playerTransform;
+
+    [SerializeField] [ReadOnly] Vector2 offset = new Vector2(16f / 2f, 9f / 2f);
+
 
     [Range(0f, 5f)] public float shakeStrength = 1f;
     public float shakeDuration = 0.5f;
@@ -37,104 +21,38 @@ public class View : MonoBehaviour {
 
     void Awake() {
         origin = transform.position;
-        followTransform.parent = transform;
-
-        daylightColors.Add(DayTime.Dawn, dawnColor);
-        daylightColors.Add(DayTime.Morning, morningColor);
-        daylightColors.Add(DayTime.Afternoon, afternoonColor);
-        daylightColors.Add(DayTime.Evening, eveningColor);
-        daylightColors.Add(DayTime.Dusk, duskColor);
-        daylightColors.Add(DayTime.Night, nightColor);
-        daylightColors.Add(DayTime.Midnight, midnightColor);
-        daylightColors.Add(DayTime.Twilight, twilightColor);
-
+        playerTransform.parent = null;
     }
 
-    void Update() {
-        if (isOverworld == true) {
-            Follow();
-        }
-        else {
-            followTransform.parent = transform;
-            transform.position = origin;
-        }
 
+    void Update() {
+        // Check for the overworld
+        if (overworld != null) {
+            SnapToScene();
+        }
+        // Shake the camera
         if (shake) {
             shake = Shake();
         }
+    }
 
-        if (dayCycle == null) {
-            // approx.
-            dayCycle = StartCoroutine(DayCycle(Time.deltaTime * dayUpdateTickFrequency));
+    void SnapToScene() {
+
+        Transform scene = null;
+        float minLength = Mathf.Infinity;
+        for (int i = 0; i < overworld.scenes.Length; i++) {
+            float length = (playerTransform.position - (overworld.scenes[i].position + (Vector3)offset)).magnitude;
+            if (length < minLength) {
+                scene = overworld.scenes[i];
+                minLength = length;
+            }
         }
 
-        ticks = GameRules.gameTicks % ticksPerDay;
-        daytime = (DayTime)((float)ticks * (int)DayTime.count / (float)ticksPerDay);
+        transform.position = new Vector3(scene.position.x + offset.x, scene.position.y + offset.y, transform.position.z);
 
     }
 
-    // Renderer
-    public Color dawnColor = Color.white;
-    public Color morningColor = Color.white;
-    public Color afternoonColor = Color.white;
-    public Color eveningColor = Color.white;
-    public Color duskColor = Color.white;
-    public Color nightColor = Color.white;
-    public Color midnightColor = Color.white;
-    public Color twilightColor = Color.white;
-    public Dictionary<DayTime, Color> daylightColors = new Dictionary<DayTime, Color>();
-
-    public bool renderDayCycle;
-    public Material dayTimeMaterial;
-    public Material defaultMaterial;
-    int dayUpdateTickFrequency = 64;
-    Coroutine dayCycle = null;
-
-
-    // public Season season;
-    public DayTime daytime;
-
-    public int ticks;
-    public int ticksPerDay;
-
-
-    IEnumerator DayCycle(float delay) {
-        yield return new WaitForSeconds(delay);
-        dayCycle = StartCoroutine(DayCycle(delay));
-        float percentPassed = ((float)ticks * (int)DayTime.count / (float)ticksPerDay) - (int)daytime;
-        Color newColor = daylightColors[daytime] * (1f - percentPassed) + daylightColors[(DayTime)(((int)daytime + 1) % (int)DayTime.count)] * percentPassed;
-        dayTimeMaterial.SetColor("_Color", newColor);
-
-        daylightColors[DayTime.Dawn] = dawnColor;
-        daylightColors[DayTime.Morning] = morningColor;
-        daylightColors[DayTime.Afternoon] = afternoonColor;
-        daylightColors[DayTime.Evening] = eveningColor;
-        daylightColors[DayTime.Dusk] = duskColor;
-        daylightColors[DayTime.Night] = nightColor;
-        daylightColors[DayTime.Midnight] = midnightColor;
-        daylightColors[DayTime.Twilight] = twilightColor;
-
-        yield return null;
-
-    }
-
-    void OnRenderImage(RenderTexture source, RenderTexture destination) {
-        if (renderDayCycle) {
-            Graphics.Blit(source, destination, dayTimeMaterial);
-        }
-        else {
-            Graphics.Blit(source, destination, defaultMaterial);
-        }
-    }
-
-    void Follow() {
-        if (followTransform.parent = transform) {
-            followTransform.parent = null;
-        }
-        transform.position = new Vector3(followTransform.position.x, followTransform.position.y, origin.z);
-    }
-
-    bool Shake() {
+    public bool Shake() {
         elapsedTime += Time.deltaTime;
         if (elapsedTime >= shakeDuration) {
             elapsedTime = 0f;
