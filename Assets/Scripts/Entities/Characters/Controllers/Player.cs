@@ -69,8 +69,8 @@ public class Player : Controller {
             }
         }
 
-        // Adjust the orientation if a key is pressed and no items are active.
-        if (state.activeItem == null && pressedKeys.Count > 0) {
+            // Adjust the orientation if a key is pressed and no items are active.
+            if (state.activeItem == null && pressedKeys.Count > 0) {
             orientationVector = movementKeys[pressedKeys[0]];
         }
         else if (state.activeItem) {

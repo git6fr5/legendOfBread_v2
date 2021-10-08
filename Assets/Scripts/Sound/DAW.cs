@@ -91,7 +91,7 @@ public class DAW : MonoBehaviour {
     void Update() {
 
 
-        if (!isEditing) { BPM = 120; }
+        if (!isEditing) { BPM = 160; }
         else {
             BPM = (int)(BPMKnob.value * (maxBPM - minBPM)) + minBPM;
         }
@@ -138,8 +138,8 @@ public class DAW : MonoBehaviour {
                 print("Finished");
             }
 
-            if (Input.GetKeyDown(KeyCode.N) && isEditing) {
-                if (i == editingChannel) {
+            if (Input.GetKeyDown(KeyCode.N)) {
+                if (isEditing && i == editingChannel) {
                     if (i == 0) {
                         score.bass = Score.GetRandomBar(score.bars, score.bass);
                     }
@@ -147,16 +147,25 @@ public class DAW : MonoBehaviour {
                         score.treble = Score.GetRandomBar(score.bars, score.treble);
                     }
                     // channels[i].clef = Score.GetRandomBar(score.bars);
+
+                    // Need to make it so these automatically get from treble and bass.
+                    score.SetNodesFromScore(score.treble, score.trebleNodes);
+                    score.SetNodesFromScore(score.bass, score.bassNodes);
+                    //score.SetNodesFromScore(channels[1].clef, score.trebleNodes);
+                    //score.SetNodesFromScore(channels[0].clef, score.bassNodes);
+
+                    StopChannel(channels[i]);
+                    PlayChannel(channels[i]);
+                }
+                else {
+
+                    for (int j = 0;  j < score.treble.tones.Count;  j++) {
+                        // score.treble.tones[j] = (Random.Range(0f, 1f) > 0.85f) ? (Tone)(((int)score.treble.tones[j] + 2) % (int)Tone.toneCount) : score.treble.tones[j];
+                    }
+
                 }
 
-                // Need to make it so these automatically get from treble and bass.
-                score.SetNodesFromScore(score.treble, score.trebleNodes);
-                score.SetNodesFromScore(score.bass, score.bassNodes);
-                //score.SetNodesFromScore(channels[1].clef, score.trebleNodes);
-                //score.SetNodesFromScore(channels[0].clef, score.bassNodes);
-
-                StopChannel(channels[i]);
-                PlayChannel(channels[i]);
+                
             }
 
             if (channels[i].synth.audioSource.isPlaying) {
