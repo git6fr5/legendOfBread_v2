@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 using CHANNEL = MapEditor.CHANNEL;
-using SHAPE = Geometry.SHAPE;
+using SHAPE = Geometry.Shape;
 
 public class Minimap : MonoBehaviour {
 
@@ -37,7 +37,7 @@ public class Minimap : MonoBehaviour {
             for (int j = 0; j < map.size; j++) {
                 Vector3Int tilePosition = Geometry.GridToTileMap(i, j);
 
-                if (map.shapeGrid[i][j] != (int)SHAPE.EMPTY) {
+                if (map.shapeGrid[i][j] != (int)SHAPE.Empty) {
                     TileBase tile = minimapTile;
                     minimapMap.SetTile(tilePosition, tile);
                 }

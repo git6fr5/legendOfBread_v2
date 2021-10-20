@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-using SHAPE = Geometry.SHAPE;
-using DIRECTION = Compass.DIRECTION;
+using SHAPE = Geometry.Shape;
+using DIRECTION = Compass.Direction;
 using CHALLENGE = Room.CHALLENGE;
 
 public class RoomEditor : MonoBehaviour {
@@ -131,7 +131,7 @@ public class RoomEditor : MonoBehaviour {
             PrintEdit(room.mobGrid, mobMap);
         }
         else if (Input.GetMouseButtonDown(1)) {
-            room.mobGrid = Geometry.EditInteriorPoint(room.transform, room.mobGrid, room.borderGrid, (int)DIRECTION.EMPTY);
+            room.mobGrid = Geometry.EditInteriorPoint(room.transform, room.mobGrid, room.borderGrid, (int)DIRECTION.Empty);
             PrintEdit(room.mobGrid, mobMap);
         }
     }
@@ -143,7 +143,7 @@ public class RoomEditor : MonoBehaviour {
             PrintEdit(room.trapGrid, trapMap);
         }
         else if (Input.GetMouseButtonDown(1)) {
-            room.trapGrid = Geometry.EditInteriorPoint(room.transform, room.trapGrid, room.borderGrid, (int)DIRECTION.EMPTY);
+            room.trapGrid = Geometry.EditInteriorPoint(room.transform, room.trapGrid, room.borderGrid, (int)DIRECTION.Empty);
             PrintEdit(room.trapGrid, trapMap);
         }
     }

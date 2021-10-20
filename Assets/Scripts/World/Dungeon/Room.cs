@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-using ORIENTATION = Compass.ORIENTATION;
-using DIRECTION = Compass.DIRECTION;
-using SHAPE = Geometry.SHAPE;
+using ORIENTATION = Compass.Orientation;
+using DIRECTION = Compass.Direction;
+using SHAPE = Geometry.Shape;
 
 [RequireComponent(typeof(Grid))]
 public class Room : MonoBehaviour {
@@ -41,7 +41,7 @@ public class Room : MonoBehaviour {
     public int border = 1;
     // File Management.
     public static string path = "DataFiles/Rooms/";
-    public static string identifierFilename = "rooms";
+    public static string listFile = "rooms";
 
     /* --- Unity --- */
     // Runs once on compilation
@@ -54,7 +54,7 @@ public class Room : MonoBehaviour {
     // Reads and constructs a room from a file.
     public void Open(string filename) {
         List<int[][]> channels = IO.OpenCSV(path, filename);
-        int[] identifiers = IO.FindInListFile(filename);
+        int[] identifiers = IO.FindInListFile(path, listFile, filename);
         shape = (SHAPE)identifiers[0];
         challenge = (CHALLENGE)identifiers[1]; 
         mobGrid = channels[0];
@@ -65,9 +65,9 @@ public class Room : MonoBehaviour {
     /* --- Methods --- */
     // Resets the room state
     public void Reset() {
-        floorGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
-        mobGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
-        trapGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
+        floorGrid = Geometry.Grid(SHAPE.Empty, size, size);
+        mobGrid = Geometry.Grid(SHAPE.Empty, size, size);
+        trapGrid = Geometry.Grid(SHAPE.Empty, size, size);
     }
 
     // Constructs the room setting.

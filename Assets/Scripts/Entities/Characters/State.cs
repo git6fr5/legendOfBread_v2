@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿/* --- Libraries --- */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Orientation = Compass.ORIENTATION;
+
+/* --- Enumerations --- */
+using Orientation = Compass.Orientation;
 
 public class State : MonoBehaviour {
 
@@ -43,7 +46,7 @@ public class State : MonoBehaviour {
         Pushing,
     }
 
-    public Orientation orientation = Orientation.RIGHT;
+    public Orientation orientation = Orientation.Right;
     public Movement movement = Movement.Idle;
     public Vitality vitality = Vitality.Healthy;
     public Action action = Action.Inactive;

@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 
-using DIRECTION = Compass.DIRECTION;
-using SHAPE = Geometry.SHAPE;
+using DIRECTION = Compass.Direction;
+using SHAPE = Geometry.Shape;
 
 public class Map : MonoBehaviour {
 
@@ -48,15 +48,17 @@ public class Map : MonoBehaviour {
         entranceGrid = channels[2];
         nodeGrid = channels[3];
         FindEntrances();
+        // print(entrance[0]);
+        // print(entrance[1]);
     }
 
     /* --- Methods --- */
     // Resets the room state
     public void Reset() {
-        shapeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
+        shapeGrid = Geometry.Grid(SHAPE.Empty, size, size);
         nodeGrid = new int[][] { };
-        challengeGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
-        entranceGrid = Geometry.Grid(SHAPE.EMPTY, size, size);
+        challengeGrid = Geometry.Grid(SHAPE.Empty, size, size);
+        entranceGrid = Geometry.Grid(SHAPE.Empty, size, size);
     }
 
     public void FindEntrances() {

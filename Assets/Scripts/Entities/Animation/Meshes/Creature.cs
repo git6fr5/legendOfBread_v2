@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿/* --- Modules --- */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using ORIENTATION = Compass.ORIENTATION;
+/* --- Enumerations --- */
+using Orientation = Compass.Orientation;
 using Action = State.Action;
 using Vitality = State.Vitality;
 using Movement = State.Movement;

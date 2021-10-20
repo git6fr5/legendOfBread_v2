@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿/* --- Libraries --- */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using ORIENTATION = Compass.ORIENTATION;
+/* --- Enumerations --- */
+using Orientation = Compass.Orientation;
 using Action = State.Action;
 
 [RequireComponent(typeof(Rigidbody2D))]

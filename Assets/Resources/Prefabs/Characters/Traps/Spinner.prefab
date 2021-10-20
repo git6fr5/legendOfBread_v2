@@ -118,7 +118,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 1916190443933977279}
-  targetTag: Player
   container: []
 --- !u!1 &1916190443188450491
 GameObject:
@@ -192,7 +191,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 160454865
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 765d5055523da474aa949aaa4fed9620, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -240,16 +239,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1916190443188450491}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 524de1ecd807e4543b4941427e172562, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c1d979acd4ec1943911999aed525a90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
+  overhead: {fileID: 0}
   hull: {fileID: 3975625968950484730}
-  depth: 0
-  trap: {fileID: 1916190443933977279}
-  off:
-  - {fileID: 21300000, guid: 765d5055523da474aa949aaa4fed9620, type: 3}
-  on:
-  - {fileID: 21300000, guid: 765d5055523da474aa949aaa4fed9620, type: 3}
+  frame: {fileID: 1916190443188450484}
 --- !u!1 &1916190443749383477
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,7 +334,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 1916190443933977279}
-  targetTag: Player
   container: []
 --- !u!1 &1916190443933977278
 GameObject:
@@ -411,14 +406,16 @@ MonoBehaviour:
   maxHealth: 0
   health: 0
   baseSpeed: 1
+  enemyTags: []
+  equipment: []
+  activeItem: {fileID: 0}
+  carryingStructure: {fileID: 0}
   orientation: 0
-  isMoving: 0
-  isAttacking: 0
-  isHurt: 0
-  isDead: 0
-  attackBuffer: 0.4
-  hurtBuffer: 0.4
-  deathBuffer: 0.6
+  movement: 0
+  vitality: 0
+  action: 0
+  actionBuffer: 0
+  vitalityBuffer: 0.4
 --- !u!114 &1916190443933977279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,12 +429,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: {fileID: 0}
+  body: {fileID: 0}
+  mesh: {fileID: 0}
   id: 2
   origin: {x: 0, y: 0}
   movementVector: {x: 0, y: 0}
-  orientationVector: {x: 0, y: 0}
   moveSpeed: 0
-  activateAttack: 0
+  momentumVector: {x: 0, y: 0}
+  orientationVector: {x: 0, y: 0}
+  fieldPulse: 0
   button: 1
   rotationSpeed: 8
   damage: 1
@@ -548,7 +548,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 160454865
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -6607481912129624618, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -573,8 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc68205a6e7e41147860d75ac695a7d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hull: {fileID: 3329672062925058678}
-  depth: 0
+  spriteRenderer: {fileID: 0}
   effect:
   - {fileID: -6607481912129624618, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -7250195882505504687, guid: 2145d88719e485a4aa18e380819447da, type: 3}
@@ -584,6 +583,13 @@ MonoBehaviour:
   - {fileID: -4701697456131926120, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -1711208824211276139, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -3769374411695510437, guid: 2145d88719e485a4aa18e380819447da, type: 3}
+  inFront: 1
+  isLoop: 1
+  isDisposable: 1
+  frameRate: 8
+  timeInterval: 0
+  isPaused: 0
+  pauseFrame: -1
 --- !u!1 &3329672062837066046
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,7 +692,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 160454865
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -6607481912129624618, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -711,8 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc68205a6e7e41147860d75ac695a7d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hull: {fileID: 3329672064396515801}
-  depth: 0
+  spriteRenderer: {fileID: 0}
   effect:
   - {fileID: -6607481912129624618, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -7250195882505504687, guid: 2145d88719e485a4aa18e380819447da, type: 3}
@@ -722,6 +727,13 @@ MonoBehaviour:
   - {fileID: -4701697456131926120, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -1711208824211276139, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -3769374411695510437, guid: 2145d88719e485a4aa18e380819447da, type: 3}
+  inFront: 1
+  isLoop: 1
+  isDisposable: 1
+  frameRate: 8
+  timeInterval: 0
+  isPaused: 0
+  pauseFrame: -1
 --- !u!1 &3329672062925058677
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,7 +866,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 160454865
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -6607481912129624618, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -879,8 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc68205a6e7e41147860d75ac695a7d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hull: {fileID: 3329672062837066047}
-  depth: 0
+  spriteRenderer: {fileID: 0}
   effect:
   - {fileID: -6607481912129624618, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -7250195882505504687, guid: 2145d88719e485a4aa18e380819447da, type: 3}
@@ -890,6 +901,13 @@ MonoBehaviour:
   - {fileID: -4701697456131926120, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -1711208824211276139, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -3769374411695510437, guid: 2145d88719e485a4aa18e380819447da, type: 3}
+  inFront: 1
+  isLoop: 1
+  isDisposable: 1
+  frameRate: 8
+  timeInterval: 0
+  isPaused: 0
+  pauseFrame: -1
 --- !u!1 &3329672064396515800
 GameObject:
   m_ObjectHideFlags: 0
@@ -992,7 +1010,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 160454865
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -6607481912129624618, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1017,8 +1035,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc68205a6e7e41147860d75ac695a7d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hull: {fileID: 3329672063272315237}
-  depth: 0
+  spriteRenderer: {fileID: 0}
   effect:
   - {fileID: -6607481912129624618, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -7250195882505504687, guid: 2145d88719e485a4aa18e380819447da, type: 3}
@@ -1028,6 +1045,13 @@ MonoBehaviour:
   - {fileID: -4701697456131926120, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -1711208824211276139, guid: 2145d88719e485a4aa18e380819447da, type: 3}
   - {fileID: -3769374411695510437, guid: 2145d88719e485a4aa18e380819447da, type: 3}
+  inFront: 1
+  isLoop: 1
+  isDisposable: 1
+  frameRate: 8
+  timeInterval: 0
+  isPaused: 0
+  pauseFrame: -1
 --- !u!1 &4079271604691434594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,7 +1140,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 1916190443933977279}
-  targetTag: Player
   container: []
 --- !u!1 &6393426152708089127
 GameObject:
@@ -1206,5 +1229,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 1916190443933977279}
-  targetTag: Player
   container: []

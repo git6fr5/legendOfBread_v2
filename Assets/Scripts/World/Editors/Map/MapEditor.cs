@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-using SHAPE = Geometry.SHAPE;
-using DIRECTION = Compass.DIRECTION;
-using ORIENTATION = Compass.ORIENTATION;
+using SHAPE = Geometry.Shape;
+using DIRECTION = Compass.Direction;
+using ORIENTATION = Compass.Orientation;
 using CHALLENGE = Room.CHALLENGE;
 using ENTRANCE = Map.ENTRANCE;
 
@@ -114,7 +114,7 @@ public class MapEditor : MonoBehaviour {
             PrintEdit();
         }
         if (Input.GetMouseButtonDown(1)) {
-            map.shapeGrid = Geometry.EditPoint(map.transform, map.shapeGrid, (int)SHAPE.EMPTY);
+            map.shapeGrid = Geometry.EditPoint(map.transform, map.shapeGrid, (int)SHAPE.Empty);
             PrintEdit();
         }
     }
@@ -219,8 +219,8 @@ public class MapEditor : MonoBehaviour {
         map.nodeGrid = new int[activeNodes.Count][];
         for (int i = 0; i < activeNodes.Count; i++) {
             int[] nodeArray = new int[] { 
-                activeNodes[i].id0[0], activeNodes[i].id0[1], 
-                activeNodes[i].id1[0], activeNodes[i].id1[1], 
+                activeNodes[i].id0[0] - 1, activeNodes[i].id0[1], 
+                activeNodes[i].id1[0] - 1, activeNodes[i].id1[1], 
                 activeNodes[i].offset, (int)activeNodes[i].access 
             };
             map.nodeGrid[i] = nodeArray;
@@ -235,7 +235,7 @@ public class MapEditor : MonoBehaviour {
         for (int i = 0; i < nodes.Count; i++) {
             for (int j = 0; j < map.nodeGrid.Length; j++) {
                 NodeSelector node = nodes[i]; int[] nodeGrid = map.nodeGrid[j];
-                if (node.id0[0] == nodeGrid[0] && node.id0[1] == nodeGrid[1] && node.id1[0] == nodeGrid[2] && node.id1[1] == nodeGrid[3] && node.offset == nodeGrid[4]) {
+                if (node.id0[0] - 1 == nodeGrid[0] && node.id0[1] == nodeGrid[1] && node.id1[0] - 1 == nodeGrid[2] && node.id1[1] == nodeGrid[3] && node.offset == nodeGrid[4]) {
                     print("found active node");
                     node.SetActive();
                     node.access = (NodeSelector.ACCESS)nodeGrid[5];

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using DIRECTION = Compass.DIRECTION;
+using DIRECTION = Compass.Direction;
 
 public class Spark : Trap
 {

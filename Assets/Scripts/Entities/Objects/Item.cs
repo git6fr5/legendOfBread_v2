@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿/* --- Libraries --- */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/* --- Enumerations --- */
 using Action = State.Action;
-using Orientation = Compass.ORIENTATION;
+using Orientation = Compass.Orientation;
 
 /// <summary>
 /// Any item that is equippable.
