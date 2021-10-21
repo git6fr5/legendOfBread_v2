@@ -16,6 +16,11 @@ public class Spinner : Trap {
     protected override void On() {
         float deltaRotation = rotationSpeed * Time.fixedDeltaTime;
         arms.eulerAngles = arms.eulerAngles + Vector3.forward * deltaRotation;
+
+        foreach (Transform child in arms) {
+            child.eulerAngles = -arms.eulerAngles;
+        }
+
     }
 
     /* --- Event Actions --- */
