@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /* --- Enumerations --- */
-using Orientation = Compass.ORIENTATION;
+using Orientation = Compass.Orientation;
 using Movement = State.Movement;
 using Action = State.Action;
 using Vitality = State.Vitality;
@@ -85,7 +85,7 @@ public class Controller : MonoBehaviour {
         if (orientationVector != Vector2.zero) {
             return Compass.VectorOrientations[orientationVector]; // Compass.SnapVectorToOrientation(orientationVector);
         }
-        return Orientation.UP;
+        return Orientation.Up;
     }
 
     /* --- Internal Event Actions --- */

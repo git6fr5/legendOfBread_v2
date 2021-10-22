@@ -41,6 +41,10 @@ public class GameRules : MonoBehaviour {
     public static float gravityScale = 10f;
     public static float perspectiveAngle = Mathf.PI / 6;
 
+    /* --- Scenes --- */
+    public static string DungeonScene = "Dungeon";
+
+
     /* --- Unity --- */
     void Update() {
         Tick();

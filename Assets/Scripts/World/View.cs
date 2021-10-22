@@ -48,6 +48,10 @@ public class View : MonoBehaviour {
             }
         }
 
+        for (int i = 0; i < overworld.scenes.Length; i++) {
+            overworld.scenes[i].gameObject.SetActive(false);
+        }
+        scene.gameObject.SetActive(true);
         transform.position = new Vector3(scene.position.x + offset.x, scene.position.y + offset.y, transform.position.z);
 
     }
