@@ -16,12 +16,12 @@ public class Pushable : Structure {
     [SerializeField] [Range(0f, 5f)] protected float pushDistance = 1f; // The distance this structure is pushed.
     [SerializeField] [Range(0f, 5f)] protected float pushSpeed = 3f; // The speed at which this structure is pushed.
     // Internal Pushing Mechanics.
-    [SerializeField] protected Vector2 targetPoint; // The position this object is interpolating towards.
-    [SerializeField] protected float pushFriction; // The factor by which this object slows down.
-    [HideInInspector] protected Vector3 origin; // The last snapped position of this object.
-    [HideInInspector] public float pushedTime = 0f; // The amount of time this has been pushed for.
-    [HideInInspector] public float pushInterval = 1f; // The maximum interval that this can be pushed for before snapping.
-    [HideInInspector] protected float pushBuffer; // The time between being interacted with and being pushed.
+    [SerializeField] [ReadOnly] protected Vector2 targetPoint; // The position this object is interpolating towards.
+    [SerializeField] [ReadOnly] protected float pushFriction; // The factor by which this object slows down.
+    [HideInInspector] [ReadOnly] protected Vector3 origin; // The last snapped position of this object.
+    [HideInInspector] [ReadOnly] public float pushedTime = 0f; // The amount of time this has been pushed for.
+    [SerializeField] [ReadOnly] private float pushInterval = 1f; // The maximum interval that this can be pushed for before snapping.
+    [SerializeField] [ReadOnly] private float pushBuffer; // The time between being interacted with and being pushed.
 
     /* --- Unity --- */
     // Runs once on instantiation.
@@ -62,9 +62,10 @@ public class Pushable : Structure {
         // Slow down this structure.
         body.velocity = body.velocity - (body.velocity * pushFriction * Time.deltaTime);
 
-        if (Vector2.Distance(transform.position, targetPoint) < GameRules.movementPrecision || pushedTime >= pushInterval || body.velocity.magnitude < GameRules.movementPrecision) {            
+        if (Vector2.Distance(transform.position, targetPoint) < GameRules.movementPrecision || pushedTime >= pushInterval || body.velocity.magnitude < GameRules.movementPrecision) {
             // Snap to the nearest grid.
-            transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), transform.position.z);
+            // transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), transform.position.z) + (Vector3)offset;
+            transform.position = Level.SnapToGrid(transform.position);
 
             // Freeze the body.
             body.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -77,6 +78,8 @@ public class Pushable : Structure {
         }
     }
 
+    private Vector2 offset = new Vector2(0.5f, 0f);
+
     /* --- Action Methods --- */
     void Push(Orientation pusherOrientation, Vector3 pusherPosition) {
         // Get the push direction.
@@ -84,7 +87,7 @@ public class Pushable : Structure {
 
         // Get the target point and snap it to the grid.
         targetPoint = (Vector2)transform.position + pushDistance * pushDirection;
-        targetPoint = new Vector2((float)(int)targetPoint.x, (float)(int)targetPoint.y);
+        targetPoint = new Vector2(targetPoint.x, targetPoint.y);
 
         // Apply the force.
         body.velocity = pushSpeed * pushDirection;

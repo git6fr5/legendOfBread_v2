@@ -9,16 +9,20 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class Level : MonoBehaviour {
 
+    [SerializeField] [ReadOnly] public int height;
+    [SerializeField] [ReadOnly] public int width;
+    public bool difficult;
+
     public List<Entity> entities;
     public Tilemap floorMap;
     public Tilemap borderMap;
 
-    public void SetFloor(Environment environment, int size) {
+    public void SetFloor(Environment environment) {
 
         environment.SetFloorTile();
 
-        for (int i = -1; i < size+1; i++) {
-            for (int j = -1; j < size+1; j++) {
+        for (int i = -1; i < height+1; i++) {
+            for (int j = -1; j < width+1; j++) {
                 // Get the position and tile.
                 Vector3Int tilePosition = GridToTileMap(i, j);
                 // print(tilePosition);
@@ -32,10 +36,10 @@ public class Level : MonoBehaviour {
 
     }
 
-    public void SetBorder(Environment environment, int size) {
+    public void SetBorder(Environment environment) {
 
-        for (int i = -1; i < size+1; i++) {
-            for (int j = -1; j < size+1; j++) {
+        for (int i = -1; i < height+1; i++) {
+            for (int j = -1; j < width+1; j++) {
                 // Get the position and tile.
                 Vector3Int tilePosition = GridToTileMap(i, j);
                 // print(tilePosition);
@@ -84,6 +88,16 @@ public class Level : MonoBehaviour {
     // Converts a grid coordinate to tile map position.
     public static Vector3Int GridToTileMap(int i, int j) {
         return new Vector3Int(j, i, 0);
+    }
+
+    public Vector3 GridToWorld(Vector2Int gridPosition) {
+        return new Vector3(gridPosition.x + 0.5f, height - gridPosition.y - 0.5f, 0f) + transform.position;
+    }
+
+    public static Vector3 SnapToGrid(Vector3 position) {
+        float snappedX = Mathf.Floor(position.x) + 0.5f;
+        float snappedY = Mathf.Round(position.y);
+        return new Vector3(snappedX, snappedY, 0f);
     }
 
 }

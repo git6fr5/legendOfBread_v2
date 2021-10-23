@@ -135,7 +135,7 @@ SpriteRenderer:
   m_SortingLayerID: 160454865
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2b928aa581a21944188aa05283c707ef, type: 3}
+  m_Sprite: {fileID: 2827113482637823355, guid: c9db4377809eba94983e714bf5876797, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -271,6 +271,7 @@ GameObject:
   - component: {fileID: 9043418084084050419}
   - component: {fileID: 9043418084084050420}
   - component: {fileID: 9043418084084050421}
+  - component: {fileID: 3878833445601983466}
   m_Layer: 0
   m_Name: Pushable Block
   m_TagString: Untagged
@@ -337,3 +338,17 @@ MonoBehaviour:
   pushFriction: 0
   pushedTime: 0
   pushInterval: 1
+--- !u!114 &3878833445601983466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9043418084084050422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871fd3d577cd52849b387dbe1c4c05d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vectorID: {x: 5, y: 3}
+  gridPosition: {x: 0, y: 0}

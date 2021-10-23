@@ -15,6 +15,7 @@ public class Loader : MonoBehaviour {
 
     /* --- Static Variables --- */
     public static string EntityLayer = "Entity";
+    public static string DifficultLayer = "Difficult";
     public static string DirectionLayer = "Direction";
 
     /* --- Dictionaries --- */
@@ -40,10 +41,7 @@ public class Loader : MonoBehaviour {
 
     /* --- Variables --- */
     [SerializeField] [ReadOnly] private LdtkJson json;
-    [SerializeField] [ReadOnly] public int height;
-    [SerializeField] [ReadOnly] public int width;
-
-    public int id;
+    public int id; // Consider moving this to level.
     public static string identifier = "Level_";
 
 
@@ -68,8 +66,8 @@ public class Loader : MonoBehaviour {
         json = lDtkData.FromJson();
 
         // Read the json data.
-        height = (int)(json.DefaultLevelHeight / json.DefaultGridSize);
-        width = (int)(json.DefaultLevelWidth / json.DefaultGridSize);
+        level.height = (int)(json.DefaultLevelHeight / json.DefaultGridSize);
+        level.width = (int)(json.DefaultLevelWidth / json.DefaultGridSize);
 
     }
 
@@ -109,8 +107,8 @@ public class Loader : MonoBehaviour {
         ClearLevel();
 
         // Load the background.
-        level.SetBorder(environment, height);
-        level.SetFloor(environment, height);
+        level.SetBorder(environment);
+        level.SetFloor(environment);
 
         if (ldtkLevel == null) {
             return;
@@ -121,6 +119,17 @@ public class Loader : MonoBehaviour {
         if (entityLayer != null) {
             level.entities = LoadEntityLayer(entityLayer);
         }
+
+        // Get the extra entities if difficulty is on.
+        if (level.difficult) {
+            LDtkUnity.LayerInstance difficultLayer = GetLayer(ldtkLevel, DifficultLayer);
+            if (difficultLayer != null) {
+                List<Entity> extraEntities = LoadEntityLayer(difficultLayer);
+                for (int i = 0; i < extraEntities.Count; i++) {
+                    level.entities.Add(extraEntities[i]);
+                }
+            }
+        } 
 
         // Technically this can happen in the above conditional.
         // But it feels cleaner this way.
@@ -181,7 +190,7 @@ public class Loader : MonoBehaviour {
         Entity entityBase = environment.GetEntityByVectorID(vectorID);
 
         if (entityBase != null) {
-            Entity newEntity = Instantiate(entityBase.gameObject, GridToWorld(gridPosition) + level.transform.position, Quaternion.identity, level.transform).GetComponent<Entity>();
+            Entity newEntity = Instantiate(entityBase.gameObject, level.GridToWorld(gridPosition), Quaternion.identity, level.transform).GetComponent<Entity>();
             newEntity.OnSpawn(gridPosition);
             return newEntity;
         }
@@ -270,7 +279,4 @@ public class Loader : MonoBehaviour {
         }
     }
 
-    public Vector3 GridToWorld(Vector2Int gridPosition) {
-        return new Vector3(gridPosition.x + 0.5f, height - gridPosition.y - 0.5f, 0f);
-    }
 }

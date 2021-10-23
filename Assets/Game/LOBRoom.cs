@@ -13,7 +13,7 @@ public class LOBRoom : MonoBehaviour
         // loader.level.AddExit(loader.height, Level.Location.Right, 0);
         // loader.level.AddExit(loader.height, Level.Location.Left, 0);
         // loader.level.AddExit(loader.height, Level.Location.Up, 0);
-        loader.level.AddExit(loader.height, Level.Location.Down, 0);
+        loader.level.AddExit(loader.level.height, Level.Location.Down, 0);
 
         player.transform.position = origin.position;
         player.state.health = player.state.maxHealth;

@@ -818,6 +818,14 @@ PrefabInstance:
       propertyPath: carryWalk.Array.data[15]
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7499720929307182049, guid: 4a470b12f33777040b376073dd208fdb, type: 3}
+      propertyPath: equipment.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7499720929307182049, guid: 4a470b12f33777040b376073dd208fdb, type: 3}
+      propertyPath: equipment.Array.data[0]
+      value: 
+      objectReference: {fileID: 7948338361113343579}
     - target: {fileID: 8012200341532117909, guid: 4a470b12f33777040b376073dd208fdb, type: 3}
       propertyPath: m_Name
       value: Player
@@ -838,5 +846,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 942c67ed4e022214a9d438290499a4f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7948338361113343579 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3203347170916359203, guid: 4a470b12f33777040b376073dd208fdb, type: 3}
+  m_PrefabInstance: {fileID: 4772330058477841016}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56d487321b9068742b2c89438398da47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
