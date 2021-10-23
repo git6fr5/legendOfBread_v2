@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
+  m_Name: Watermelon Tree
+  m_EditorClassIdentifier: 
+  m_DefaultSprite: {fileID: 2572236292851511218, guid: 0c00a3bf6eb886d4c8b9eeae407a357e, type: 3}
+  m_DefaultGameObject: {fileID: 3500126336693245344, guid: c9c8225b6f3150f4f9180c2035ddf77a, type: 3}
+  m_DefaultColliderType: 1
+  m_TilingRules: []
