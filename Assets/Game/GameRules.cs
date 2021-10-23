@@ -94,7 +94,7 @@ public class GameRules : MonoBehaviour {
     }
 
     public static void CameraShake() {
-        //Camera.main.GetComponent<View>().shake = true;
+        Camera.main.GetComponent<View>().shake = true;
     }
 
 }

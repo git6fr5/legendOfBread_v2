@@ -31,7 +31,7 @@ public class Spike : Item {
         Crush crush = controller.GetComponent<Crush>();
         actionBuffer = (crush.travelDistance / (crush.state.baseSpeed * crush.chargeSpeed)) * 8f / 4f;
 
-        effect.ControlledActivate(actionBuffer);
+        effect.FrameDelayedControlledActivate(actionBuffer);
 
         hitbox.controller = controller;
         hitbox.gameObject.SetActive(true);

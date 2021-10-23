@@ -262,7 +262,7 @@ MonoBehaviour:
   orientationVector: {x: 0, y: 0}
   fieldPulse: 0
   button: 2
-  rotationSpeed: 8
+  rotationSpeed: 12
   damage: 1
   arms: {fileID: 3329672062667560415}
 --- !u!114 &7257759466352348682

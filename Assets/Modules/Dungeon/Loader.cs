@@ -3,12 +3,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using LDtkUnity;
 
 /// <summary>
 /// Loads a level from the lDtk Data into the level using the environment.
 /// </summary>
 public class Loader : MonoBehaviour {
+
+    public UnityEvent OnLoad = new UnityEvent();
 
     /* --- Static Variables --- */
     public static string EntityLayer = "Entity";
@@ -37,8 +40,8 @@ public class Loader : MonoBehaviour {
 
     /* --- Variables --- */
     [SerializeField] [ReadOnly] private LdtkJson json;
-    [SerializeField] [ReadOnly] protected int height;
-    [SerializeField] [ReadOnly] protected int width;
+    [SerializeField] [ReadOnly] public int height;
+    [SerializeField] [ReadOnly] public int width;
 
     public int id;
     public static string identifier = "Level_";
@@ -47,10 +50,7 @@ public class Loader : MonoBehaviour {
     /* --- Unity --- */
     // Runs once before the first frame.
     void Start() {
-        LevelSettings();
-        LDtkUnity.Level ldtkLevel = GetLevelByID(id);
-        LoadLevel(ldtkLevel);
-        SetStream();
+        Open(id.ToString());
     }
 
     public void Open(string str_id) {
@@ -59,6 +59,7 @@ public class Loader : MonoBehaviour {
         LDtkUnity.Level ldtkLevel = GetLevelByID(id);
         LoadLevel(ldtkLevel);
         SetStream();
+        OnLoad.Invoke();
     }
 
     // Gets the level settings.

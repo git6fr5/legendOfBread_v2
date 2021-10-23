@@ -18,7 +18,7 @@ public class Spinner : Trap {
         arms.eulerAngles = arms.eulerAngles + Vector3.forward * deltaRotation;
 
         foreach (Transform child in arms) {
-            child.eulerAngles = -arms.eulerAngles;
+            child.eulerAngles = Vector3.zero;
         }
 
     }

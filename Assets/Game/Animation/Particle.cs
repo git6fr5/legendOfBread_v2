@@ -65,9 +65,28 @@ public class Particle : MonoBehaviour {
         Fire();
     }
 
+
     public void ControlledActivate(float duration) {
         frameRate = (float)(effect.Length) / duration;
         Activate(true);
+    }
+
+    public void FrameDelayedControlledActivate(float duration) {
+        DelayedControlledActivate(0f, duration);
+    }
+
+    public void DelayedControlledActivate(float delay, float duration) {
+        GetComponent<SpriteRenderer>().enabled = false;
+        ControlledActivate(duration);
+        isPaused = true;
+        StartCoroutine(IEDelayedControlledActivate(delay, duration));
+    }
+
+    IEnumerator IEDelayedControlledActivate(float delay, float duration) {
+        yield return new WaitForSeconds(delay);
+        isPaused = false;
+        GetComponent<SpriteRenderer>().enabled = true;
+        yield return null;
     }
 
     public void InheritLayer(string layerName, int index, int discrepancy = 1) {

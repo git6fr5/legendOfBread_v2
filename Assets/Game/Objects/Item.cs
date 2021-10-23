@@ -36,9 +36,9 @@ public class Item : MonoBehaviour {
 
     /* --- Methods --- */
     public Action Activate(Controller controller) {
+        transform.localRotation = Compass.OrientationAngles[controller.state.orientation];
         isActive = OnActivate(controller);
         if (isActive) {
-            transform.localRotation = Compass.OrientationAngles[controller.state.orientation];
             controller.state.activeItem = this;
             timeInterval = 0f;
             return action;

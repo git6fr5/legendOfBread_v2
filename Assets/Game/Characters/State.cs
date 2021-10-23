@@ -58,7 +58,7 @@ public class State : MonoBehaviour {
     [HideInInspector] public float actionBuffer;
 
     // Timed State Buffers
-    [HideInInspector] Coroutine vitalityTimer;
+    [HideInInspector] public Coroutine vitalityTimer;
     [Range(0.05f, 1f)] public float vitalityBuffer = 0.4f; // The interval between dying and despawning.
 
     /* --- Unity --- */

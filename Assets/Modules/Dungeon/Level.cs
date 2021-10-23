@@ -17,8 +17,8 @@ public class Level : MonoBehaviour {
 
         environment.SetFloorTile();
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = -1; i < size+1; i++) {
+            for (int j = -1; j < size+1; j++) {
                 // Get the position and tile.
                 Vector3Int tilePosition = GridToTileMap(i, j);
                 // print(tilePosition);
@@ -47,6 +47,36 @@ public class Level : MonoBehaviour {
                 
             }
         }
+
+    }
+
+    public enum Location {
+        Right, Up, Left, Down
+    }
+
+    /* --- Dictionaries --- */
+    public Dictionary<Location, Vector2> loc_vec = new Dictionary<Location, Vector2>() {
+        { Location.Down, new Vector2(0.5f, 0f) },
+        // Note: technically this is the up arrow, but the coordinates on the y axis are backwards.
+        { Location.Left, new Vector2(0f, 0.5f) },
+        { Location.Right, new Vector2(1f, 0.5f) },
+        { Location.Up, new Vector2(0.5f, 1f) }
+    };
+
+    public void AddExit(int size, Location location, int offset) {
+
+        Vector2 vector = loc_vec[location] * (size);
+        if (vector.x == 0f) {
+            vector.x = -1f;
+        }
+        if (vector.y == 0f) {
+            vector.y = -1f;
+        }
+
+
+        Vector3Int tilePosition = GridToTileMap((int)vector.y, (int)vector.x);
+        print(tilePosition);
+        borderMap.SetTile(tilePosition, null);
 
     }
 

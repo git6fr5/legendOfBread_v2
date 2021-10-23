@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 712035800519618848, guid: fbdc6226b1bbb1445808f0f6addc30bd, type: 3}
+  m_Sprite: {fileID: 9081050864577520736, guid: 69ceff124270c7047b21fbc82200b96d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -370,9 +370,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   damage: 1
-  travelDistance: 2.5
+  travelDistance: 2
   isCharging: 0
-  chargeSpeed: 5
+  chargeSpeed: 3
 --- !u!114 &1815690484085274547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,7 +389,8 @@ MonoBehaviour:
   health: 0
   baseSpeed: 1.5
   enemyTags: []
-  equipment: []
+  equipment:
+  - {fileID: 8541821309123861167}
   activeItem: {fileID: 0}
   carryingStructure: {fileID: 0}
   orientation: 0
