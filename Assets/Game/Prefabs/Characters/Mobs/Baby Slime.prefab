@@ -57,7 +57,7 @@ Transform:
   m_GameObject: {fileID: 3002490966484817476}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -4.62, y: -0.498, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 8537975596508906534}
   m_Father: {fileID: 8383983335340645594}
@@ -139,6 +139,8 @@ MonoBehaviour:
   isDisposable: 1
   frameRate: 4
   timeInterval: 0
+  isPaused: 0
+  pauseFrame: -1
 --- !u!1 &8033866167589245901
 GameObject:
   m_ObjectHideFlags: 0
@@ -240,7 +242,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 8383983335340645592}
-  targetTag: Player
   container: []
 --- !u!1 &8383983334422823109
 GameObject:
@@ -418,7 +419,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
-  overhead: {fileID: 0}
+  overhead: {fileID: 8047578687660673115}
   hull: {fileID: 8383983335884344620}
   frame: {fileID: 8383983334749519895}
   state: {fileID: 8383983335340645593}
@@ -429,6 +430,7 @@ MonoBehaviour:
   defaultMaterial: {fileID: 2100000, guid: b5fef772705834242a41dac1825e5f73, type: 2}
   hurtMaterial: {fileID: 2100000, guid: 62a228f52b24d234280c1ac2e975764c, type: 2}
   deathMaterial: {fileID: 2100000, guid: 3b78a2eee01003d4f8861952dae809f1, type: 2}
+  isBobbly: 0
   timeInterval: 0
 --- !u!1 &8383983335340645599
 GameObject:
@@ -439,8 +441,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8383983335340645594}
-  - component: {fileID: 8383983335340645593}
   - component: {fileID: 8383983335340645592}
+  - component: {fileID: 8383983335340645593}
   - component: {fileID: 8383983335340645595}
   m_Layer: 0
   m_Name: Baby Slime
@@ -457,7 +459,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8383983335340645599}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8383983334749519892}
@@ -468,31 +470,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8383983335340645593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8383983335340645599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f4df1b9576890b49b3fc648be41583f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 1
-  health: 2
-  height: 0
-  baseSpeed: 1
-  jumpPulse: 0
-  activeItem: {fileID: 0}
-  equipment: []
-  orientation: 0
-  movement: 0
-  vitality: 0
-  action: 0
-  actionBuffer: 0
-  vitalityBuffer: 0.4
 --- !u!114 &8383983335340645592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -502,7 +479,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8383983335340645599}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f84cbf13ea5d77c40aca922502ad1222, type: 3}
+  m_Script: {fileID: 11500000, guid: d3405bf016e0abb47adb095635f3a1cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   state: {fileID: 0}
@@ -520,10 +497,40 @@ MonoBehaviour:
   idleFactor: 1
   aggressiveFactor: 1.25
   childSlime: {fileID: 8383983335340645592}
-  parentSlime: {fileID: 3060322277553909562, guid: e999b6d704adc6a4dba09f7f181392dc, type: 3}
-  trailObject: {fileID: 3002490966484817476}
-  damage: 1
+  parentSlime: {fileID: 3060322277553909563, guid: e999b6d704adc6a4dba09f7f181392dc, type: 3}
   isChild: 1
+  growTime: 3
+  damage: 1
+  idleDistance: 0.75
+  idleInterval: 1
+  trailObject: {fileID: 3002490966484817476}
+  trailMaxInterval: 1
+  trailInterval: 0
+--- !u!114 &8383983335340645593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383983335340645599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 942c67ed4e022214a9d438290499a4f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  health: 0
+  baseSpeed: 0.5
+  enemyTags: []
+  equipment: []
+  activeItem: {fileID: 0}
+  carryingStructure: {fileID: 0}
+  orientation: 0
+  movement: 0
+  vitality: 0
+  action: 0
+  actionBuffer: 0
+  vitalityBuffer: 0.4
 --- !u!50 &8383983335340645595
 Rigidbody2D:
   serializedVersion: 4

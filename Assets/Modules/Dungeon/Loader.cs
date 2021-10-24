@@ -53,7 +53,7 @@ public class Loader : MonoBehaviour {
 
     public void Open(string str_id) {
         LevelSettings();
-        int id = Int32.Parse(str_id);
+        id = Int32.Parse(str_id);
         LDtkUnity.Level ldtkLevel = GetLevelByID(id);
         LoadLevel(ldtkLevel);
         SetStream();
@@ -98,7 +98,6 @@ public class Loader : MonoBehaviour {
             return json.Levels[id];
         }
         print("Could not find level");
-        stream.text = this.id.ToString();
         return null;
     }
 
@@ -150,7 +149,9 @@ public class Loader : MonoBehaviour {
         // Reset the entities.
         if (level.entities != null) {
             for (int i = 0; i < level.entities.Count; i++) {
-                Destroy(level.entities[i].gameObject);
+                if (level.entities[i] != null) {
+                    Destroy(level.entities[i].gameObject);
+                }
             }
             level.entities = new List<Entity>();
         }

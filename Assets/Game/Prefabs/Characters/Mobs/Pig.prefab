@@ -30,6 +30,56 @@ Transform:
   m_Father: {fileID: 5352843811778211854}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3491771852275201626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6971789361215811136}
+  - component: {fileID: 9110064645771082486}
+  m_Layer: 0
+  m_Name: Raycast
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6971789361215811136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3491771852275201626}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5352843811778211854}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9110064645771082486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3491771852275201626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d26aa34ab3cefaf45add83141c9ffa89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 0.65
+  scale: 0.05
+  rayVectors:
+  - {x: 1, y: 0}
+  - {x: -1, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: -1}
 --- !u!1 &5352843811568169183
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,6 +173,7 @@ Transform:
   - {fileID: 6277366736031370641}
   - {fileID: 5352843813059837238}
   - {fileID: 8619456741531605998}
+  - {fileID: 6971789361215811136}
   m_Father: {fileID: 5352843813544815808}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -193,7 +244,7 @@ MonoBehaviour:
   overhead: {fileID: 6277366736031370641}
   hull: {fileID: 5352843813059837238}
   frame: {fileID: 8619456741531605999}
-  state: {fileID: 5352843813544815811}
+  state: {fileID: 5352843813544815812}
   idle:
   - {fileID: -982904232830982447, guid: 01c64e897978c6e459069f8a9a2195e3, type: 3}
   - {fileID: 2416434504916517810, guid: 01c64e897978c6e459069f8a9a2195e3, type: 3}
@@ -295,7 +346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ddfc4051b4f72941bee4c1e7d492816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 5352843813544815812}
+  controller: {fileID: 5352843813544815811}
 --- !u!1 &5352843813059837225
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,8 +387,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5352843813544815808}
   - component: {fileID: 5352843813544815811}
-  - component: {fileID: 5352843813544815809}
   - component: {fileID: 5352843813544815812}
+  - component: {fileID: 5352843813544815809}
+  - component: {fileID: 1150571129166210530}
   m_Layer: 0
   m_Name: Pig
   m_TagString: Mob
@@ -372,12 +424,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 5352843813544815813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f4df1b9576890b49b3fc648be41583f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6059eeaa7b403a647ae9b4a86d411bfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
-  health: 3
-  baseSpeed: 1
+  state: {fileID: 0}
+  body: {fileID: 0}
+  mesh: {fileID: 5352843811778211840}
+  id: 0
+  origin: {x: 0, y: 0}
+  movementVector: {x: 0, y: 0}
+  moveSpeed: 0
+  momentumVector: {x: 0, y: 0}
+  orientationVector: {x: 0, y: 0}
+  fieldPulse: 0
+  loot: []
+  vision: {fileID: 5352843811568169178}
+  idleFactor: 1
+  aggressiveFactor: 1.25
+  idleDistance: 0.5
+  idleInterval: 1
+  idleTicks: 0
+  canAttack: 0
+  attackRadius: 3
+  attackInterval: 3
+  raycast: {fileID: 9110064645771082486}
+--- !u!114 &5352843813544815812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5352843813544815813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 942c67ed4e022214a9d438290499a4f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 2
+  health: 0
+  baseSpeed: 0.75
   enemyTags: []
   equipment:
   - {fileID: 6821388457804500443}
@@ -410,7 +495,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5352843813544815812
+--- !u!114 &1150571129166210530
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -419,29 +504,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5352843813544815813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ff4b02753c663741a0ce7467983bff6, type: 3}
+  m_Script: {fileID: 11500000, guid: 871fd3d577cd52849b387dbe1c4c05d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: {fileID: 0}
-  body: {fileID: 0}
-  mesh: {fileID: 5352843811778211840}
-  id: 0
-  origin: {x: 0, y: 0}
-  movementVector: {x: 0, y: 0}
-  moveSpeed: 0
-  momentumVector: {x: 0, y: 0}
-  orientationVector: {x: 0, y: 0}
-  fieldPulse: 0
-  loot: []
-  vision: {fileID: 5352843811568169178}
-  idleFactor: 1
-  aggressiveFactor: 1.25
-  idleDistance: 1
-  idleInterval: 3
-  idleTicks: 0
-  canAttack: 1
-  attackRadius: 2.5
-  attackInterval: 2
+  vectorID: {x: 5, y: 0}
+  gridPosition: {x: 0, y: 0}
 --- !u!1 &8619456741531605996
 GameObject:
   m_ObjectHideFlags: 0
