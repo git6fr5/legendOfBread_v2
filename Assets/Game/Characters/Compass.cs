@@ -15,8 +15,8 @@ public class Compass : MonoBehaviour {
     public static Dictionary<Orientation, Vector2> OrientationVectors = new Dictionary<Orientation, Vector2>() {
         {Orientation.Up, Vector2.up },
         {Orientation.Right, Vector2.right },
-        {Orientation.Down, -Vector2.up },
-        {Orientation.Left, -Vector2.right }
+        {Orientation.Left, Vector2.left },
+        {Orientation.Down, Vector2.down }
     };
 
     public static Dictionary<Orientation, Quaternion> OrientationAngles = new Dictionary<Orientation, Quaternion>() {
@@ -29,8 +29,8 @@ public class Compass : MonoBehaviour {
     public static Dictionary<Vector2, Orientation> VectorOrientations = new Dictionary<Vector2, Orientation>() {
         { Vector2.up, Orientation.Up },
         { Vector2.right, Orientation.Right },
-        { -Vector2.up, Orientation.Down },
-        { -Vector2.right,Orientation.Left }
+        { Vector2.left,Orientation.Left },
+        { Vector2.down, Orientation.Down },
     };
 
     public static Vector2 SnapVector(Vector2 vector) {

@@ -54,12 +54,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3491771852275201626}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 5352843811778211854}
-  m_RootOrder: 3
+  m_Father: {fileID: 5352843813544815808}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9110064645771082486
 MonoBehaviour:
@@ -75,11 +75,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distance: 0.65
   scale: 0.05
-  rayVectors:
-  - {x: 1, y: 0}
-  - {x: -1, y: 0}
-  - {x: 0, y: 1}
-  - {x: 0, y: -1}
+  castCollisions: 
+  precision: 6
+  length: 1
+  outset: 0.65
 --- !u!1 &5352843811568169183
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,7 +109,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5352843813544815808}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5352843811568169178
 MonoBehaviour:
@@ -173,9 +172,8 @@ Transform:
   - {fileID: 6277366736031370641}
   - {fileID: 5352843813059837238}
   - {fileID: 8619456741531605998}
-  - {fileID: 6971789361215811136}
   m_Father: {fileID: 5352843813544815808}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5352843811778211852
 SpriteRenderer:
@@ -306,7 +304,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5352843813544815808}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &5352843812660822604
 BoxCollider2D:
@@ -408,6 +406,7 @@ Transform:
   m_LocalPosition: {x: -1.238, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 6971789361215811136}
   - {fileID: 8758105676222270430}
   - {fileID: 5352843811778211854}
   - {fileID: 5352843811568169180}
@@ -605,7 +604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5715701877870927399, guid: d43ea940f04e75a48bedd78cf0d1fafa, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5715701877870927399, guid: d43ea940f04e75a48bedd78cf0d1fafa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

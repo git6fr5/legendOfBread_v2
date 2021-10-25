@@ -7,54 +7,54 @@ public class Raycast : MonoBehaviour {
     public float distance;
     public float scale;
 
-    public Vector2[] rayVectors;
-    List<BoxCollider2D> rays = new List<BoxCollider2D>();
-    Dictionary<Collider2D, Vector2> casts = new Dictionary<Collider2D, Vector2>();
+    List<Vector2> rayVectors = new List<Vector2>() { Vector2.right, Vector2.up, Vector2.left, Vector2.down };
+    public List<int> castCollisions = new List<int>();
 
-    void Start() {
-        for (int i = 0; i < rayVectors.Length; i++) {
-            BoxCollider2D newRay = gameObject.AddComponent<BoxCollider2D>();
-            newRay.offset = distance * rayVectors[i];
-            newRay.isTrigger = true;
-            newRay.size = new Vector2(Mathf.Abs(rayVectors[i].y) * scale + GameRules.movementPrecision, Mathf.Abs(rayVectors[i].x) * scale + GameRules.movementPrecision);
-            rays.Add(newRay);
-        }
+    public int precision = 6;
+    public float length = 1f;
+    public float outset = 0.65f;
+
+    public Collider2D selfCollider;
+
+    public enum RayDirection {
+        Forward,
+        Backward
     }
 
     void Update() {
-        // print(casts.Count);
-    }
 
-    void OnTriggerStay2D(Collider2D collider) {
+        castCollisions = new List<int>();
 
-        if (!collider.isTrigger) {
-            if (casts.ContainsKey(collider)) {
-                casts[collider] = collider.transform.position - transform.position;
-            }
-            else {
-                casts.Add(collider, collider.transform.position - transform.position);
+        for (int i = 0; i < rayVectors.Count; i++) {
+            for (int j = 0; j < precision; j++) {
+                NewRay(i, j, RayDirection.Forward);
+                NewRay(i, j, RayDirection.Backward);
             }
         }
     }
 
-    void OnTriggerExit2D(Collider2D collider) {
-        
-        if (casts.ContainsKey(collider)) {
-            casts.Remove(collider);
+    private void NewRay(int orientation, int index, RayDirection rayDirection) {
+        float offset = length * ((float)index / (float)(precision -1) - 1f / 2f);
+        if (rayDirection == RayDirection.Backward) {
+            offset += GameRules.movementPrecision;
         }
-    }
 
-    private float threshold = 0.5f;
+        Vector3 origin = transform.position + (Vector3)rayVectors[orientation] * outset + (Vector3)(Vector2.Perpendicular(rayVectors[orientation]) * offset);
+        Vector2 direction = rayVectors[orientation];
+        float distance = 0.3f;
 
-    public bool CheckCast(Vector2 vector) {
-        foreach (KeyValuePair<Collider2D, Vector2> raycast in casts) {
-            // print(Vector2.Dot(vector, raycast.Value));
-            if (Vector2.Dot(vector, raycast.Value) > threshold) {
-                print("there's something in the way");
-                return true;
-            }
+        Color col = Color.blue;
+        if (rayDirection == RayDirection.Backward) {
+            col = Color.yellow;
+            origin = origin + (Vector3)(direction * distance);
+            direction *= -1;
         }
-        return false;
+
+        Debug.DrawRay(origin, direction * distance, col);
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);
+        if (hit.collider != selfCollider && hit.collider != null && !hit.collider.isTrigger) {
+            castCollisions.Add(orientation);
+        }
     }
 
 }

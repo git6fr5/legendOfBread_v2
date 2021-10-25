@@ -37,6 +37,20 @@ public class LOBRoom : MonoBehaviour
                     }
                 }
             }
+
+            else if (loader.level.entities[i].GetComponent<Memory>() != null) {
+                Memory memory = loader.level.entities[i].GetComponent<Memory>();
+                if (loader.level.entities[i].GetComponent<Spark>()) {
+                    Spark spark = loader.level.entities[i].GetComponent<Spark>();
+                    int index = (int)Compass.VectorOrientations[memory.direction];
+                    if (index >= 2) {
+                        spark.memory = 3;
+                    }
+                    else if (index < 2) {
+                        spark.memory = 1;
+                    }
+                }
+            }
         }
 
     }

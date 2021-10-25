@@ -29,6 +29,7 @@ public class Pig : Mob {
 
     /* --- Action Flow --- */
     protected override void Idle() {
+
         // Look for a target, but otherwise move randomly
         Hurtbox target = vision.LookFor(GameRules.playerTag);
         if (vision.LookFor(GameRules.playerTag) != null) {
@@ -40,38 +41,77 @@ public class Pig : Mob {
             }
         }
         else {
+            print("idle");
             idleTicks += Time.deltaTime;
             if (idleTicks >= idleInterval || targetPoint == Vector3.zero) {
-                NewTargetPoint();
+                targetPoint = NewTargetPoint();
+                idleTicks = 0f;
             }
         }
 
-        moveSpeed *= state.activeItem ? state.activeItem.moveSpeed : 1f;
-        moveSpeed *= canAttack ? 1f : -1f;
-
-        movementVector = targetPoint - transform.position;
-        if (raycast.CheckCast(movementVector)) {
-            movementVector = new Vector2(-movementVector.y, movementVector.x);
+        // Make a few decisions about how to move.
+        Vector2 targetMovementVector = targetPoint - transform.position;
+        if (targetMovementVector.x > 0f) {
+            targetMovementVector = new Vector2(targetMovementVector.x, 0f);
         }
 
-        if (movementVector.magnitude < GameRules.movementPrecision) {
+        // Return if we're close enough to the point we want to be.
+        if (targetMovementVector.magnitude < GameRules.movementPrecision) {
+            transform.position = targetPoint;
             movementVector = Vector2.zero;
+            return;
         }
-        else {
+
+        movementVector = movementVector + MoveAround(Compass.SnapVector(targetMovementVector));
+        // movementVector = targetMovementVector;
+        if (movementVector != Vector2.zero) {
             orientationVector = Compass.SnapVector(movementVector);
         }
 
-        Vector2 sideShuffle = canAttack ? movementVector : new Vector2(-movementVector.y, movementVector.x);
-        if (!raycast.CheckCast(sideShuffle)) {
-            movementVector = sideShuffle;
-        }
+        Debug.DrawRay(transform.position, targetMovementVector, Color.red);
+        Debug.DrawRay(transform.position, movementVector, Color.green);
 
     }
 
-    private void NewTargetPoint() {
-        Compass.Orientation orientation = (Compass.Orientation)Random.Range(0, (int)Compass.Orientation.count);
-        targetPoint = Compass.OrientationVectors[orientation] * 3f + (Vector2)transform.position;
-        idleTicks = 0f;
+    private Vector2 NewTargetPoint() {
+
+        int index = Random.Range(0, (int)Compass.Orientation.count);
+
+        // Check through the indices.
+        bool foundValidIndex = false;
+        for (int i = 0; i < (int)Compass.Orientation.count; i++) {
+            index = (index + i) % ((int)Compass.Orientation.count);
+            if (raycast.castCollisions.Contains(index)) {
+                print("There is something in the way");
+            }
+            else {
+                foundValidIndex = true;
+                break;
+            }
+        }
+
+        if (!foundValidIndex) {
+            return (Vector2)transform.position;
+        }
+        else {
+            Vector2 direction = Compass.OrientationVectors[(Compass.Orientation)index];
+            return idleDistance * direction + (Vector2)transform.position;
+        }
+        
+
+    }
+
+    private Vector2 MoveAround(Vector2 targetMovementVector) {
+        for (int i = 0; i < (int)Compass.Orientation.count; i++) {
+            int index = ((int)Compass.VectorOrientations[targetMovementVector] + i) % ((int)Compass.Orientation.count);
+            if (raycast.castCollisions.Contains(index)) {
+                print("There is something in the way");
+            }
+            else {
+                return Compass.OrientationVectors[(Compass.Orientation)index];
+            }
+        }
+        return Vector2.zero;
     }
 
     protected override void OnAction(int index = 0) {
