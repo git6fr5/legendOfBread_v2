@@ -50,6 +50,7 @@ public class Controller : MonoBehaviour {
     // Runs every frame.
     void Update() {
         Think();
+        DebugLines();
     }
 
     // Runs every fixed interval
@@ -148,6 +149,11 @@ public class Controller : MonoBehaviour {
 
     protected virtual void OnDeath() {
         // Determined by the particular type of controller.
+    }
+
+    /* --- Debug --- */
+    private void DebugLines() {
+        Debug.DrawRay(transform.position, movementVector, Color.yellow);
     }
 
 }

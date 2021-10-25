@@ -21,19 +21,31 @@ public class Raycast : MonoBehaviour {
         Backward
     }
 
+    void Start() {
+        rayVectors = new List<Vector2>();
+        for (int i = 0; i < precision; i++) {
+            Vector2 newVector = Quaternion.Euler(0, 0, i * 360f / (float)precision) * Vector2.right;
+            rayVectors.Add(newVector);
+        }
+    }
+
     void Update() {
 
         castCollisions = new List<int>();
 
+        //for (int i = 0; i < rayVectors.Count; i++) {
+        //    for (int j = 0; j < precision; j++) {
+        //        LinearRay(i, j, RayDirection.Forward);
+        //        LinearRay(i, j, RayDirection.Backward);
+        //    }
+        //}
+
         for (int i = 0; i < rayVectors.Count; i++) {
-            for (int j = 0; j < precision; j++) {
-                NewRay(i, j, RayDirection.Forward);
-                NewRay(i, j, RayDirection.Backward);
-            }
+            CircularRay(i);
         }
     }
 
-    private void NewRay(int orientation, int index, RayDirection rayDirection) {
+    private void LinearRay(int orientation, int index, RayDirection rayDirection) {
         float offset = length * ((float)index / (float)(precision -1) - 1f / 2f);
         if (rayDirection == RayDirection.Backward) {
             offset += GameRules.movementPrecision;
@@ -55,6 +67,23 @@ public class Raycast : MonoBehaviour {
         if (hit.collider != selfCollider && hit.collider != null && !hit.collider.isTrigger) {
             castCollisions.Add(orientation);
         }
+    }
+
+    private void CircularRay(int orientation) {
+
+        Vector3 origin = transform.position + (Vector3)rayVectors[orientation] * outset;
+        Vector2 direction = rayVectors[orientation];
+
+        Color col = Color.green;
+
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);
+        if (hit.collider != selfCollider && hit.collider != null && !hit.collider.isTrigger) {
+            col = Color.red;
+            castCollisions.Add(orientation);
+        }
+        Debug.DrawRay(origin, direction * distance, col);
+
+
     }
 
 }
