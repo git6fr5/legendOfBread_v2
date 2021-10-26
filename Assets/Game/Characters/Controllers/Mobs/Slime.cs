@@ -32,7 +32,7 @@ public class Slime : Mob {
     protected override void Idle() {
         // Look for a target, but otherwise move randomly
         Hurtbox target = vision.LookFor(GameRules.playerTag);
-        if (vision.LookFor(GameRules.playerTag) != null) {
+        if (target != null) {
             moveSpeed = state.baseSpeed;
             targetPoint = target.transform.position;
         }
@@ -57,6 +57,28 @@ public class Slime : Mob {
             }
         }
         Trail();
+
+        SmartPath(transform.position, targetPoint - transform.position);
+    }
+
+    private void SmartPath(Vector2 position, Vector2 targetpoint) {
+
+        // for testing.
+        vision.GetComponent<CircleCollider2D>().radius = 6f;
+        moveSpeed = 0f;
+        movementVector = Vector2.zero;
+
+        // Draw a line between the target and us.
+        RaycastHit2D[] hits = Physics2D.RaycastAll(position, targetpoint.normalized, targetpoint.magnitude - 0.5f);
+        Color col = Color.green;
+        for (int i = 0; i < hits.Length; i++) {
+            if (hits[i].collider != null && hits[i].collider != mesh.frame && !hits[i].collider.isTrigger) {
+                col = Color.red;
+            }
+
+        }
+        Debug.DrawRay(position, targetpoint, col);
+
     }
 
     /* --- Event Actions --- */

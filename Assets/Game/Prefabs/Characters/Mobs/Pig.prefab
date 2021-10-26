@@ -74,15 +74,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selfCollider: {fileID: 8619456741531605999}
-  precision: 4
-  length: 0.15
+  precision: 12
+  length: 0.75
   outset: 0.65
-  rayVectors:
-  - {x: 1, y: 0}
-  - {x: 0, y: 1}
-  - {x: -1, y: 0}
-  - {x: 0, y: -1}
-  castCollisions: 
+  rayVectors: []
+  castedVectors: []
+  castedCollisions: []
 --- !u!1 &5352843811568169183
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,7 +447,7 @@ MonoBehaviour:
   canAttack: 0
   attackRadius: 3
   attackInterval: 3
-  raycast: {fileID: 0}
+  raycast: {fileID: 2424036603698972319}
 --- !u!114 &5352843813544815812
 MonoBehaviour:
   m_ObjectHideFlags: 0

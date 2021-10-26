@@ -32,7 +32,7 @@ public class Pig : Mob {
 
         // Look for a target, but otherwise move randomly
         Hurtbox target = vision.LookFor(GameRules.playerTag);
-        if (vision.LookFor(GameRules.playerTag) != null) {
+        if (target != null) {
             targetPoint = target.transform.position;
             if ((target.transform.position - transform.position).magnitude < attackRadius) {
                 if (canAttack) {
@@ -49,8 +49,8 @@ public class Pig : Mob {
         }
 
         moveSpeed *= state.activeItem ? state.activeItem.moveSpeed : 1f;
-        moveSpeed *= canAttack ? 1f : -1;
         movementVector = targetPoint - transform.position;
+        // movementVector = raycast.AdjustMovement(movementVector);
 
         if (movementVector.magnitude < GameRules.movementPrecision) {
             movementVector = Vector2.zero;
@@ -59,7 +59,7 @@ public class Pig : Mob {
             orientationVector = Compass.SnapVector(movementVector);
         }
 
-        movementVector = canAttack ? movementVector : new Vector2(-movementVector.y, movementVector.x);
+        movementVector = canAttack ? movementVector : -1f * new Vector2(-movementVector.y, movementVector.x);
 
         Debug.DrawRay(transform.position, movementVector, Color.green);
 

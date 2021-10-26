@@ -73,4 +73,24 @@ public class Raycast : MonoBehaviour {
 
     }
 
+    public Vector2 AdjustMovement(Vector2 vector) {
+
+        Vector2 direction = vector.normalized;
+
+        for (int i = 0; i < castedVectors.Count; i++) {
+            if (Vector2.Dot(castedVectors[i], direction) > 0.95f) {
+                direction = Quaternion.Euler(0f, 0f, -90f) * direction;
+            }
+            else if (Vector2.Dot(castedVectors[i], direction) > 0f) {
+                direction -= castedVectors[i];
+            }
+        }
+
+        Vector2 adjustedVector = direction.normalized;
+        Debug.DrawRay(transform.position, adjustedVector, Color.white);
+
+        return adjustedVector;
+
+    }
+
 }
