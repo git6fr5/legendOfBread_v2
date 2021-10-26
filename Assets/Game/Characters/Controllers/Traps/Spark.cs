@@ -12,7 +12,7 @@ public class Spark : Trap {
     public int damage;
 
     /* --- Properties --- */
-    public Transform[] tracking;
+    public Block currentBlock;
 
     protected override void Off() {
 
@@ -20,11 +20,18 @@ public class Spark : Trap {
 
     protected override void On() {
 
-        Vector2 displacement = Vector2.zero;
-        for (int i = 0; i < tracking.Length; i++) {
-            // Get the displacement from the tracking object.
-            displacement = displacement + (Vector2)(tracking[i].position - transform.position);       
+        // Check the current block is still the closest block
+        Block newBlock = currentBlock;
+        Vector2 displacement = currentBlock.transform.position - transform.position;
+        for (int i = 0; i < currentBlock.group.Count; i++) {
+            Vector2 newDisplacement = currentBlock.group[i].transform.position - transform.position;
+            if (newDisplacement.magnitude < displacement.magnitude) {
+                displacement = newDisplacement;
+                newBlock = currentBlock.group[i];
+            }
         }
+        // Otherwise we would swap the current block.
+        currentBlock = newBlock;
 
         // Draw the displacement.
         Debug.DrawRay(transform.position, displacement, Color.green);
@@ -46,6 +53,11 @@ public class Spark : Trap {
 
         Debug.DrawRay(transform.position, direction.normalized, Color.yellow);
         movementVector = direction.normalized;
+
+        // Account for internal edges and going astray.
+        if (largerDisplacement.magnitude > 1f) {
+            movementVector += largerDisplacement.normalized;
+        }
 
     }
 

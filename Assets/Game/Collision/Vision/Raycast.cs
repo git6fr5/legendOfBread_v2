@@ -18,13 +18,14 @@ public class Raycast : MonoBehaviour {
     public Collider2D selfCollider;
 
     /* --- Variables --- */
-    [SerializeField] private int precision = 6; // The number of rays.
+    [SerializeField] private int precision = 4; // The number of rays.
     [SerializeField] private float length = 1f; // The length of each ray.
-    [SerializeField] private float outset = 0.65f; // The offset from the center of each ray.
+    [SerializeField] private float outset = 0.35f; // The offset from the center of each ray.
 
     /* --- Properties ---*/
     [SerializeField] [ReadOnly] public List<Vector2> rayVectors;
-    [SerializeField] [ReadOnly] public List<int> castCollisions = new List<int>();
+    [SerializeField] [ReadOnly] public List<Vector2> castedVectors = new List<Vector2>();
+    [SerializeField] [ReadOnly] public List<Collider2D> castedCollisions = new List<Collider2D>();
 
     void Start() {
         // Set up the list of rays.
@@ -38,12 +39,11 @@ public class Raycast : MonoBehaviour {
 
     void Update() {
         // Get the ray cast collisions.
-        castCollisions = new List<int>();
+        castedVectors = new List<Vector2>();
+        castedCollisions = new List<Collider2D>();
         for (int i = 0; i < rayVectors.Count; i++) {
             CircularRay(i);
         }
-
-        NextBestDirection(Vector2.right);
     }
 
     private void CircularRay(int orientation) {
@@ -51,64 +51,25 @@ public class Raycast : MonoBehaviour {
         // Set the ray properties.
         Vector3 origin = transform.position + (Vector3)rayVectors[orientation] * outset;
         Vector2 direction = rayVectors[orientation];
+        float distance = length - outset;
 
         // Check if the ray is colliding with anything.
         Color col = Color.green;
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction, length);
-        if (hit.collider != null && hit.collider != selfCollider && !hit.collider.isTrigger) {
-            col = Color.red;
-            castCollisions.Add(orientation);
-        }
-        Debug.DrawRay(origin, direction * length, col);
-
-    }
-
-    private void AdjustMovement(Vector2 vector) {
-
-        float magnitude = vector.magnitude;
-        Vector2 direction = vector.normalized;
-
-        Vector2 adjustedVector = new Vector2(direction.x, direction.y);
-
-        for (int i = 0; i < rayVectors.Count; i++) {
-            if (castCollisions.Contains(i)) {
-                if (Vector2.Dot(rayVectors[i], direction) > 0f) {
-
-                    adjustedVector = adjustedVector - rayVectors[i] / castCollisions.Count;
-
+        RaycastHit2D[] hits = Physics2D.RaycastAll(origin, direction, distance);
+        for (int i = 0; i < hits.Length; i++) {
+            if (hits[i].collider != null && hits[i].collider != selfCollider && !hits[i].collider.isTrigger) {
+                col = Color.red;
+                if (!castedVectors.Contains(rayVectors[orientation])) {
+                    castedVectors.Add(rayVectors[orientation]);
                 }
+                if (!castedCollisions.Contains(hits[i].collider)) {
+                    castedCollisions.Add(hits[i].collider);
+                }
+                break;
             }
         }
-
-        adjustedVector = adjustedVector.normalized;
-        Debug.DrawRay(transform.position, adjustedVector, Color.white);
-
-
-    }
-
-    public Vector2 NextBestDirection(Vector2 vector) {
-
-        Vector2 direction = vector.normalized;
-
-        float min = -20f;
-        int index = -1;
-
-        for (int i = 0; i < rayVectors.Count; i++) {
-            if (!castCollisions.Contains(i)) {
-                if (Vector2.Dot(rayVectors[i], direction) > min) {
-                    index = i;
-                    min = Vector2.Dot(rayVectors[i], direction);
-                }
-            }
-        }
-
-        if (index == -1) {
-            return Vector2.zero;
-        }
-        Vector2 adjustedVector = rayVectors[index].normalized;
-        Debug.DrawRay(transform.position, adjustedVector, Color.white);
-
-        return adjustedVector;
+        
+        Debug.DrawRay(origin, direction * distance, col);
 
     }
 

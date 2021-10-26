@@ -65,47 +65,6 @@ public class Pig : Mob {
 
     }
 
-    private Vector2 NewTargetPoint() {
-
-        int index = Random.Range(0, (int)Compass.Orientation.count);
-
-        // Check through the indices.
-        bool foundValidIndex = false;
-        for (int i = 0; i < (int)Compass.Orientation.count; i++) {
-            index = (index + i) % ((int)Compass.Orientation.count);
-            if (raycast.castCollisions.Contains(index)) {
-                print("There is something in the way");
-            }
-            else {
-                foundValidIndex = true;
-                break;
-            }
-        }
-
-        if (!foundValidIndex) {
-            return (Vector2)transform.position;
-        }
-        else {
-            Vector2 direction = Compass.OrientationVectors[(Compass.Orientation)index];
-            return idleDistance * direction + (Vector2)transform.position;
-        }
-        
-
-    }
-
-    private Vector2 MoveAround(Vector2 targetMovementVector) {
-        for (int i = 0; i < (int)Compass.Orientation.count; i++) {
-            int index = ((int)Compass.VectorOrientations[targetMovementVector] + i) % ((int)Compass.Orientation.count);
-            if (raycast.castCollisions.Contains(index)) {
-                print("There is something in the way");
-            }
-            else {
-                return Compass.OrientationVectors[(Compass.Orientation)index];
-            }
-        }
-        return Vector2.zero;
-    }
-
     protected override void OnAction(int index = 0) {
         canAttack = false;
         float cooldown = attackInterval;

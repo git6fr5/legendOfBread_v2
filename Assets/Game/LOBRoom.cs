@@ -37,6 +37,23 @@ public class LOBRoom : MonoBehaviour
                     }
                 }
             }
+
+            else if (loader.level.entities[i].GetComponent<Memory>() != null) {
+                Memory memory = loader.level.entities[i].GetComponent<Memory>();
+                if (loader.level.entities[i].GetComponent<Spark>()) {
+                    Spark spark = loader.level.entities[i].GetComponent<Spark>();
+
+                    Vector2 direction = new Vector2(memory.direction.x, -memory.direction.y);
+                    RaycastHit2D[] hits = Physics2D.RaycastAll(spark.transform.position, direction, 1f);
+                    for (int j = 0; j < hits.Length; j++) {
+                        if (hits[j].collider.transform.parent.GetComponent<Block>() != null) {
+                            Block block = hits[j].collider.transform.parent.GetComponent<Block>();
+                            spark.currentBlock = block;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
     }

@@ -229,7 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 1
   health: 0
-  baseSpeed: 0.5
+  baseSpeed: 2
   enemyTags: []
   equipment: []
   activeItem: {fileID: 0}
@@ -264,7 +264,7 @@ MonoBehaviour:
   fieldPulse: 0
   button: 2
   damage: 1
-  tracking: []
+  currentBlock: {fileID: 0}
 --- !u!114 &8494859384074607386
 MonoBehaviour:
   m_ObjectHideFlags: 0
