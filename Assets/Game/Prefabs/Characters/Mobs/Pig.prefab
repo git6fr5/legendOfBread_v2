@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6971789361215811136}
-  - component: {fileID: 9110064645771082486}
+  - component: {fileID: 2424036603698972319}
   m_Layer: 0
   m_Name: Raycast
   m_TagString: Untagged
@@ -61,7 +61,7 @@ Transform:
   m_Father: {fileID: 5352843813544815808}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9110064645771082486
+--- !u!114 &2424036603698972319
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,12 +73,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d26aa34ab3cefaf45add83141c9ffa89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 0.65
-  scale: 0.05
-  castCollisions: 
-  precision: 6
-  length: 1
+  selfCollider: {fileID: 8619456741531605999}
+  precision: 4
+  length: 0.15
   outset: 0.65
+  rayVectors:
+  - {x: 1, y: 0}
+  - {x: 0, y: 1}
+  - {x: -1, y: 0}
+  - {x: 0, y: -1}
+  castCollisions: 
 --- !u!1 &5352843811568169183
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,7 +450,7 @@ MonoBehaviour:
   canAttack: 0
   attackRadius: 3
   attackInterval: 3
-  raycast: {fileID: 9110064645771082486}
+  raycast: {fileID: 0}
 --- !u!114 &5352843813544815812
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -41,34 +41,26 @@ public class Pig : Mob {
             }
         }
         else {
-            print("idle");
             idleTicks += Time.deltaTime;
             if (idleTicks >= idleInterval || targetPoint == Vector3.zero) {
-                targetPoint = NewTargetPoint();
+                targetPoint = idleDistance * Random.insideUnitCircle + (Vector2)transform.position;
                 idleTicks = 0f;
             }
         }
 
-        // Make a few decisions about how to move.
-        Vector2 targetMovementVector = targetPoint - transform.position;
-        if (targetMovementVector.x > 0f) {
-            targetMovementVector = new Vector2(targetMovementVector.x, 0f);
-        }
+        moveSpeed *= state.activeItem ? state.activeItem.moveSpeed : 1f;
+        moveSpeed *= canAttack ? 1f : -1;
+        movementVector = targetPoint - transform.position;
 
-        // Return if we're close enough to the point we want to be.
-        if (targetMovementVector.magnitude < GameRules.movementPrecision) {
-            transform.position = targetPoint;
+        if (movementVector.magnitude < GameRules.movementPrecision) {
             movementVector = Vector2.zero;
-            return;
         }
-
-        movementVector = movementVector + MoveAround(Compass.SnapVector(targetMovementVector));
-        // movementVector = targetMovementVector;
-        if (movementVector != Vector2.zero) {
+        else {
             orientationVector = Compass.SnapVector(movementVector);
         }
 
-        Debug.DrawRay(transform.position, targetMovementVector, Color.red);
+        movementVector = canAttack ? movementVector : new Vector2(-movementVector.y, movementVector.x);
+
         Debug.DrawRay(transform.position, movementVector, Color.green);
 
     }

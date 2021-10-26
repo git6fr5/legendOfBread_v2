@@ -1,88 +1,114 @@
-﻿using System.Collections;
+﻿/* --- Libraries --- */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 
+/// </summary>
 public class Raycast : MonoBehaviour {
 
-    public float distance;
-    public float scale;
-
-    List<Vector2> rayVectors = new List<Vector2>() { Vector2.right, Vector2.up, Vector2.left, Vector2.down };
-    public List<int> castCollisions = new List<int>();
-
-    public int precision = 6;
-    public float length = 1f;
-    public float outset = 0.65f;
-
-    public Collider2D selfCollider;
-
+    /* --- Enumerations --- */
     public enum RayDirection {
         Forward,
         Backward
     }
 
+    /* --- Components --- */
+    public Collider2D selfCollider;
+
+    /* --- Variables --- */
+    [SerializeField] private int precision = 6; // The number of rays.
+    [SerializeField] private float length = 1f; // The length of each ray.
+    [SerializeField] private float outset = 0.65f; // The offset from the center of each ray.
+
+    /* --- Properties ---*/
+    [SerializeField] [ReadOnly] public List<Vector2> rayVectors;
+    [SerializeField] [ReadOnly] public List<int> castCollisions = new List<int>();
+
     void Start() {
+        // Set up the list of rays.
         rayVectors = new List<Vector2>();
         for (int i = 0; i < precision; i++) {
+            // Rotate by the appropriate amount.
             Vector2 newVector = Quaternion.Euler(0, 0, i * 360f / (float)precision) * Vector2.right;
             rayVectors.Add(newVector);
         }
     }
 
     void Update() {
-
+        // Get the ray cast collisions.
         castCollisions = new List<int>();
-
-        //for (int i = 0; i < rayVectors.Count; i++) {
-        //    for (int j = 0; j < precision; j++) {
-        //        LinearRay(i, j, RayDirection.Forward);
-        //        LinearRay(i, j, RayDirection.Backward);
-        //    }
-        //}
-
         for (int i = 0; i < rayVectors.Count; i++) {
             CircularRay(i);
         }
-    }
 
-    private void LinearRay(int orientation, int index, RayDirection rayDirection) {
-        float offset = length * ((float)index / (float)(precision -1) - 1f / 2f);
-        if (rayDirection == RayDirection.Backward) {
-            offset += GameRules.movementPrecision;
-        }
-
-        Vector3 origin = transform.position + (Vector3)rayVectors[orientation] * outset + (Vector3)(Vector2.Perpendicular(rayVectors[orientation]) * offset);
-        Vector2 direction = rayVectors[orientation];
-        float distance = 0.3f;
-
-        Color col = Color.blue;
-        if (rayDirection == RayDirection.Backward) {
-            col = Color.yellow;
-            origin = origin + (Vector3)(direction * distance);
-            direction *= -1;
-        }
-
-        Debug.DrawRay(origin, direction * distance, col);
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);
-        if (hit.collider != selfCollider && hit.collider != null && !hit.collider.isTrigger) {
-            castCollisions.Add(orientation);
-        }
+        NextBestDirection(Vector2.right);
     }
 
     private void CircularRay(int orientation) {
 
+        // Set the ray properties.
         Vector3 origin = transform.position + (Vector3)rayVectors[orientation] * outset;
         Vector2 direction = rayVectors[orientation];
 
+        // Check if the ray is colliding with anything.
         Color col = Color.green;
-
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance);
-        if (hit.collider != selfCollider && hit.collider != null && !hit.collider.isTrigger) {
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction, length);
+        if (hit.collider != null && hit.collider != selfCollider && !hit.collider.isTrigger) {
             col = Color.red;
             castCollisions.Add(orientation);
         }
-        Debug.DrawRay(origin, direction * distance, col);
+        Debug.DrawRay(origin, direction * length, col);
 
+    }
+
+    private void AdjustMovement(Vector2 vector) {
+
+        float magnitude = vector.magnitude;
+        Vector2 direction = vector.normalized;
+
+        Vector2 adjustedVector = new Vector2(direction.x, direction.y);
+
+        for (int i = 0; i < rayVectors.Count; i++) {
+            if (castCollisions.Contains(i)) {
+                if (Vector2.Dot(rayVectors[i], direction) > 0f) {
+
+                    adjustedVector = adjustedVector - rayVectors[i] / castCollisions.Count;
+
+                }
+            }
+        }
+
+        adjustedVector = adjustedVector.normalized;
+        Debug.DrawRay(transform.position, adjustedVector, Color.white);
+
+
+    }
+
+    public Vector2 NextBestDirection(Vector2 vector) {
+
+        Vector2 direction = vector.normalized;
+
+        float min = -20f;
+        int index = -1;
+
+        for (int i = 0; i < rayVectors.Count; i++) {
+            if (!castCollisions.Contains(i)) {
+                if (Vector2.Dot(rayVectors[i], direction) > min) {
+                    index = i;
+                    min = Vector2.Dot(rayVectors[i], direction);
+                }
+            }
+        }
+
+        if (index == -1) {
+            return Vector2.zero;
+        }
+        Vector2 adjustedVector = rayVectors[index].normalized;
+        Debug.DrawRay(transform.position, adjustedVector, Color.white);
+
+        return adjustedVector;
 
     }
 
