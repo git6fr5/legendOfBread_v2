@@ -63,7 +63,7 @@ Transform:
   - {fileID: 2521152499074010483}
   - {fileID: 5662592965910284206}
   m_Father: {fileID: 1100849837317249328}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1100849836989048636
 SpriteRenderer:
@@ -189,7 +189,6 @@ Transform:
   m_LocalPosition: {x: 2.41, y: 1.55, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6295575695719668306}
   - {fileID: 1100849837535366845}
   - {fileID: 1100849836989048627}
   m_Father: {fileID: 0}
@@ -265,8 +264,7 @@ MonoBehaviour:
   fieldPulse: 0
   button: 2
   damage: 1
-  raycast: {fileID: 4814788743683159222}
-  memory: 0
+  tracking: []
 --- !u!114 &8494859384074607386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,7 +310,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1100849837317249328}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1100849837535366847
 BoxCollider2D:
@@ -462,53 +460,3 @@ MonoBehaviour:
   timeInterval: 0
   isPaused: 0
   pauseFrame: -1
---- !u!1 &2105158979765647486
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6295575695719668306}
-  - component: {fileID: 4814788743683159222}
-  m_Layer: 0
-  m_Name: Raycast
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6295575695719668306
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2105158979765647486}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1100849837317249328}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4814788743683159222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2105158979765647486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d26aa34ab3cefaf45add83141c9ffa89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distance: 0.05
-  scale: 0.05
-  castCollisions: 
-  precision: 3
-  length: 0.9
-  outset: 0.25
-  selfCollider: {fileID: 1100849836989048637}

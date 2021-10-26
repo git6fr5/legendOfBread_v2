@@ -1,55 +1,51 @@
-﻿using System.Collections;
+﻿/* --- Libraries --- */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 
+/// </summary>
 public class Spark : Trap {
 
+    /* --- Variables --- */
     public int damage;
-    public Raycast raycast;
 
-    public int memory;
+    /* --- Properties --- */
+    public Transform[] tracking;
 
     protected override void Off() {
 
     }
 
     protected override void On() {
-        print("On");
 
-        int index = -1;
-
-        // Check through the indices.
-        for (int i = 0; i < (int)Compass.Orientation.count; i++) {
-            int _index = (i) % ((int)Compass.Orientation.count);
-            // Find where the wall is.
-            if (raycast.castCollisions.Contains(_index)) {
-                index = _index;
-                break;
-            }
+        Vector2 displacement = Vector2.zero;
+        for (int i = 0; i < tracking.Length; i++) {
+            // Get the displacement from the tracking object.
+            displacement = displacement + (Vector2)(tracking[i].position - transform.position);       
         }
 
-        if (index == 1 || index == 3) {
-            memory = index;
-        }
+        // Draw the displacement.
+        Debug.DrawRay(transform.position, displacement, Color.green);
 
-        if (index == -1) {
-            print("floating");
-            index = memory;
-        }
+        // Get the standard bases of the vector.
+        Vector2 horizontalDisplacement = new Vector2(displacement.x, 0f);
+        Vector2 verticalDisplacement = new Vector2(0f, displacement.y);
 
-        print(index);
-        int rotate = ( (index - 1) % (int)Compass.Orientation.count );
-        if (rotate < 0) {
-            rotate = (int)Compass.Orientation.count + rotate;
-        }
+        // Redraw the bigger one in red.
+        Vector2 largerDisplacement = horizontalDisplacement.magnitude > verticalDisplacement.magnitude ? horizontalDisplacement : verticalDisplacement;
+        Vector2 smallerDisplacement = horizontalDisplacement.magnitude < verticalDisplacement.magnitude ? horizontalDisplacement : verticalDisplacement;
 
-        if (raycast.castCollisions.Contains(rotate)) {
-            rotate = ((rotate - 1) % (int)Compass.Orientation.count);
-        }
+        // Draw the components.
+        Debug.DrawRay(transform.position, largerDisplacement, Color.red);
+        Debug.DrawRay(transform.position, smallerDisplacement, Color.cyan);
 
-        print(rotate);
-        Vector2 direction = Compass.OrientationVectors[(Compass.Orientation)rotate];
-        movementVector = direction;
+        // Travel perpendicular to the larger displacement.
+        Vector2 direction = (Vector2)(Quaternion.Euler(0, 0, -90f) * largerDisplacement);
+
+        Debug.DrawRay(transform.position, direction.normalized, Color.yellow);
+        movementVector = direction.normalized;
 
     }
 
