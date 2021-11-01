@@ -28,6 +28,10 @@ public class Slime : Mob {
     [SerializeField] protected float trailMaxInterval = 0.5f; // The interval between leaving a trail.
     [SerializeField] [ReadOnly] protected float trailInterval; // The interval between leaving a trail.
 
+
+    private float targetTicks = 0f;
+    private float maxTargetTicks = 100f;
+
     /* --- Action Flow --- */
     protected override void Idle() {
         // Look for a target, but otherwise move randomly
@@ -35,6 +39,8 @@ public class Slime : Mob {
         if (target != null) {
             moveSpeed = state.baseSpeed;
             targetPoint = target.transform.position;
+            targetTicks += Time.deltaTime;
+            targetTicks = targetTicks % maxTargetTicks;
         }
         else {
             idleTicks += Time.deltaTime;
@@ -48,6 +54,12 @@ public class Slime : Mob {
             movementVector = Vector2.zero;
         }
         else {
+            if (target != null) {
+                Collider2D targetCollider = target.controller.mesh.frame;
+                Vector2 offset = new Vector2(0.5f * Mathf.Cos(3f * targetTicks), 0.5f * Mathf.Sin(3f * targetTicks));
+                Vector2 origin = transform.position + (Vector3)offset; 
+                movementVector = Raycast.SmartPath(origin, targetPoint - transform.position, mesh.frame, targetCollider, 0, 3);
+            }
             orientationVector = new Vector2(Mathf.Sign(movementVector.x), 0);
         }
         if (isChild) {
@@ -57,28 +69,6 @@ public class Slime : Mob {
             }
         }
         Trail();
-
-        SmartPath(transform.position, targetPoint - transform.position);
-    }
-
-    private void SmartPath(Vector2 position, Vector2 targetpoint) {
-
-        // for testing.
-        vision.GetComponent<CircleCollider2D>().radius = 6f;
-        moveSpeed = 0f;
-        movementVector = Vector2.zero;
-
-        // Draw a line between the target and us.
-        RaycastHit2D[] hits = Physics2D.RaycastAll(position, targetpoint.normalized, targetpoint.magnitude - 0.5f);
-        Color col = Color.green;
-        for (int i = 0; i < hits.Length; i++) {
-            if (hits[i].collider != null && hits[i].collider != mesh.frame && !hits[i].collider.isTrigger) {
-                col = Color.red;
-            }
-
-        }
-        Debug.DrawRay(position, targetpoint, col);
-
     }
 
     /* --- Event Actions --- */

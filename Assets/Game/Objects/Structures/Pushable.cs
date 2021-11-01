@@ -23,6 +23,7 @@ public class Pushable : Structure {
     [SerializeField] [ReadOnly] private float pushInterval = 1f; // The maximum interval that this can be pushed for before snapping.
     [SerializeField] [ReadOnly] private float pushBuffer; // The time between being interacted with and being pushed.
 
+
     /* --- Unity --- */
     // Runs once on instantiation.
     void Awake() {
@@ -65,7 +66,7 @@ public class Pushable : Structure {
         if (Vector2.Distance(transform.position, targetPoint) < GameRules.movementPrecision || pushedTime >= pushInterval || body.velocity.magnitude < GameRules.movementPrecision) {
             // Snap to the nearest grid.
             // transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), transform.position.z) + (Vector3)offset;
-            transform.position = Level.SnapToGrid(transform.position);
+            transform.position = Room.SnapToGrid(transform.position);
 
             // Freeze the body.
             body.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -77,8 +78,6 @@ public class Pushable : Structure {
             pushedTime = 0f;
         }
     }
-
-    private Vector2 offset = new Vector2(0.5f, 0f);
 
     /* --- Action Methods --- */
     void Push(Orientation pusherOrientation, Vector3 pusherPosition) {

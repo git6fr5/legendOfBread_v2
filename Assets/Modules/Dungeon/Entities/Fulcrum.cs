@@ -3,9 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/* --- Structs --- */
-using Rotation = Loader.Rotation;
-
 public class Fulcrum : Entity {
 
     public Transform arms;
@@ -15,7 +12,7 @@ public class Fulcrum : Entity {
         print("Attached to fulcrum");
     }
 
-    public override void ApplyRotation(Level level, Rotation rotation) {
+    public override void ApplyRotation(Room room, Vector2Int gridPosition, int rotation) {
         // 
     }
 

@@ -14,7 +14,8 @@ public class Pig : Mob {
     [SerializeField] float attackRadius = 3f;
     [SerializeField] float attackInterval = 3f;
 
-    public Raycast raycast;
+    private float targetTicks = 0f;
+    private float maxTargetTicks = 100f;
 
     /* --- Unity --- */
     // Runs once before the first frame.
@@ -32,6 +33,7 @@ public class Pig : Mob {
 
         // Look for a target, but otherwise move randomly
         Hurtbox target = vision.LookFor(GameRules.playerTag);
+        bool shuffle = false;
         if (target != null) {
             targetPoint = target.transform.position;
             if ((target.transform.position - transform.position).magnitude < attackRadius) {
@@ -39,6 +41,11 @@ public class Pig : Mob {
                     Action();
                 }
             }
+            if ((target.transform.position - transform.position).magnitude < attackRadius * 0.75f) {
+                shuffle = true;
+            }
+            targetTicks += Time.deltaTime;
+            targetTicks = targetTicks % maxTargetTicks;
         }
         else {
             idleTicks += Time.deltaTime;
@@ -59,9 +66,12 @@ public class Pig : Mob {
             orientationVector = Compass.SnapVector(movementVector);
         }
 
-        movementVector = canAttack ? movementVector : -1f * new Vector2(-movementVector.y, movementVector.x);
+        movementVector = (canAttack && shuffle) ? movementVector : -1f * new Vector2(-movementVector.y, movementVector.x);
 
-        Debug.DrawRay(transform.position, movementVector, Color.green);
+        Vector2 offset = new Vector2(0.5f * Mathf.Cos(3f * targetTicks), 0.5f * Mathf.Sin(3f * targetTicks));
+        Vector2 origin = transform.position + (Vector3)offset;
+        Collider2D targetCollider = (target != null) ? target.controller.mesh.frame : null;
+        movementVector = Raycast.SmartPath(origin, movementVector, mesh.frame, targetCollider, 0, 3);
 
     }
 

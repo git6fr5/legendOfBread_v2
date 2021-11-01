@@ -156,6 +156,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raycast: {fileID: 3081178003311940004}
+  mesh: {fileID: 4802487796581496247}
+  group: []
+  shadowGroup: []
 --- !u!1 &8518335203535621731
 GameObject:
   m_ObjectHideFlags: 0

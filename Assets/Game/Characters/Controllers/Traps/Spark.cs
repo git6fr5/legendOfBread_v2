@@ -20,6 +20,24 @@ public class Spark : Trap {
 
     protected override void On() {
 
+        if (currentBlock == null) {
+            Memory memory = GetComponent<Memory>();
+
+            Vector2 dir = new Vector2(memory.direction.x, -memory.direction.y);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, dir, 1f);
+            for (int j = 0; j < hits.Length; j++) {
+                if (hits[j].collider.transform.parent.GetComponent<Block>() != null) {
+                    Block block = hits[j].collider.transform.parent.GetComponent<Block>();
+                    currentBlock = block;
+                    break;
+                }
+            }
+            // If still can't find anything.
+            if (currentBlock == null) {
+                return;
+            }
+        }
+
         // Check the current block is still the closest block
         Block newBlock = currentBlock;
         Vector2 displacement = currentBlock.transform.position - transform.position;

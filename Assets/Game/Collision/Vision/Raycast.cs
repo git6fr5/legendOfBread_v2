@@ -93,4 +93,37 @@ public class Raycast : MonoBehaviour {
 
     }
 
+    public static Vector2 SmartPath(Vector2 origin, Vector2 vector, Collider2D selfCollider, Collider2D targetCollider, int depth = 0, int maxDepth = 5) {
+
+        if (depth > maxDepth) {
+            return vector;
+        }
+
+        // Draw a line between the target and us.
+        RaycastHit2D[] hits = Physics2D.RaycastAll(origin, vector.normalized, vector.magnitude);
+        Color col = Color.green;
+        for (int i = 0; i < hits.Length; i++) {
+            if (hits[i].collider != null && hits[i].collider != selfCollider && hits[i].collider != targetCollider && !hits[i].collider.isTrigger) {
+                col = Color.red;
+            }
+        }
+        Debug.DrawRay(origin, vector, col);
+
+        if (col == Color.green) {
+            return vector;
+        }
+
+        Vector2 normal = (Quaternion.Euler(0f, 0f, 90f) * vector).normalized;
+        Vector2 firstHalf = vector * 0.5f;
+
+        // Adjust the end of the first half slightly.
+        firstHalf += normal * 3f;
+        firstHalf = SmartPath(origin, firstHalf, selfCollider, targetCollider, depth + 1, maxDepth);
+
+        Vector2 secondHalf = (vector - firstHalf);
+        SmartPath(origin + firstHalf, secondHalf, selfCollider, targetCollider, depth + 1, maxDepth);
+
+        return firstHalf;
+    }
+
 }

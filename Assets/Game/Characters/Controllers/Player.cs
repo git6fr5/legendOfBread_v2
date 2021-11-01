@@ -23,6 +23,8 @@ public class Player : Controller {
     public Interactbox interactbox;
     public KeyCode interactKey = KeyCode.Space;
     public Item[] interactItems;
+    // public List<Key> keys = new List<Key>();
+    public int numKeys = 0;
 
     // Player-Specific Action Controls
     [Range(0.05f, 1f)] public float actionMoveFactor = 0.25f;

@@ -83,6 +83,7 @@ public class Stream : MonoBehaviour {
     }
 
     public void SetText(string text) {
+
         // Delete the previous text
         if (characterRenderers != null) {
             for (int i = 0; i < characterRenderers.Length; i++) {
@@ -107,6 +108,8 @@ public class Stream : MonoBehaviour {
             newCharacterRenderer.material = textMaterial;
             characterRenderers[i] = newCharacterRenderer;
         }
+
+        this.text = text;
     }
 
 }

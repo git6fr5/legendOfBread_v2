@@ -3,34 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/* --- Structs --- */
-using Direction = Loader.Direction;
-
 public class Attachable : Entity {
 
     public static int maxSearchDepth = 7;
 
-    public override void ApplyDirection(Level level, Direction direction) {
-        Fulcrum fulcrum = FindFulcrum(level, gridPosition, direction.direction);
+    public override void ApplyDirection(Room room, Vector2Int gridPosition, Vector2Int direction) {
+        Fulcrum fulcrum = FindFulcrum(room, gridPosition, direction);
         if (fulcrum != null) {
             fulcrum.Attach(this);
         }
     }
 
-    private Fulcrum FindFulcrum(Level level, Vector2Int gridPosition, Vector2Int searchDirection, int searchDepth = 0) {
+    private Fulcrum FindFulcrum(Room room, Vector2Int gridPosition, Vector2Int searchDirection, int searchDepth = 0) {
 
         Vector2Int nextGridPosition = gridPosition + searchDirection;
 
         // Needs to check it is the correct type of object that we run into.
-        for (int i = 0; i < level.entities.Count; i++) {
-            if (level.entities[i].MatchGridPosition(nextGridPosition) && level.entities[i].GetComponent<Fulcrum>() != null) {
-                return level.entities[i].GetComponent<Fulcrum>();
+        for (int i = 0; i < room.entities.Count; i++) {
+            if (room.entities[i].gridPosition == nextGridPosition && room.entities[i].GetComponent<Fulcrum>() != null) {
+                return room.entities[i].GetComponent<Fulcrum>();
             }
         }
 
         if (searchDepth < maxSearchDepth) {
             searchDepth = searchDepth + 1;
-            return FindFulcrum(level, nextGridPosition, searchDirection, searchDepth);
+            return FindFulcrum(room, nextGridPosition, searchDirection, searchDepth);
         }
 
         return null;

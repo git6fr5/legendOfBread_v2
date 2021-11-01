@@ -1,0 +1,1495 @@
+fileFormatVersion: 2
+guid: 262f567917bf5584eb36a7d80cd3f0e9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8921695774451633394
+    second: Door_Tiles_0
+  - first:
+      213: -1071967872873345515
+    second: Door_Tiles_1
+  - first:
+      213: 6532505864423393239
+    second: Door_Tiles_2
+  - first:
+      213: 4215940255208251145
+    second: Door_Tiles_3
+  - first:
+      213: -7648693509096074675
+    second: Door_Tiles_4
+  - first:
+      213: -1219784200480909034
+    second: Door_Tiles_5
+  - first:
+      213: -8557336333428022278
+    second: Door_Tiles_6
+  - first:
+      213: 6877193255734492599
+    second: Door_Tiles_7
+  - first:
+      213: 6436493209862204597
+    second: Door_Tiles_8
+  - first:
+      213: 1533323597569317480
+    second: Door_Tiles_9
+  - first:
+      213: 7515786946303635258
+    second: Door_Tiles_10
+  - first:
+      213: -5239713415525831816
+    second: Door_Tiles_11
+  - first:
+      213: 4176400932735033913
+    second: Door_Tiles_12
+  - first:
+      213: 4463904591952814838
+    second: Door_Tiles_13
+  - first:
+      213: -3991526616482168891
+    second: Door_Tiles_14
+  - first:
+      213: -7411976743770631507
+    second: Door_Tiles_15
+  - first:
+      213: 1316486717079592734
+    second: Door_Tiles_16
+  - first:
+      213: -3621448240771858286
+    second: Door_Tiles_17
+  - first:
+      213: 1561176554907843167
+    second: Door_Tiles_18
+  - first:
+      213: -5869011482628831024
+    second: Door_Tiles_19
+  - first:
+      213: -112972882096936407
+    second: Door_Tiles_20
+  - first:
+      213: 2987596635445261882
+    second: Door_Tiles_21
+  - first:
+      213: 3425652231659797552
+    second: Door_Tiles_22
+  - first:
+      213: 5278231900076957300
+    second: Door_Tiles_23
+  - first:
+      213: 4107697322910482877
+    second: Door_Tiles_24
+  - first:
+      213: -6711222049437596796
+    second: Door_Tiles_25
+  - first:
+      213: -4415416668060486181
+    second: Door_Tiles_26
+  - first:
+      213: 8977572222256706930
+    second: Door_Tiles_27
+  - first:
+      213: 5428051488320642549
+    second: Door_Tiles_28
+  - first:
+      213: -1204303745001549866
+    second: Door_Tiles_29
+  - first:
+      213: -8281717122224675825
+    second: Door_Tiles_30
+  - first:
+      213: -2951803297694891712
+    second: Door_Tiles_31
+  - first:
+      213: -565179719032084032
+    second: Door_Tiles_32
+  - first:
+      213: -6953210577040866971
+    second: Door_Tiles_33
+  - first:
+      213: -845764699837212549
+    second: Door_Tiles_34
+  - first:
+      213: 7870733004587865574
+    second: Door_Tiles_35
+  - first:
+      213: -7394624796033408973
+    second: Door_Tiles_36
+  - first:
+      213: 7187044680575776041
+    second: Door_Tiles_37
+  - first:
+      213: -4201531586389673773
+    second: Door_Tiles_38
+  - first:
+      213: 3502808504228960691
+    second: Door_Tiles_39
+  - first:
+      213: 3191207272907768121
+    second: Door_Tiles_40
+  - first:
+      213: -6729895663449206643
+    second: Door_Tiles_41
+  - first:
+      213: 8247369329895145800
+    second: Door_Tiles_42
+  - first:
+      213: 452156379434591613
+    second: Door_Tiles_43
+  - first:
+      213: 112360268957933807
+    second: Door_Tiles_44
+  - first:
+      213: -2979817446715266041
+    second: Door_Tiles_45
+  - first:
+      213: -4409219525977424133
+    second: Door_Tiles_46
+  - first:
+      213: 5216221037192414320
+    second: Door_Tiles_47
+  - first:
+      213: 4757213967127398216
+    second: Door_Tiles_48
+  - first:
+      213: -6123455003514667889
+    second: Door_Tiles_49
+  - first:
+      213: 1486940721083154046
+    second: Door_Tiles_50
+  - first:
+      213: -8333120584153364371
+    second: Door_Tiles_51
+  - first:
+      213: -8244538067326805463
+    second: Door_Tiles_52
+  - first:
+      213: -7648146160107073289
+    second: Door_Tiles_53
+  - first:
+      213: -564715685324587778
+    second: Door_Tiles_54
+  - first:
+      213: -6011879726036971085
+    second: Door_Tiles_55
+  - first:
+      213: -6113254629322960588
+    second: Door_Tiles_56
+  - first:
+      213: 4576241834890600484
+    second: Door_Tiles_57
+  - first:
+      213: 9032124801194591813
+    second: Door_Tiles_58
+  - first:
+      213: -6458753093659518301
+    second: Door_Tiles_59
+  - first:
+      213: 1185983283988425052
+    second: Door_Tiles_60
+  - first:
+      213: -6980125246664615523
+    second: Door_Tiles_61
+  - first:
+      213: 7454390218170681510
+    second: Door_Tiles_62
+  - first:
+      213: -3366818367635589759
+    second: Door_Tiles_63
+  - first:
+      213: 1840159849288483845
+    second: Door_Tiles_64
+  - first:
+      213: 5408375477582049824
+    second: Door_Tiles_65
+  - first:
+      213: -3782446682152025328
+    second: Door_Tiles_66
+  - first:
+      213: 804187980482317357
+    second: Door_Tiles_67
+  - first:
+      213: -5603993852575731327
+    second: Door_Tiles_68
+  - first:
+      213: 4147373903714280070
+    second: Door_Tiles_69
+  - first:
+      213: 8094768346661852171
+    second: Door_Tiles_70
+  - first:
+      213: -7156278004605196592
+    second: Door_Tiles_71
+  - first:
+      213: 539248588040710051
+    second: Door_Tiles_72
+  - first:
+      213: -7657714549968651933
+    second: Door_Tiles_73
+  - first:
+      213: -262664472357089668
+    second: Door_Tiles_74
+  - first:
+      213: -4981487698634861282
+    second: Door_Tiles_75
+  - first:
+      213: -696005613356903311
+    second: Door_Tiles_76
+  - first:
+      213: -698368695881081154
+    second: Door_Tiles_77
+  - first:
+      213: 2416858058723122642
+    second: Door_Tiles_78
+  - first:
+      213: -5976943388768871928
+    second: Door_Tiles_79
+  - first:
+      213: -8458543821877499172
+    second: Door_Tiles_80
+  - first:
+      213: 5889600259547720023
+    second: Door_Tiles_81
+  - first:
+      213: -566682549933215868
+    second: Door_Tiles_82
+  - first:
+      213: 9038242347252718553
+    second: Door_Tiles_83
+  - first:
+      213: -3735359570036004626
+    second: Door_Tiles_84
+  - first:
+      213: 8526626590430792446
+    second: Door_Tiles_85
+  - first:
+      213: 1318367226820238539
+    second: Door_Tiles_86
+  - first:
+      213: -5532554123981494424
+    second: Door_Tiles_87
+  - first:
+      213: -637906618904719068
+    second: Door_Tiles_88
+  - first:
+      213: 5507156438552158628
+    second: Door_Tiles_89
+  - first:
+      213: -5356228724920753355
+    second: Door_Tiles_90
+  - first:
+      213: -3806057674223516471
+    second: Door_Tiles_0
+  - first:
+      213: 288349599445617702
+    second: Door_Tiles_1
+  - first:
+      213: -5854407414705379690
+    second: Door_Tiles_2
+  - first:
+      213: 2674362903335050809
+    second: Door_Tiles_3
+  - first:
+      213: 978630385334941987
+    second: Door_Tiles_4
+  - first:
+      213: -5135799567811363748
+    second: Door_Tiles_5
+  - first:
+      213: -670653868689133460
+    second: Door_Tiles_6
+  - first:
+      213: -9062360745912680510
+    second: Door_Tiles_7
+  - first:
+      213: -4208082192535159039
+    second: Door_Tiles_8
+  - first:
+      213: 857332087493136300
+    second: Door_Tiles_9
+  - first:
+      213: 5019302897977816441
+    second: Door_Tiles_10
+  - first:
+      213: -5617088125120807758
+    second: Door_Tiles_11
+  - first:
+      213: -5729873347011540523
+    second: Door_Tiles_12
+  - first:
+      213: 9021931487209599549
+    second: Door_Tiles_13
+  - first:
+      213: 7002076538158751359
+    second: Door_Tiles_14
+  - first:
+      213: 3747375281082815700
+    second: Door_Tiles_15
+  - first:
+      213: -2546166805228800010
+    second: Door_Tiles_16
+  - first:
+      213: -7591108999948862505
+    second: Door_Tiles_17
+  - first:
+      213: 6037196130945853178
+    second: Door_Tiles_18
+  - first:
+      213: -4843780116169192390
+    second: Door_Tiles_19
+  - first:
+      213: 3423367875303908646
+    second: Door_Tiles_20
+  - first:
+      213: -2550391577980326277
+    second: Door_Tiles_21
+  - first:
+      213: -1607409526934452143
+    second: Door_Tiles_22
+  - first:
+      213: 6936283650574218776
+    second: Door_Tiles_23
+  - first:
+      213: 178766243442735150
+    second: Door_Tiles_24
+  - first:
+      213: -5335364189728348796
+    second: Door_Tiles_25
+  - first:
+      213: -3846547540615681722
+    second: Door_Tiles_26
+  - first:
+      213: -5726098901954585550
+    second: Door_Tiles_27
+  - first:
+      213: -8796743982778641894
+    second: Door_Tiles_28
+  - first:
+      213: -2649792663116284519
+    second: Door_Tiles_29
+  - first:
+      213: -2930988033346310727
+    second: Door_Tiles_30
+  - first:
+      213: -6733479714759544913
+    second: Door_Tiles_31
+  - first:
+      213: 526357007454582158
+    second: Door_Tiles_32
+  - first:
+      213: -7753673727774180999
+    second: Door_Tiles_33
+  - first:
+      213: -8414284065591740771
+    second: Door_Tiles_34
+  - first:
+      213: -4957532918702005875
+    second: Door_Tiles_35
+  - first:
+      213: 952025526166734900
+    second: Door_Tiles_36
+  - first:
+      213: -5804668503678694569
+    second: Door_Tiles_37
+  - first:
+      213: 752548842818237614
+    second: Door_Tiles_38
+  - first:
+      213: 1422867991028015559
+    second: Door_Tiles_39
+  - first:
+      213: 5605859231568093262
+    second: Door_Tiles_40
+  - first:
+      213: 2454395273745492327
+    second: Door_Tiles_41
+  - first:
+      213: -3567327267672597065
+    second: Door_Tiles_42
+  - first:
+      213: 1248363947553353314
+    second: Door_Tiles_43
+  - first:
+      213: 5348471187970572770
+    second: Door_Tiles_44
+  - first:
+      213: -6156591175858963861
+    second: Door_Tiles_45
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Door_Tiles_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 14
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c4024de5ba2e2bc0800000000000000
+      internalID: -3806057674223516471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 14
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62c0516de6c600400800000000000000
+      internalID: 288349599445617702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_2
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 14
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 696a21c6977f0cea0800000000000000
+      internalID: -5854407414705379690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_3
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 14
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93e94c524ee3d1520800000000000000
+      internalID: 2674362903335050809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_4
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 14
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 329fa44862bc49d00800000000000000
+      internalID: 978630385334941987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_5
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 14
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5cbff2f089f9b8b0800000000000000
+      internalID: -5135799567811363748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_6
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 14
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c60fa851cdb51b6f0800000000000000
+      internalID: -670653868689133460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 12
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cf3e618ae60c3280800000000000000
+      internalID: -9062360745912680510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_8
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 12
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10f7b409a83e995c0800000000000000
+      internalID: -4208082192535159039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_9
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 12
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: caf8291cdfad5eb00800000000000000
+      internalID: 857332087493136300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_10
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 12
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9757e0e646528a540800000000000000
+      internalID: 5019302897977816441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_11
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 12
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2bcfb1e5c181c02b0800000000000000
+      internalID: -5617088125120807758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_12
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 12
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d9066f8c866b70b0800000000000000
+      internalID: -5729873347011540523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 10
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d323a0b23e6543d70800000000000000
+      internalID: 9021931487209599549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_14
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 10
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7e9c0b438f5c2160800000000000000
+      internalID: 7002076538158751359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_15
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 10
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d45505b6f9510430800000000000000
+      internalID: 3747375281082815700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_16
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 10
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f73273e7c23aacd0800000000000000
+      internalID: -2546166805228800010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_17
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 10
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7dbf6ce7596f6a690800000000000000
+      internalID: -7591108999948862505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_18
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 10
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af6e36805ed68c350800000000000000
+      internalID: 6037196130945853178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_19
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3c82a5d5af67ccb0800000000000000
+      internalID: -4843780116169192390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_20
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 8
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62529fed1fe328f20800000000000000
+      internalID: 3423367875303908646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_21
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 8
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7ea5545f503b9cd0800000000000000
+      internalID: -2550391577980326277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_22
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 8
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1584e7a3d8551b9e0800000000000000
+      internalID: -1607409526934452143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_23
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 8
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81673ddea31a24060800000000000000
+      internalID: 6936283650574218776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_24
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 8
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e283c3683fa1b7200800000000000000
+      internalID: 178766243442735150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 485e6e3998af4f5b0800000000000000
+      internalID: -5335364189728348796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_26
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 6
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64923f544615e9ac0800000000000000
+      internalID: -3846547540615681722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_27
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 6
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23c1e38036fc880b0800000000000000
+      internalID: -5726098901954585550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_28
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 6
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a129c6e64ffabe580800000000000000
+      internalID: -8796743982778641894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_29
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 6
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99d7482bc9b0a3bd0800000000000000
+      internalID: -2649792663116284519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_30
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 6
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bde877a9e90357d0800000000000000
+      internalID: -2930988033346310727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_31
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faf657bffdfdd82a0800000000000000
+      internalID: -6733479714759544913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_32
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 4
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e853e56d8eefd4700800000000000000
+      internalID: 526357007454582158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_33
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 4
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 979bdb743da656490800000000000000
+      internalID: -7753673727774180999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_34
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 4
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d96bc2f19357a3b80800000000000000
+      internalID: -8414284065591740771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_35
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 4
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d81267a931e433bb0800000000000000
+      internalID: -4957532918702005875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_36
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 4
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 438c5480c26463d00800000000000000
+      internalID: 952025526166734900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_37
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 4
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75b455710cca17fa0800000000000000
+      internalID: -5804668503678694569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_38
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 4
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea4ff447f27917a00800000000000000
+      internalID: 752548842818237614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_39
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c1af7f26ea0fb310800000000000000
+      internalID: 1422867991028015559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_40
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e40e57e15430ccd40800000000000000
+      internalID: 5605859231568093262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_41
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 2
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7696ffd5f73cf0220800000000000000
+      internalID: 2454395273745492327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_42
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 2
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bd5fc420ce4e7ec0800000000000000
+      internalID: -3567327267672597065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_43
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 2
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26e625c6564135110800000000000000
+      internalID: 1248363947553353314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_44
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 2
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e1c5624536993a40800000000000000
+      internalID: 5348471187970572770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Door_Tiles_45
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 2
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6a3f9fc1f46f8aa0800000000000000
+      internalID: -6156591175858963861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

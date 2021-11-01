@@ -3,10 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/* --- Structs --- */
-using Direction = Loader.Direction;
-using Rotation = Loader.Rotation;
-
 public class Entity : MonoBehaviour {
 
     public Vector2Int vectorID;
@@ -17,15 +13,11 @@ public class Entity : MonoBehaviour {
         this.gridPosition = gridPosition;
     }
 
-    public bool MatchGridPosition(Vector2Int gridPosition) {
-        return (this.gridPosition.x == gridPosition.x && this.gridPosition.y == gridPosition.y);
-    }
-
-    public virtual void ApplyDirection(Level level, Direction direction) {
+    public virtual void ApplyDirection(Room room, Vector2Int gridPosition, Vector2Int direction) {
 
     }
 
-    public virtual void ApplyRotation(Level level, Rotation rotation) {
+    public virtual void ApplyRotation(Room room, Vector2Int gridPosition, int rotation) {
 
     }
 

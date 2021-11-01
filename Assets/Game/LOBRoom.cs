@@ -2,32 +2,110 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LOBRoom : MonoBehaviour
-{
-    public Loader loader;
-    public Player player;
-    public Transform origin;
 
+/// <summary>
+/// 
+/// </summary>
+public class LOBRoom : MonoBehaviour {
+
+    /* --- Components --- */
+    [SerializeField] public Loader loader;
+    [SerializeField] public Player player;
+    [SerializeField] public Transform spawn;
+    [SerializeField] public Block shadowBlock;
+
+    /* --- Properties --- */
+    [SerializeField] private List<Block> shadowBlocks = new List<Block>();
+
+    /* --- Methods --- */
     public void OnLoadRoom() {
-        print("Loaded room");
-        // loader.level.AddExit(loader.height, Level.Location.Right, 0);
-        // loader.level.AddExit(loader.height, Level.Location.Left, 0);
-        // loader.level.AddExit(loader.height, Level.Location.Up, 0);
-        loader.level.AddExit(loader.level.height, Level.Location.Down, 0);
 
-        player.transform.position = origin.position;
+        LoadExit();
+        LoadPlayer();
+        LoadBorderBlocks();
+        LoadEntityInfo();
+
+    }
+
+    private void LoadExit() {
+
+        if (loader.GetComponent<Map>() != null) { return; }
+        // loader.room.AddExit(loader.height, Level.Location.Right, 0);
+        // loader.room.AddExit(loader.height, Level.Location.Left, 0);
+        // loader.room.AddExit(loader.height, Level.Location.Up, 0);
+        loader.room.AddDoor(null, new Loader.LDtkTileData(new Vector2Int(3, -1), new Vector2Int(0, 0)), null);
+    }
+
+    private void LoadBorderBlocks() {
+
+        // Clear the previous shadow blocks.
+        for (int i = 0; i < shadowBlocks.Count; i++) {
+            if (shadowBlocks[i] != null) {
+                Destroy(shadowBlocks[i].gameObject);
+            }
+        }
+
+        // Spawn the shadow blocks.
+        shadowBlocks = new List<Block>();
+        int height = loader.room.height;
+        for (int i = -1; i < height + 1; i++) {
+            CreateShadowBlock(i, height);
+            CreateShadowBlock(i, -1);
+            CreateShadowBlock(height, i);
+            CreateShadowBlock(-1, i);
+        }
+
+        // Group the shadow blocks together.
+        for (int i = 0; i < shadowBlocks.Count; i++) {
+            for (int j = 0; j < shadowBlocks.Count; j++) {
+                if (i != j) {
+                    shadowBlocks[i].shadowGroup.Add(shadowBlocks[j]);
+                }
+            }
+        }
+    }
+
+    private void LoadPlayer() {
+        // Reset the player position.
+        if (loader.GetComponent<Map>() != null) { return; }
+
+        player.transform.position = spawn.position;
+
+        // Reset the player's health.
         player.state.health = player.state.maxHealth;
         player.state.vitality = State.Vitality.Healthy;
         if (player.state.vitalityTimer != null) {
             StopCoroutine(player.state.vitalityTimer);
             player.state.vitalityTimer = null;
         }
+
+        // Enable the player.
         player.enabled = true;
         player.gameObject.SetActive(true);
+    }
 
-        for (int i = 0; i < loader.level.entities.Count; i++) {
-            if (loader.level.entities[i].GetComponent<Attachable>() != null) {
-                Attachable attachable = loader.level.entities[i].GetComponent<Attachable>();
+    private void CreateShadowBlock(int j, int i) {
+
+        // Create the shadow block.
+        Vector3 position = loader.room.GridToWorld(new Vector2Int(j, i));
+        Block newShadowBlock = Instantiate(shadowBlock.gameObject, position, Quaternion.identity, transform).GetComponent<Block>();
+        newShadowBlock.transform.position = position;
+        shadowBlocks.Add(newShadowBlock);
+
+        // If the tile at this block is null, make the shadow block have no collision.
+        int y = loader.room.height - i - 1;
+        Vector3Int tilePosition = new Vector3Int(j, y, 0);
+        if (loader.room.borderMap.GetTile(tilePosition) == null) {
+            newShadowBlock.mesh.frame.isTrigger = true;
+        }
+    }
+
+    private void LoadEntityInfo() {
+
+        // Collect the fireballs, and appropriately attach them to the spinners.
+        for (int i = 0; i < loader.room.entities.Count; i++) {
+            if (loader.room.entities[i].GetComponent<Attachable>() != null) {
+                Attachable attachable = loader.room.entities[i].GetComponent<Attachable>();
                 foreach (Transform child in attachable.transform) {
                     if (child.GetComponent<Hitbox>() != null) {
                         Hitbox hitbox = child.GetComponent<Hitbox>();
@@ -37,32 +115,7 @@ public class LOBRoom : MonoBehaviour
                     }
                 }
             }
-
-            else if (loader.level.entities[i].GetComponent<Memory>() != null) {
-                Memory memory = loader.level.entities[i].GetComponent<Memory>();
-                if (loader.level.entities[i].GetComponent<Spark>()) {
-                    Spark spark = loader.level.entities[i].GetComponent<Spark>();
-
-                    Vector2 direction = new Vector2(memory.direction.x, -memory.direction.y);
-                    RaycastHit2D[] hits = Physics2D.RaycastAll(spark.transform.position, direction, 1f);
-                    for (int j = 0; j < hits.Length; j++) {
-                        if (hits[j].collider.transform.parent.GetComponent<Block>() != null) {
-                            Block block = hits[j].collider.transform.parent.GetComponent<Block>();
-                            spark.currentBlock = block;
-                            break;
-                        }
-                    }
-                }
-            }
         }
 
     }
-
-    // Create an exit.
-
-
-
-    // Attach the entities controllers.
-
-    // Be able to reset the player.
 }
