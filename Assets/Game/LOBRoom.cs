@@ -33,7 +33,7 @@ public class LOBRoom : MonoBehaviour {
         // loader.room.AddExit(loader.height, Level.Location.Right, 0);
         // loader.room.AddExit(loader.height, Level.Location.Left, 0);
         // loader.room.AddExit(loader.height, Level.Location.Up, 0);
-        loader.room.AddDoor(Map.Switch.On, new Loader.LDtkTileData(new Vector2Int(0, 0), new Vector2Int(3, -1), new Vector2Int(0, 0) ), new List<int>());
+        loader.room.AddDoor(Map.Switch.On, new Loader.LDtkTileData(new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(3, -1) ), new List<int>());
     }
 
     private void LoadBorderBlocks() {

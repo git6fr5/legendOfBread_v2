@@ -253,8 +253,8 @@ MonoBehaviour:
   room: {fileID: 0}
   environment: {fileID: 1642959306}
   stream: {fileID: 93522961292913264}
-  seed: 3
-  generatedSeed: 0
+  roomBase: {fileID: 7619083560877715705}
+  minimap: {fileID: 646638550}
   lDtkMapData: {fileID: 5952403297619209955, guid: e92ff2f3a8c42714fa700b38517c1761, type: 3}
   lDtkCombatRoomData:
   - {fileID: 912956249493483965, guid: 73807a44c213ea2449e93929c442fc82, type: 3}
@@ -268,16 +268,16 @@ MonoBehaviour:
   - {fileID: -1687640484201786135, guid: fd1e679a24fb5f4419b6122b73592b4c, type: 3}
   lDtkKeyRoomData:
   - {fileID: -2626575212708787811, guid: 6cc943ef281de94419a8cf1757ff92a8, type: 3}
+  seed: 3
+  id: 0
+  generatedSeed: 0
   height: 0
   width: 0
   location: {x: 3, y: 2}
-  roomBase: {fileID: 7619083560877715705}
-  minimap: {fileID: 646638550}
   mapData:
     entrance: {x: 0, y: 0}
     unlockedDoors: 
     doorSwitch: 0
-  id: 0
   unlockedExits: 
 --- !u!4 &156782657
 Transform:
@@ -306,6 +306,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 173623002877015898, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
+      propertyPath: numKeys
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5790620096642752267, guid: 3d95e1fb1a5d3f9468fd9571b1f43cf0, type: 3}
       propertyPath: m_Name
       value: Main
@@ -407,17 +411,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1ec2ef0828449044b2c3eeaf5db4eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  locations: []
-  doors: []
   squareBase: {fileID: 1444254244}
   playerBase: {fileID: 964625665}
   doorBase: {fileID: 885904636}
-  scale: 3
   regularDoor: {fileID: 8921695774451633394, guid: 262f567917bf5584eb36a7d80cd3f0e9, type: 3}
   onDoor: {fileID: -1071967872873345515, guid: 262f567917bf5584eb36a7d80cd3f0e9, type: 3}
   offDoor: {fileID: 6532505864423393239, guid: 262f567917bf5584eb36a7d80cd3f0e9, type: 3}
   keyDoor: {fileID: 4215940255208251145, guid: 262f567917bf5584eb36a7d80cd3f0e9, type: 3}
   itemDoor: {fileID: -7648693509096074675, guid: 262f567917bf5584eb36a7d80cd3f0e9, type: 3}
+  locations: []
+  doors: []
 --- !u!1 &885904635
 GameObject:
   m_ObjectHideFlags: 0
