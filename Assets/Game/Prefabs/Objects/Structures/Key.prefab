@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1265096252070309014}
   - component: {fileID: 4941224861631301656}
   - component: {fileID: 1265096252070309008}
+  - component: {fileID: 4526655987307405201}
   m_Layer: 0
   m_Name: Key
   m_TagString: Untagged
@@ -63,6 +64,27 @@ MonoBehaviour:
   condition: 0
   interactAction: 5
   mesh: {fileID: 2674135280109998677}
+--- !u!50 &4526655987307405201
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1265096252070309011}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1265096252936810870
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +160,7 @@ SpriteRenderer:
   m_SortingLayerID: 160454865
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3029557215844878772, guid: c9db4377809eba94983e714bf5876797, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fe56522ee688f8f4eadf152074c7d84c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

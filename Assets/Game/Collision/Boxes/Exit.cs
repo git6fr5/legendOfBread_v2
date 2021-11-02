@@ -75,8 +75,8 @@ public class Exit : MonoBehaviour {
         // Load the new room.
         if (id[0] != 0 || id[1] != 0) {
             // Get the new room id.
-            Vector2Int newID = new Vector2Int( map.location[0] + id[0], map.location[1] + id[1] );
-            map.OpenRoom(newID);
+            Vector2Int newLocation = new Vector2Int( map.location[0] + id[0], map.location[1] + id[1] );
+            map.OpenRoom(newLocation);
         }
     }
 

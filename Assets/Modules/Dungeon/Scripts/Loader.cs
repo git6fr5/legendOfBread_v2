@@ -31,15 +31,22 @@ public class Loader : MonoBehaviour {
     /* --- Structs --- */
     public struct LDtkTileData {
 
-        public Vector2Int gridPosition;
+        /* --- Properties --- */
         public Vector2Int vectorID;
+        public Vector2Int gridPosition;
+        public Vector2Int offsetPosition;
         public int index;
+        public int rotation;
 
-        public LDtkTileData(Vector2Int gridPosition, Vector2Int vectorID, int index = 0) {
+        /* --- Constructor --- */
+        public LDtkTileData(Vector2Int vectorID, Vector2Int gridPosition, Vector2Int offsetPosition, int index = 0, int rotation = 0) {
             this.gridPosition = gridPosition;
             this.vectorID = vectorID;
             this.index = index;
+            this.rotation = rotation;
+            this.offsetPosition = offsetPosition;
         }
+
     }
 
     /* --- Dictionaries --- */
@@ -104,14 +111,13 @@ public class Loader : MonoBehaviour {
 
         ResetRoom();
         if (ldtkRoom != null) {
-            Debug.Log("Loading the next level.");
 
             // Load the entity data.
-            List<LDtkTileData> entityData = LoadLayer(ldtkRoom, EntityLayer);
-            if (room.isDifficult) { entityData = LoadLayer(ldtkRoom, DifficultLayer, entityData); }
+            List<LDtkTileData> entityData = LoadLayer(ldtkRoom, EntityLayer, DefaultGridSize);
+            if (room.isDifficult) { entityData = LoadLayer(ldtkRoom, DifficultLayer, DefaultGridSize, entityData); }
 
             // Load the directional data.
-            List<LDtkTileData> directionData = LoadLayer(ldtkRoom, DirectionLayer);
+            List<LDtkTileData> directionData = LoadLayer(ldtkRoom, DirectionLayer, DefaultGridSize);
 
             // Instatiantate and set up the entities using the data.
             List<Entity> entities = LoadEntities(entityData);
@@ -124,7 +130,6 @@ public class Loader : MonoBehaviour {
 
     private void ResetRoom() {
         // Reset the entities.
-        Debug.Log("Resetting the room.");
         if (room.entities != null) {
             for (int i = 0; i < room.entities.Count; i++) {
                 if (room.entities[i] != null) {
@@ -171,7 +176,7 @@ public class Loader : MonoBehaviour {
     }
 
     // Returns the vector ID's of all the tiles in the layer.
-    private List<LDtkTileData> LoadLayer(LDtkUnity.Level ldtkLevel, string layerName, List<LDtkTileData> layerData = null) {
+    protected List<LDtkTileData> LoadLayer(LDtkUnity.Level ldtkLevel, string layerName, int gridSize, List<LDtkTileData> layerData = null) {
 
         if (layerData == null) { layerData = new List<LDtkTileData>(); }
 
@@ -185,10 +190,11 @@ public class Loader : MonoBehaviour {
 
                 // Get the position that this tile is at.
                 Vector2Int gridPosition = tile.UnityPx / DefaultGridSize;
-                Vector2Int vectorID = new Vector2Int((int)(tile.Src[0]), (int)(tile.Src[1])) / DefaultGridSize;
+                Vector2Int vectorID = new Vector2Int((int)(tile.Src[0]), (int)(tile.Src[1])) / gridSize;
+                Vector2Int offsetPosition = (tile.UnityPx / gridSize) - gridPosition * (DefaultGridSize / gridSize);
 
                 // Construct the data piece.
-                LDtkTileData tileData = new LDtkTileData(gridPosition, vectorID);
+                LDtkTileData tileData = new LDtkTileData(vectorID, gridPosition, offsetPosition, index);
                 layerData.Add(tileData);
             }
 
@@ -216,7 +222,7 @@ public class Loader : MonoBehaviour {
                 entities.Add(newEntity);
             }
         }
-        print("Loaded this many entities: " + entities.Count + " out of " + entityData.Count);
+        // print("Loaded this many entities: " + entities.Count + " out of " + entityData.Count);
         return entities;
     }
 
