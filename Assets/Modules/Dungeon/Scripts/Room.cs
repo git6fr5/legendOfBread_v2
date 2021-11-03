@@ -12,33 +12,10 @@ public class Room : MonoBehaviour {
     /* --- Static Variables --- */
     public static Vector2 offset; // Stores the transforms offset for grid-snapping.
 
-    /* --- Enumerations --- */
-    public enum Location {
-        Right, Up, Left, Down
-    }
-
-    /* --- Dictionaries --- */
-    // Location of the exit to its scaled vector position
-    public Dictionary<Location, Vector2> loc_vec = new Dictionary<Location, Vector2>() {
-        { Location.Down, new Vector2(0.5f, 0f) },
-        // Note: technically this is the up arrow, but the coordinates on the y axis are backwards.
-        { Location.Left, new Vector2(0f, 0.5f) },
-        { Location.Right, new Vector2(1f, 0.5f) },
-        { Location.Up, new Vector2(0.5f, 1f) }
-    };
-
-    // Location of the exit to the ID of the exit.
-    public Dictionary<Location, Vector2Int> loc_id = new Dictionary<Location, Vector2Int>() {
-        { Location.Down, new Vector2Int(0, 1) },
-        // Note: technically this is the up arrow, but the coordinates on the y axis are backwards.
-        { Location.Left, new Vector2Int(-1, 0) },
-        { Location.Right, new Vector2Int(1, 0) },
-        { Location.Up, new Vector2Int(0, -1) }
-    };
-
     /* --- Components --- */
     [SerializeField] public Tilemap floorMap; // The map that will display the floor tiles.
     [SerializeField] public Tilemap borderMap; // The map that will display the borders.
+    [SerializeField] public Exit doorBase;
 
     /* --- Properties --- */
     // Dimensions.
@@ -56,32 +33,33 @@ public class Room : MonoBehaviour {
     }
 
     /* --- Methods --- */
-    public Exit AddDoor(Map map, Loader.LDtkTileData exitData, Exit exitBase) {
+    public Exit AddDoor(Map.Switch doorSwitch, Loader.LDtkTileData doorData, List<int> unlockedExits) {
 
-        bool construct = CheckDoorType(map, exitData);
+        bool construct = CheckDoorType(doorSwitch, doorData);
 
-        Vector3Int tilePosition = new Vector3Int((int)exitData.gridPosition.x, (int)exitData.gridPosition.y, 0);
+        // Clear the tile space.
+        Vector3Int tilePosition = new Vector3Int((int)doorData.offsetPosition.x, (int)doorData.offsetPosition.y, 0);
         if (construct) {
             borderMap.SetTile(tilePosition, null);
         }
 
+        if (doorBase != null) {
 
-        print("Loading exit");
-        if (exitBase != null) {
-            Exit newExit = Instantiate(exitBase, (Vector3)tilePosition, Quaternion.identity, transform).GetComponent<Exit>();
-            newExit.id = GetDoorID(exitData);
+            // Instantiate the new door.
+            Exit newExit = Instantiate(doorBase, (Vector3)tilePosition, Quaternion.identity, transform).GetComponent<Exit>();
+            newExit.id = GetDoorID(doorData);
             newExit.transform.localPosition = (Vector3)tilePosition + new Vector3(newExit.id.x, -newExit.id.y, 0f) * (Exit.offset - height) + new Vector3(0.5f, 0.5f, 0f);
             newExit.gameObject.SetActive(construct);
 
             // The exit data.
-            newExit.exitData = exitData;
-            newExit.index = exitData.index;
+            newExit.exitData = doorData;
+            newExit.index = doorData.index;
 
             // exit type = vectorID.x
-            if ((Map.Door)exitData.vectorID.x == Map.Door.Key) {
+            if ((Map.Door)doorData.vectorID.x == Map.Door.Key) {
                 bool isUnlocked = false;
-                for (int i = 0; i < map.unlockedExits.Count; i++) {
-                    if (exitData.index == map.unlockedExits[i]) {
+                for (int i = 0; i < unlockedExits.Count; i++) {
+                    if (doorData.index == unlockedExits[i]) {
                         isUnlocked = true;
                         break;
                     }
@@ -89,39 +67,38 @@ public class Room : MonoBehaviour {
                 newExit.isLocked = !isUnlocked;
             }
 
+            newExit.@lock.transform.position += -Vector3.up * (Exit.offset - 7);
+            newExit.transform.eulerAngles = Vector3.forward * 90f * doorData.rotation;
+            // newExit.@lock.transform.eulerAngles = Vector3.zero;
+
             exits.Add(newExit);
         }
+
         return null;
     }
 
-    private bool CheckDoorType(Map map, Loader.LDtkTileData exitData) {
+    private bool CheckDoorType(Map.Switch doorSwitch, Loader.LDtkTileData door) {
 
-        if (map == null) {
+        if ((Map.Door)door.vectorID.x == Map.Door.Regular) {
             return true;
         }
-
-        print("CHECKING DOOR TYPE" + (Map.Door)exitData.vectorID.x + map.doorSwitch.ToString());
-
-        if ((Map.Door)exitData.vectorID.x == Map.Door.Regular) {
+        else if ((Map.Door)door.vectorID.x == Map.Door.On && doorSwitch == Map.Switch.On) {
             return true;
         }
-        else if ((Map.Door)exitData.vectorID.x == Map.Door.On && map.doorSwitch == Map.Switch.On) {
+        else if ((Map.Door)door.vectorID.x == Map.Door.Off && doorSwitch == Map.Switch.Off) {
             return true;
         }
-        else if ((Map.Door)exitData.vectorID.x == Map.Door.Off && map.doorSwitch == Map.Switch.Off) {
+        else if ((Map.Door)door.vectorID.x == Map.Door.Item) { // Actually puzzle doors.
             return true;
         }
-        else if ((Map.Door)exitData.vectorID.x == Map.Door.Item) { // Actually puzzle doors.
-            return true;
-        }
-        else if ((Map.Door)exitData.vectorID.x == Map.Door.Key) {
+        else if ((Map.Door)door.vectorID.x == Map.Door.Key) {
             return true;
         }
         return false;
     }
 
     private Vector2Int GetDoorID(Loader.LDtkTileData exitData) {
-        Vector2 _id = (exitData.gridPosition - new Vector2(3.5f, 3.5f));
+        Vector2 _id = (exitData.offsetPosition - new Vector2(3.5f, 3.5f));
         Vector2Int id;
         if (Mathf.Abs(_id.y) > Mathf.Abs(_id.x)) {
             id = new Vector2Int(0, -(int)Mathf.Sign(_id.y));

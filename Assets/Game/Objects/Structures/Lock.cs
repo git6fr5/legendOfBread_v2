@@ -21,7 +21,7 @@ public class Lock : Structure {
                 player.numKeys -= 1;
                 exit.isLocked = false;
 
-                exit.map.unlockedExits.Add(exit.index);
+                exit.map.mapData.unlockedDoors.Add(exit.index);
 
             }
         }

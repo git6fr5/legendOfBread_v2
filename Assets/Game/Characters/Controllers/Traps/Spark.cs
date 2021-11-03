@@ -77,6 +77,10 @@ public class Spark : Trap {
             movementVector += largerDisplacement.normalized;
         }
 
+        // Make sure it stays on the grid.
+        if (largerDisplacement.magnitude < 1f - GameRules.movementPrecision) {
+            transform.position = transform.position - (Vector3)(1f * largerDisplacement.normalized - largerDisplacement);
+        }
     }
 
     /* --- Event Actions --- */
