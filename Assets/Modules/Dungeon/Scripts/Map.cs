@@ -43,7 +43,7 @@ public class Map : Loader {
 
             // Initialize.
             this.unlockedDoors = new List<int>();
-            this.doorSwitch = Switch.Off;
+            this.doorSwitch = Switch.On;
             this.loc_room = new Dictionary<Vector2Int, Room>();
         }
 
@@ -234,58 +234,77 @@ public class Map : Loader {
         if (room != null) { room.gameObject.SetActive(false); }
 
         if (mapData.loc_room.ContainsKey(newLocation)) {
-            // Load the previously loaded room.
-            print("loading previously loaded room");
-            mapData.loc_room[newLocation].gameObject.SetActive(true);
-            room = mapData.loc_room[newLocation];
-
-            // Refresh the tileset.
-            //environment.RefreshTiles();
-            //LoadTiles(room.borderMap, environment.borderTile, room.height, room.width);
-            //LoadTiles(room.floorMap, environment.floorTile, room.height, room.width);
+            OpenPreloadedRoom(newLocation);
         }
         else {
-            // Instantiate a new room.
-            room = Instantiate(roomBase, roomBase.transform.position, Quaternion.identity, transform).GetComponent<Room>();
-            room.gameObject.SetActive(true);
-
-            // Find a matching LDtk set to pick a room from.
-            RoomData roomData = GetRoomDataAtLocation(newLocation);
-            lDtkData = FindMatchingLDtkSet(roomData);
-
-            if (lDtkData != null) {
-
-                // Pick a room from the LDtk set using the randomizer from the seed.
-                LdtkJson roomJson = lDtkData.FromJson();
-                int id = GameRules.PrimeRandomizer(newLocation.x + newLocation.y) % roomJson.Levels.Length;
-                if (id == 0) { id = (id + 1) % roomJson.Levels.Length; }
-
-                // Load the room.
-                LDtkRoom ldtkRoom = GetRoomByID(lDtkData, id);
-                LoadRoom(ldtkRoom);
-
-            }
-            else {
-                room.height = 7; room.width = 7;
-                LoadRoom(null);
-            }
-
-            // Set the shape.
-            Geometry.Carve(roomData.shape, roomData.shapeOffset, room.borderMap, room.height, room.width);
-            Geometry.Carve(roomData.shape, roomData.shapeOffset, room.floorMap, room.height, room.width);
-
-            // Load the doors for the room.
-            LoadDoors(newLocation);
-
-            // Add it to the list of loaded rooms.
-            mapData.loc_room.Add(newLocation, room);
+            ReloadRoom(newLocation);
         }
+
+        LoadExtra(newLocation);
+
+    }
+
+    public void LoadExtra(Vector2Int newLocation) {
+        // Load the doors for the room.
+        LoadDoors(newLocation);
 
         // Update the minimap.
         location = newLocation;
         minimap.Refresh(location, mapData, height, DefaultGridSize, DoorGridSize);
         OnLoad.Invoke();
+    }
 
+    public void ReloadRoom(Vector2Int newLocation) {
+
+        if (mapData.loc_room.ContainsKey(newLocation)) {
+            Destroy(mapData.loc_room[newLocation].gameObject);
+            mapData.loc_room.Remove(newLocation);
+        }
+
+        // Instantiate a new room.
+        room = Instantiate(roomBase, roomBase.transform.position, Quaternion.identity, transform).GetComponent<Room>();
+        room.gameObject.SetActive(true);
+
+        // Find a matching LDtk set to pick a room from.
+        RoomData roomData = GetRoomDataAtLocation(newLocation);
+        lDtkData = FindMatchingLDtkSet(roomData);
+
+        if (lDtkData != null) {
+
+            // Pick a room from the LDtk set using the randomizer from the seed.
+            LdtkJson roomJson = lDtkData.FromJson();
+            int id = GameRules.PrimeRandomizer(newLocation.x + newLocation.y) % roomJson.Levels.Length;
+            if (id == 0) { id = (id + 1) % roomJson.Levels.Length; }
+
+            // Load the room.
+            LDtkRoom ldtkRoom = GetRoomByID(lDtkData, id);
+            LoadRoom(ldtkRoom);
+
+        }
+        else {
+            room.height = 7; room.width = 7;
+            LoadRoom(null);
+        }
+
+        // Set the shape.
+        Geometry.Carve(roomData.shape, roomData.shapeOffset, room.borderMap, room.height, room.width);
+        Geometry.Carve(roomData.shape, roomData.shapeOffset, room.floorMap, room.height, room.width);
+
+        // Add it to the list of loaded rooms.
+        mapData.loc_room.Add(newLocation, room);
+    }
+
+    private void OpenPreloadedRoom(Vector2Int newLocation) {
+        // Load the previously loaded room.
+        print("loading previously loaded room");
+        mapData.loc_room[newLocation].gameObject.SetActive(true);
+        room = mapData.loc_room[newLocation];
+
+        // Refresh the tileset.
+        environment.RefreshTiles();
+        LoadTiles(room.borderMap, environment.borderTile, room.height, room.width);
+        LoadTiles(room.floorMap, environment.floorTile, room.height, room.width);
+        ResetDoors();
     }
 
     private Vector2Int FindEntrance(List<LDtkTileData> challenges) {
@@ -328,6 +347,15 @@ public class Map : Loader {
     }
 
     public List<int> unlockedExits = new List<int>();
+
+    private void ResetDoors() {
+        for (int i = 0; i < room.exits.Count; i++) {
+            if (room.exits[i] != null) {
+                Destroy(room.exits[i].gameObject);
+            }
+        }
+        room.exits = new List<Exit>();
+    }
 
     private void LoadDoors(Vector2Int location) {
 

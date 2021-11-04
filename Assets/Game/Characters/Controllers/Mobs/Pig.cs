@@ -88,4 +88,8 @@ public class Pig : Mob {
         yield return null;
     }
 
+    protected override void OnDeath() {
+        DropSkrit();
+    }
+
 }

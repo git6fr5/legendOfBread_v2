@@ -104,6 +104,11 @@ public class Minimap : MonoBehaviour {
         // Instantiate the square.
         Transform newLocation = Instantiate(squareBase, scaledGridPosition, Quaternion.identity, transform);
         newLocation.gameObject.SetActive(true);
+        // For dev purposes.
+        LocationSelector locSelect = newLocation.GetComponent<LocationSelector>();
+        if (locSelect != null) {
+            locSelect.gridPosition = gridPosition;
+        }
         return newLocation;
     }
 

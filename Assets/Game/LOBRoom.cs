@@ -104,13 +104,15 @@ public class LOBRoom : MonoBehaviour {
 
         // Collect the fireballs, and appropriately attach them to the spinners.
         for (int i = 0; i < loader.room.entities.Count; i++) {
-            if (loader.room.entities[i].GetComponent<Attachable>() != null) {
-                Attachable attachable = loader.room.entities[i].GetComponent<Attachable>();
-                foreach (Transform child in attachable.transform) {
-                    if (child.GetComponent<Hitbox>() != null) {
-                        Hitbox hitbox = child.GetComponent<Hitbox>();
-                        if (attachable.transform.parent?.parent?.GetComponent<Controller>() != null) {
-                            hitbox.controller = attachable.transform.parent.parent.GetComponent<Controller>();
+            if (loader.room.entities[i] != null) {
+                if (loader.room.entities[i].GetComponent<Attachable>() != null) {
+                    Attachable attachable = loader.room.entities[i].GetComponent<Attachable>();
+                    foreach (Transform child in attachable.transform) {
+                        if (child.GetComponent<Hitbox>() != null) {
+                            Hitbox hitbox = child.GetComponent<Hitbox>();
+                            if (attachable.transform.parent?.parent?.GetComponent<Controller>() != null) {
+                                hitbox.controller = attachable.transform.parent.parent.GetComponent<Controller>();
+                            }
                         }
                     }
                 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2593161581914529180}
   - component: {fileID: 3180072077674863876}
+  - component: {fileID: 6621831134004183133}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
@@ -82,6 +83,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6621831134004183133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500954788545450052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d26aa34ab3cefaf45add83141c9ffa89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selfCollider: {fileID: 0}
+  precision: 4
+  length: 0.1
+  outset: 0.35
+  rayVectors: []
+  castedVectors: []
+  castedCollisions: []
 --- !u!1 &5224228993443119634
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4482173311256316346}
   - component: {fileID: 5649419664068343628}
+  - component: {fileID: 2725749712881297645}
   m_Layer: 0
   m_Name: Block Switch
   m_TagString: Untagged
@@ -128,3 +149,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vectorID: {x: 1, y: 2}
   gridPosition: {x: 0, y: 0}
+--- !u!114 &2725749712881297645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5224228993443119634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cfa0bb56c483b847bfb8d6f3909fdb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  raycast: {fileID: 6621831134004183133}
+  mesh: {fileID: 0}
+  group: []
+  shadowGroup: []
