@@ -5,24 +5,26 @@ using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
-public class LevelSelector : DungeonSelector {
+public class MapSelector : MonoBehaviour {
 
     /* --- Variables --- */
+    public Map map;
     public int increment;
 
     /* --- Unity --- */
     void OnMouseOver() {
-        spriteRenderer.material.SetFloat("_OutlineWidth", 0.05f);
+        GetComponent<SpriteRenderer>().material.SetFloat("_OutlineWidth", 0.05f);
     }
 
     void OnMouseExit() {
-        spriteRenderer.material.SetFloat("_OutlineWidth", 0f);
+        GetComponent<SpriteRenderer>().material.SetFloat("_OutlineWidth", 0f);
     }
 
     /* --- Override --- */
-    protected override void Select() {
-        loader.id = loader.id + increment;
-        if (loader.id < 0) { loader.id = 0; }
+    void OnMouseDown() {
+        map.id = map.id + increment;
+        if (map.id < 0) { map.id = 0; }
+        map.Open(map.id);
     }
 
 }

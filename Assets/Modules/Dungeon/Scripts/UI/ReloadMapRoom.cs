@@ -24,8 +24,8 @@ public class ReloadMapRoom : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        map.ReloadRoom(map.location);
-        map.LoadExtra(map.location);
+        Room room = map.mapData.loc_room[map.location];
+        map.OpenRoom(room.id, map.location);
     }
 
 }

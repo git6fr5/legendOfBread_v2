@@ -10,11 +10,11 @@ public class SetSelector : DungeonSelector {
     public LDtkComponentProject lDtkData;
 
     protected override void Select() {
-        loader.lDtkData = lDtkData;
+        room.lDtkData = lDtkData;
     }
 
     protected override bool HighlightCondition() {
-        return (loader.lDtkData == lDtkData);
+        return (room.lDtkData == lDtkData);
     }
 
 }

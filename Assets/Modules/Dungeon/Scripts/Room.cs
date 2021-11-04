@@ -1,201 +1,171 @@
 ﻿/* --- Libraries --- */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+    using LDtkUnity;
+
+/* --- Definitions --- */
+using LDtkRoom = LDtkUnity.Level;
+using LDtkMap = LDtkUnity.Level;
+using MapData = Map.MapData;
+
+/* --- Enumerations --- */
+using MapSwitch = Map.Switch;
+
+
 
 /// <summary>
 /// Room.
 /// </summary>
-public class Room : MonoBehaviour {
+public class Room : Loader {
 
-    /* --- Static Variables --- */
-    public static Vector2 offset; // Stores the transforms offset for grid-snapping.
+    /* --- Static Variable --- */
+    // Layer Names
+    public static string EntityLayer = "Entity";
+    public static string DifficultLayer = "Difficult";
+    public static string DirectionLayer = "Direction";
 
-    /* --- Enumerations --- */
-    public enum Lock {
-        Key,
-        Off,
-        Item,
-        None
-    }
+    /* --- Dictionaries --- */
+    // The source sprite to the direction to it points.
+    public Dictionary<Vector2Int, Vector2Int> src_direction = new Dictionary<Vector2Int, Vector2Int>() {
+        { new Vector2Int(5, 9), Vector2Int.down },
+        // Note: technically this is the up arrow, but the coordinates on the y axis are backwards.
+        { new Vector2Int(4, 10), Vector2Int.left },
+        { new Vector2Int(6, 10), Vector2Int.right },
+        { new Vector2Int(5, 10), Vector2Int.up }
+    };
+
+    // The source sprite to the direction it rotates.
+    public Dictionary<Vector2Int, int> src_rotation = new Dictionary<Vector2Int, int>() {
+        { new Vector2Int(6, 9), 1 },
+        { new Vector2Int(4, 9), -1 }
+    };
 
     /* --- Components --- */
+    [SerializeField] public LDtkComponentProject lDtkData;
     [SerializeField] public Tilemap floorMap; // The map that will display the floor tiles.
     [SerializeField] public Tilemap borderMap; // The map that will display the borders.
-    [SerializeField] public Exit doorBase;
+    [SerializeField] public Environment environment;
+    [SerializeField] public Transform entityParent;
 
     /* --- Properties --- */
     // Dimensions.
     [SerializeField] [ReadOnly] public int height;
     [SerializeField] [ReadOnly] public int width;
+    [SerializeField] [ReadOnly] public Vector2 offset; // Stores the transforms offset for grid-snapping.
     // Settings.
-    [SerializeField] [ReadOnly] public int id;
     [SerializeField] [ReadOnly] public bool isDifficult;
     [SerializeField] [ReadOnly] public List<Entity> entities; // The list of currently loaded entities.
-    [SerializeField] [ReadOnly] public List<Exit> exits; // The list of currently loaded exits.
 
-    void Start() {
-        // Set up these variables.
+    void OnEnable() {
         offset = new Vector2( (Mathf.Abs(transform.position.x + 0.5f)) % 1f, Mathf.Abs((transform.position.y - 0.5f)) % 1f );
-    }
-
-    bool playerHasEntered = false;
-    List<Exit> puzzleLocks = new List<Exit>();
-
-    void Update() {
-        //bool roomIsCleared = true;
-        //if (playerHasEntered) {
-        //    for (int i = 0; i < entities.Count; i++) {
-        //        if (entities[i] != null) {
-        //            if (entities[i].GetComponent<Mob>() != null) {
-        //                Mob mob = entities[i].GetComponent<Mob>();
-        //                if (mob.state.vitality != State.Vitality.Dead) {
-        //                    roomIsCleared = false;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        //if (!roomIsCleared) {
-        //    for (int i = 0; i < originallyUnlockedDoors.Count; i++) {
-        //        originallyUnlockedDoors[i].lockType = Lock.Item;
-        //    }
-        //}
-        //else {
-        //    for (int i = 0; i < originallyUnlockedDoors.Count; i++) {
-        //        originallyUnlockedDoors[i].lockType = Lock.None;
-        //    }
-        //}
-
-        bool isCleared = true;
-        for (int i = 0; i < entities.Count; i++) {
-            if (entities[i] != null) {
-                if (entities[i].GetComponent<Sensor>() != null) {
-                    Sensor sensor = entities[i].GetComponent<Sensor>();
-                    if (!sensor.isActivated) {
-                        isCleared = false;
-                    }
-                }
-            }
-        }
-
-        print(isCleared);
-        if (isCleared) {
-            for (int i = 0; i < puzzleLocks.Count; i++) {
-                if (puzzleLocks[i].lockType == Lock.Item) {
-                    puzzleLocks[i].lockType = Lock.None;
-                }
-            }
-        }
-        else {
-            for (int i = 0; i < puzzleLocks.Count; i++) {
-                if (puzzleLocks[i].lockType == Lock.None) {
-                    puzzleLocks[i].lockType = Lock.Item;
-                }
-            }
-        }
-
-
-    }
-
-    void OnTriggerStay2D(Collider2D collider) {
-
-    }
-
-    void OnTriggerEnter2D(Collider2D collider) {
-        Player player = collider.GetComponent<Hurtbox>()?.controller?.GetComponent<Player>();
-        if (player != null) {
-            print("player entered");
-            playerHasEntered = true;
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D collider) {
-        Player player = collider.GetComponent<Hurtbox>()?.controller?.GetComponent<Player>();
-        if (player != null) {
-            print("player exited");
-        }
+        height = 7;
+        width = 7;
     }
 
     /* --- Methods --- */
-    public Exit AddDoor(Map.Switch doorSwitch, Loader.LDtkTileData doorData, List<int> unlockedExits) {
-
-        Lock lockType = CheckDoorType(doorSwitch, doorData, unlockedExits);
-
-        // Clear the tile space.
-        Vector3Int tilePosition = new Vector3Int((int)doorData.offsetPosition.x, (int)doorData.offsetPosition.y, 0);
-        borderMap.SetTile(tilePosition, null);
-
-        if (doorBase != null) {
-
-            // Instantiate the new door.
-            Exit newExit = Instantiate(doorBase, (Vector3)tilePosition, Quaternion.identity, transform).GetComponent<Exit>();
-            newExit.id = GetDoorID(doorData);
-            newExit.transform.localPosition = (Vector3)tilePosition + new Vector3(newExit.id.x, -newExit.id.y, 0f) * (Exit.offset - height) + new Vector3(0.5f, 0.5f, 0f);
-            newExit.gameObject.SetActive(true);
-
-            // The exit data.
-            newExit.exitData = doorData;
-            newExit.index = doorData.index;
-
-            newExit.lockType = lockType;
-            
-            newExit.@lock.transform.position += -Vector3.up * (Exit.offset - 7);
-            newExit.transform.eulerAngles = Vector3.forward * 90f * doorData.rotation;
-            // newExit.@lock.transform.eulerAngles = Vector3.zero;
-
-            if (lockType == Lock.Item) { puzzleLocks.Add(newExit); }
-            exits.Add(newExit);
-        }
-
-        return null;
+    public void Open(string str_id) {
+        Open(Int32.Parse(str_id));
     }
 
-    private Lock CheckDoorType(Map.Switch doorSwitch, Loader.LDtkTileData doorData, List<int> unlockedExits) {
+    public void Open(int id) {
 
-        if ((Map.Door)doorData.vectorID.x == Map.Door.Regular) {
-            return Lock.None;
-        }
-        else if ((Map.Door)doorData.vectorID.x == Map.Door.On && doorSwitch != Map.Switch.On) {
-            return Lock.Off;
-        }
-        else if ((Map.Door)doorData.vectorID.x == Map.Door.Off && doorSwitch != Map.Switch.Off) {
-            return Lock.Off;
-        }
-        else if ((Map.Door)doorData.vectorID.x == Map.Door.Item) { // Actually puzzle doors.
-            return Lock.Item;
-        }
-        else if ((Map.Door)doorData.vectorID.x == Map.Door.Key) {
-            for (int i = 0; i < unlockedExits.Count; i++) {
-                if (doorData.index == unlockedExits[i]) {
-                    return Lock.None;
+        LDtkRoom ldtkRoom = GetLevelByID(lDtkData, id);
+        Reset();
+        Refresh();
+        Load(ldtkRoom); 
+        SetStream();
+    }
+
+    public void Reset() {
+        // Reset the entities.
+        if (entities != null) {
+            for (int i = 0; i < entities.Count; i++) {
+                if (entities[i] != null) {
+                    Destroy(entities[i].gameObject);
                 }
             }
-            return Lock.Key;
+            entities = new List<Entity>();
         }
-        return Lock.None;
     }
 
-    private Vector2Int GetDoorID(Loader.LDtkTileData exitData) {
-        Vector2 _id = (exitData.offsetPosition - new Vector2(3.5f, 3.5f));
-        Vector2Int id;
-        if (Mathf.Abs(_id.y) > Mathf.Abs(_id.x)) {
-            id = new Vector2Int(0, -(int)Mathf.Sign(_id.y));
+    public void Refresh() {
+        // Load the tiles.
+        environment.RefreshTiles();
+        LoadTiles(borderMap, environment.borderTile, height, width);
+        LoadTiles(floorMap, environment.floorTile, height, width);
+    }
+
+
+    public void Load(LDtkRoom ldtkRoom) {
+
+        if (ldtkRoom != null) {
+
+            // Load the entity data.
+            List<LDtkTileData> entityData = LoadLayer(ldtkRoom, EntityLayer, DefaultGridSize);
+            if (isDifficult) { entityData = LoadLayer(ldtkRoom, DifficultLayer, DefaultGridSize, entityData); }
+
+            // Load the directional data.
+            List<LDtkTileData> directionData = LoadLayer(ldtkRoom, DirectionLayer, DefaultGridSize);
+
+            // Instatiantate and set up the entities using the data.
+            LoadEntities(entityData);
+            LoadDirections(entities, directionData);
+
         }
-        else {
-            id = new Vector2Int((int)Mathf.Sign(_id.x), 0);
+
+    }
+
+    /* --- Methods --- */
+    private List<Entity> LoadEntities(List<LDtkTileData> entityData) {
+
+        if (entities == null) { entities = new List<Entity>(); }
+        environment.RefreshEntities();
+
+        for (int i = 0; i < entityData.Count; i++) {
+            // Get the entity based on the environment.
+            Entity entityBase = environment.GetEntityByVectorID(entityData[i].vectorID);
+            if (entityBase != null) {
+
+                // Instantiate the entity
+                Entity newEntity = Instantiate(entityBase.gameObject, GridToRoom(entityData[i].gridPosition), Quaternion.identity, entityParent).GetComponent<Entity>();
+
+                // Set up the entity.
+                newEntity.gameObject.SetActive(true);
+                newEntity.gridPosition = entityData[i].gridPosition;
+
+                // Add the entity to the list
+                entities.Add(newEntity);
+            }
         }
-        return id;
+        // print("Loaded this many entities: " + entities.Count + " out of " + entityData.Count);
+        return entities;
+    }
+
+    private void LoadDirections(List<Entity> entities, List<LDtkTileData> directionData) {
+        for (int i = 0; i < entities.Count; i++) {
+            // Itterate throught the directions.
+            for (int j = 0; j < directionData.Count; j++) {
+                // Check if a direction needs to be applied to this entity.
+                if (entities[i].gridPosition == directionData[j].gridPosition && src_direction.ContainsKey(directionData[j].vectorID)) {
+                    entities[i].ApplyDirection(this, directionData[j].gridPosition, src_direction[directionData[j].vectorID]);
+                }
+                // Check if a rotation needs to be applied to this entity.
+                else if (entities[i].gridPosition == directionData[j].gridPosition && src_rotation.ContainsKey(directionData[j].vectorID)) {
+                    entities[i].ApplyRotation(this, directionData[j].gridPosition, src_rotation[directionData[j].vectorID]);
+                }
+            }
+        }
     }
 
     /* --- Grid Methods --- */
-    public Vector3 GridToWorld(Vector2Int gridPosition) {
-        return new Vector3(gridPosition.x + 0.5f, height - gridPosition.y - 0.5f, 0f) + transform.position;
+    public Vector3 GridToRoom(Vector2Int gridPosition) {
+        return new Vector3(gridPosition.x + offset.x, height - (gridPosition.y + offset.y + 0.5f), 0f) + transform.position;
     }
 
-    public static Vector3 SnapToGrid(Vector3 position) {
+    public Vector3 SnapToGrid(Vector3 position) {
         float snappedX = Mathf.Round(position.x) + offset.x;
         float snappedY = Mathf.Round(position.y) + offset.y;
         return new Vector3(snappedX, snappedY, 0f);

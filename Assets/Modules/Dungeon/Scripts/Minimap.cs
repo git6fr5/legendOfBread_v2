@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/* --- Definitions --- */
+using MapData = Map.MapData;
+using MapSwitch = Map.Switch;
+using Lock = Door.Lock;
+using DoorData = Loader.LDtkTileData;
+
 /// <summary>
 /// Handles all the logic for the minimap.
 /// </summary>
@@ -12,7 +18,7 @@ public class Minimap : MonoBehaviour {
     private static float Scale = 3f;
 
     /* --- Dictionaries --- */
-    public Dictionary<Map.Door, Sprite> door_sprite = null;
+    public Dictionary<Lock, Sprite> door_sprite = null;
 
     /* --- Components --- */
     [Space(5), Header("Minimap Bases")]
@@ -26,7 +32,7 @@ public class Minimap : MonoBehaviour {
     public Sprite onDoor;
     public Sprite offDoor;
     public Sprite keyDoor;
-    public Sprite itemDoor;
+    public Sprite puzzleDoor;
 
     /* --- Properties --- */
     [SerializeField] [ReadOnly] private List<Transform> locations = new List<Transform>();
@@ -35,19 +41,19 @@ public class Minimap : MonoBehaviour {
     /* --- Methods --- */
     void RefreshDoorSprites() {
         // Reset the dictionary.
-        door_sprite = new Dictionary<Map.Door, Sprite>();
+        door_sprite = new Dictionary<Lock, Sprite>();
 
         // Set the sprite to represent each type of door.
-        door_sprite.Add(Map.Door.Regular, regularDoor);
-        door_sprite.Add(Map.Door.On, onDoor);
-        door_sprite.Add(Map.Door.Off, offDoor);
-        door_sprite.Add(Map.Door.Key, keyDoor);
-        door_sprite.Add(Map.Door.Item, itemDoor);
+        door_sprite.Add(Lock.None, regularDoor);
+        door_sprite.Add(Lock.On, onDoor);
+        door_sprite.Add(Lock.Off, offDoor);
+        door_sprite.Add(Lock.Key, keyDoor);
+        door_sprite.Add(Lock.Puzzle, puzzleDoor);
 
     }
 
     // Refreshes the minimap.
-    public void Refresh(Vector2Int location, Map.MapData mapData, int size, int locationGridSize, int doorGridSize) {
+    public void Refresh(Vector2Int location, MapData mapData, int size, int locationGridSize, int doorGridSize) {
         
         // Reset the minimap.
         Reset();
@@ -113,7 +119,7 @@ public class Minimap : MonoBehaviour {
     }
 
     // Adds the doorways to the minimap.
-    public Transform AddDoor(Loader.LDtkTileData doorData, Map.Switch doorSwitch, float gridScaleFactor, float offsetScaleFactor) {
+    public Transform AddDoor(DoorData doorData, MapSwitch doorSwitch, float gridScaleFactor, float offsetScaleFactor) {
 
         // Get the position to put it on the grid at.
         Vector2Int gridPosition = doorData.gridPosition;
@@ -133,11 +139,7 @@ public class Minimap : MonoBehaviour {
 
         //Set the door sprite.
         if (door_sprite == null) { RefreshDoorSprites(); }
-        Map.Door door = (Map.Door)doorData.vectorID.x;
-        if (doorSwitch == Map.Switch.Off) {
-            if (door == Map.Door.On) { door = Map.Door.Off; }
-            else if (door == Map.Door.Off) { door = Map.Door.On; }
-        }
+        Lock door = Door.GetLock(doorData, doorSwitch, new List<int>());
         newDoor.GetComponent<SpriteRenderer>().sprite = door_sprite[door];
 
         return newDoor;

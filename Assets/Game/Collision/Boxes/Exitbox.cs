@@ -7,16 +7,11 @@ using UnityEngine;
 /// A collider to detect when the player is leaving a room.
 /// </summary>
 [RequireComponent(typeof(CircleCollider2D))]
-public class Exit : MonoBehaviour {
+public class Exitbox : MonoBehaviour {
 
     /* --- Components --- */
-    public Map map;
-    public Room.Lock lockType;
-    public Lock @lock;
+    public LOBMap map;
     [HideInInspector] protected Collider2D area;
-
-    public Loader.LDtkTileData exitData;
-    public int index;
 
     /* --- Variables --- */
     [SerializeField] [ReadOnly] public Vector2Int id = Vector2Int.zero; // Used to indicate which direction this exit faces.
@@ -29,17 +24,6 @@ public class Exit : MonoBehaviour {
         area = GetComponent<Collider2D>();
         // Set up the attached components.
         area.isTrigger = true;
-    }
-
-    void Update() {
-        if (lockType != Room.Lock.None) {
-            @lock.gameObject.SetActive(true);
-            area.enabled = false;
-        }
-        else {
-            @lock.gameObject.SetActive(false);
-            area.enabled = true;
-        }
     }
 
     void OnColliderEnter2D(Collision2D collision) {

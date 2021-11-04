@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lock : Structure {
+using Lock = Door.Lock;
 
-    public Exit exit;
-    Dictionary<Room.Lock, Sprite> lock_sprite;
+public class LockBox : Structure {
+
+    public Exitbox exitbox;
+    Dictionary<Lock, Sprite> lock_sprite;
 
     public Sprite noLock;
     public Sprite keyLock;

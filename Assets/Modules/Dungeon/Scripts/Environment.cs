@@ -47,7 +47,7 @@ public class Environment : MonoBehaviour {
 
     /* --- Entity Methods --- */
     // Refreshes the set of entities.
-    void RefreshEntities() {
+    public void RefreshEntities() {
         entities = new List<Entity>();
         foreach (Transform child in entityParentTransform) {
             FindAllEntitiesInTransform(child);

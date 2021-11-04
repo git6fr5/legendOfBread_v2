@@ -10,17 +10,19 @@ public class EnvironmentSelector : DungeonSelector {
     /* --- Components --- */
     public RuleTile borderTile;
     public Sprite[] floorSprites;
+    public Transform entityParentTransform;
 
     /* --- Override --- */
     // The logic to be executed when this is selected.
     protected override void Select() {
-        loader.environment.borderTile = borderTile;
-        loader.environment.floorSprites = floorSprites;
+        room.environment.borderTile = borderTile;
+        room.environment.floorSprites = floorSprites;
+        room.environment.entityParentTransform = entityParentTransform;
     }
 
     // A condition that determines if this selector is highlighted.
     protected override bool HighlightCondition() {
-        return (loader.environment.borderTile == borderTile && loader.environment.floorSprites == floorSprites);
+        return (room.environment.borderTile == borderTile && room.environment.floorSprites == floorSprites);
     }
 
 }

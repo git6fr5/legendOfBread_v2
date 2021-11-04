@@ -25,7 +25,8 @@ public class LocationSelector : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        map.OpenRoom(gridPosition);
+        Room room = map.mapData.loc_room[map.location];
+        map.OpenRoom(room.id, gridPosition);
     }
 
 }

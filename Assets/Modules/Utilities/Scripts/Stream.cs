@@ -23,7 +23,7 @@ public class Stream : MonoBehaviour {
     public Material textMaterial; // The material to be used for the text.
 
     /* --- Variables --- */
-    [SerializeField] [ReadOnly] public string text; // The text in this stream.
+    [SerializeField] public string text; // The text in this stream.
     [SerializeField] [ReadOnly] public bool isActive = false; // Controls whether this stream is being edited.
     [SerializeField] [ReadOnly] private SpriteRenderer[] characterRenderers; // Holds the currently rendered characters.
     [SerializeField] [Range(0.05f, 0.5f)] private float spacing = 0.4f; // The spacing between the characters.
@@ -33,6 +33,7 @@ public class Stream : MonoBehaviour {
     /* --- Unity --- */
     void Start() {
         SetText(text);
+        OnOpen.Invoke(text);
     }
 
     void OnMouseDown() {
@@ -83,7 +84,6 @@ public class Stream : MonoBehaviour {
     }
 
     public void SetText(string text) {
-
         // Delete the previous text
         if (characterRenderers != null) {
             for (int i = 0; i < characterRenderers.Length; i++) {
@@ -108,8 +108,6 @@ public class Stream : MonoBehaviour {
             newCharacterRenderer.material = textMaterial;
             characterRenderers[i] = newCharacterRenderer;
         }
-
-        this.text = text;
     }
 
 }
