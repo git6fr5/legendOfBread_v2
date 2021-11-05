@@ -25,6 +25,7 @@ public class Player : Controller {
     public Item[] interactItems;
     // public List<Key> keys = new List<Key>();
     public int numKeys = 0;
+    public int skrit = 0;
 
     // Player-Specific Action Controls
     [Range(0.05f, 1f)] public float actionMoveFactor = 0.25f;

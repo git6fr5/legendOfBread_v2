@@ -59,4 +59,31 @@ public class Mob : Controller {
         state.enemyTags = new List<string>() { GameRules.playerTag };
     }
 
+    public Skrit skritBase;
+    public int skritMinValue; public int skritMaxValue;
+
+    protected void DropSkrit() {
+
+        int totalValue = Random.Range(skritMinValue, skritMaxValue);
+
+        List<int> denominations = new List<int>();
+        int repeats = 0;
+        while (totalValue > 0 || repeats < 32) {
+            for (int j = Skrit.Values.Length - 1; j >= 0; j--) {
+                if (totalValue >= Skrit.Values[j]) {
+                    denominations.Add(Skrit.Values[j]);
+                    totalValue -= Skrit.Values[j];
+                }
+            }
+            repeats = repeats + 1;
+        }
+
+        print(denominations.Count);
+
+        for (int i = 0; i < denominations.Count; i++) {
+            Skrit newSkrit = Instantiate(skritBase, transform.position, Quaternion.identity, transform.parent).GetComponent<Skrit>();
+            newSkrit.SetValue(denominations[i]);
+            newSkrit.gameObject.SetActive(true);
+        }
+    }
 }

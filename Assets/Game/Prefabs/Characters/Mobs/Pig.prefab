@@ -390,6 +390,9 @@ MonoBehaviour:
   vision: {fileID: 5352843811568169178}
   idleFactor: 1
   aggressiveFactor: 1.25
+  skritBase: {fileID: 6148691479342863593, guid: b4f4f91e6347c1a47a97b574803d5667, type: 3}
+  skritMinValue: 5
+  skritMaxValue: 8
   idleDistance: 0.5
   idleInterval: 1
   idleTicks: 0

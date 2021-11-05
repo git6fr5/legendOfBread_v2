@@ -14,8 +14,13 @@ public class Block : MonoBehaviour {
     [HideInInspector] public List<Block> shadowGroup = new List<Block>();
 
     void Update() {
+        OnUpdate();
         Group();
         ShadowGroup();
+    }
+
+    protected virtual void OnUpdate() {
+        //
     }
 
     private void Group() {

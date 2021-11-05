@@ -527,6 +527,8 @@ MonoBehaviour:
   interactKey: 32
   interactItems:
   - {fileID: 275130575850506775}
+  numKeys: 1
+  skrit: 0
   actionMoveFactor: 0.25
   runMoveFactor: 2
 --- !u!114 &7499720929307182049

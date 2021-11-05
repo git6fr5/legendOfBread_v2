@@ -105,7 +105,7 @@ MonoBehaviour:
   - {fileID: 4255178849470395531, guid: 69ceff124270c7047b21fbc82200b96d, type: 3}
   - {fileID: -3662043008418306186, guid: 69ceff124270c7047b21fbc82200b96d, type: 3}
   inFront: 1
-  isLoop: 1
+  isLoop: 0
   isDisposable: 0
   frameRate: 8
   timeInterval: 0

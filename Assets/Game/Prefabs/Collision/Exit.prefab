@@ -151,6 +151,10 @@ MonoBehaviour:
   interactAction: 5
   mesh: {fileID: 7681550092433423919}
   exit: {fileID: 8229361920962970025}
+  noLock: {fileID: 0}
+  keyLock: {fileID: 21300000, guid: 93f43a869739e764e9b5252d9b244bda, type: 3}
+  offLock: {fileID: 2988458186069367833, guid: c9db4377809eba94983e714bf5876797, type: 3}
+  itemLock: {fileID: 21300000, guid: 556dfc364bc5562458edfc5abc034f51, type: 3}
 --- !u!1 &6775859792751461883
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 0}
-  isLocked: 0
+  lockType: 0
   lock: {fileID: 5718419469135522364}
   index: 0
   id: {x: 0, y: 0}

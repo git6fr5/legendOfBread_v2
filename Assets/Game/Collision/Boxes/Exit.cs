@@ -11,7 +11,7 @@ public class Exit : MonoBehaviour {
 
     /* --- Components --- */
     public Map map;
-    public bool isLocked;
+    public Room.Lock lockType;
     public Lock @lock;
     [HideInInspector] protected Collider2D area;
 
@@ -20,7 +20,7 @@ public class Exit : MonoBehaviour {
 
     /* --- Variables --- */
     [SerializeField] [ReadOnly] public Vector2Int id = Vector2Int.zero; // Used to indicate which direction this exit faces.
-    [HideInInspector] public static float offset = 7.75f; // The value to offset the player position by.
+    [HideInInspector] public static float offset = 8f; // The value to offset the player position by.
 
     /* --- Unity --- */
     // Runs once on instantiation
@@ -32,7 +32,7 @@ public class Exit : MonoBehaviour {
     }
 
     void Update() {
-        if (isLocked) {
+        if (lockType != Room.Lock.None) {
             @lock.gameObject.SetActive(true);
             area.enabled = false;
         }
@@ -68,7 +68,7 @@ public class Exit : MonoBehaviour {
     void OnExit(Hurtbox hurtbox) {
         // Move the player.
         Vector3 currPosition = hurtbox.controller.transform.position;
-        Vector3 deltaPosition = new Vector3(-id[0] * offset, id[1] * offset, 0);
+        Vector3 deltaPosition = new Vector3(-id[0] * (offset + 0.4f), id[1] * (offset + 0.4f), 0);
         // print("Delta Position for exit: " + deltaPosition.ToString());
         hurtbox.controller.transform.position = currPosition + deltaPosition;
 

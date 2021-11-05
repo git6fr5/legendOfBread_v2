@@ -80,6 +80,9 @@ public class Slime : Mob {
         if (!isChild) {
             Split();
         }
+        else {
+            DropSkrit();
+        }
     }
 
     /* --- Methods --- */
